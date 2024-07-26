@@ -1,0 +1,24 @@
+<nav id="left-sidebar-expand">
+    <div class="leftbar-console-expanded">
+      <div class="sidebar-header pe-3 ps-3">
+        <h5 class="fw-bold mt-3 ms-1">
+          <a href="index.html">Analytics</a>
+        </h5>
+      </div>
+      <ul class="list-group console-list mt-2" data-scrollbar="true" tabindex="-1" style="overflow: hidden; outline: none;"><div class="scroll-content">
+  
+        <li class="list-group-item list-group-item-action"
+        [ngClass]="!menu?.expanded?'collapsed':''"
+        *ngFor="let menu of subMenus; let i = index">
+            <a [routerLink]="menu['RouteName']" class="d-flex  align-items-center" [ngClass]="menu?.isChild?'chevron-icon':''" type="button" (click)="toggleCollapse(menu)">
+          
+            <!-- <i [ngClass]="menu?.class"></i> -->
+            {{ menu["DisplayName"] }}
+          </a>
+        </li>
+        
+       
+      </div><div class="scrollbar-track scrollbar-track-x" style="display: none;"><div class="scrollbar-thumb scrollbar-thumb-x" style="width: 293px; transform: translate3d(0px, 0px, 0px);"></div></div><div class="scrollbar-track scrollbar-track-y" style="display: none;"><div class="scrollbar-thumb scrollbar-thumb-y" style="height: 221px; transform: translate3d(0px, 0px, 0px);"></div></div></ul>
+    </div>
+    <a (click)="toggleNavTest()" class="panelToggle"></a>
+  </nav>
