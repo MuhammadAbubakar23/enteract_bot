@@ -31,12 +31,13 @@ export class ChatHistoryComponent implements OnInit {
     console.log("this.chat", this.chat)
   }
   removeScreen() {
+    debugger
     let newChat =
       { "session_id": this.chat.session_id }
     this.chatVisibilityService.notifyNewChatIdHistory(newChat);
     const index = this.chatVisibilityService.refreshHistoryArray.indexOf(this.chat.session_id);
     if (index !== -1) {
-      this.chatVisibilityService.refreshHistoryArray.splice(index, 1);
+      this.chatVisibilityService.refreshHistoryArray.splice(index, 0);
 }
 
   }

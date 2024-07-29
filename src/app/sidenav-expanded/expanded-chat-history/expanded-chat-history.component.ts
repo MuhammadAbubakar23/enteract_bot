@@ -41,8 +41,10 @@ export class ExpandedChatHistoryComponent {
     this.getChatBotHistory();
     this.chatVisibilityService.thirdActiveHistory$.subscribe((obj: any) => {
       if (obj) {
-        const index = this.activechatBotHistory.findIndex((item: any) => item.slug === obj.slug)
-        this.activechatBotHistory[index]['active'] = obj.active;
+        const index = this.activechatBotHistory.findIndex((item: any) => item.session_id === obj.session_id)
+        if(index!=-1){
+          this.activechatBotHistory[index]['active'] = obj.active;
+        }
       }
 
     })
@@ -84,7 +86,10 @@ export class ExpandedChatHistoryComponent {
       //   this.activechatBotHistory = res.slugs;
       // }
       if(res.detail.length>0){
-        this._spinner.hide('chat-history-menu');
+      this._spinner.hide('chat-history-menu');
+      res.detail.forEach((item: any, index: any) => {
+          item['active'] = false;
+       })
        this.activechatBotHistory = res.detail;
      }
     },
@@ -121,7 +126,6 @@ export class ExpandedChatHistoryComponent {
        this.activechatBotHistory = res.detail;
      }
      this.chatVisibilityService.refreshHistoryArray.forEach((session_id)=>{
-        
       this.activechatBotHistory.forEach((item:any)=>{
         if(item.session_id == session_id){
           item.active = true;

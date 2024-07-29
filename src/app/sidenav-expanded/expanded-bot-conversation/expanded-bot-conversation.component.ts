@@ -107,7 +107,7 @@ export class ExpandedBotConversationComponent {
 
   }
   toggleChatVisibility(clickedItem: any) {
-    
+    // this.activechatBotHistory.find((a:any)=>a.session_id === clickedItem.session_id).active = !clickedItem.active;
     // clickedItem.active = !clickedItem.active;
     this.chatVisibilityService.notifyNewChatIdHistory(clickedItem);
   }
@@ -129,8 +129,11 @@ export class ExpandedBotConversationComponent {
       //   item.name = "Unknown" + `${index + 1}`
       //   item['active'] = false;
       // })
-      if(res.detail.length>0){
-         this._spinner.hide('chat-history-menu1');
+      if(res.detail.length > 0){
+        this._spinner.hide('chat-history-menu1');
+        res.detail.forEach((item: any, index: any) => {
+        item['active'] = false;
+        })
         this.activechatBotHistory = res.detail;
       }
     },
@@ -154,7 +157,6 @@ export class ExpandedBotConversationComponent {
         this.activechatBotHistory = res.detail;
       }
       this.chatVisibilityService.refreshHistoryArray.forEach((session_id)=>{
-        
         this.activechatBotHistory.forEach((item:any)=>{
           if(item.session_id == session_id){
             item.active = true;

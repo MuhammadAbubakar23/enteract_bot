@@ -34,7 +34,6 @@ export class HeaderComponent implements OnInit {
 
     this._headerService.currentHeaderData.subscribe((data:any) => {
       this.headerData = data;
-      debugger
       console.log("header Date===>", data)
     });
 
