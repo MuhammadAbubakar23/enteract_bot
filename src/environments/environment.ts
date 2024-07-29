@@ -28,7 +28,7 @@ export const environment = {
         fallBackCount:'escalatecount',
       }
     },
-    bot_id:"6",
+    bot_id:"1",
     workspace_id:"1",
     superTeam:"1001",
     superTeam1:"1001",
