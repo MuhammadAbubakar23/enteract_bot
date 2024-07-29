@@ -36,7 +36,7 @@ export class ChatHistoryComponent implements OnInit {
     this.chatVisibilityService.notifyNewChatIdHistory(newChat);
     const index = this.chatVisibilityService.refreshHistoryArray.indexOf(this.chat.session_id);
     if (index !== -1) {
-      this.chatVisibilityService.refreshHistoryArray.splice(index, 1);
+      this.chatVisibilityService.refreshHistoryArray.splice(index, 0);
 }
 
   }

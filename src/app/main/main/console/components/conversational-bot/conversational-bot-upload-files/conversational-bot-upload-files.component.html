@@ -1,0 +1,59 @@
+<div role="tabpanel" aria-labelledby="kbase-tab">
+
+    <form>
+      <div class="mb-1">
+        <label for="formFile" class="form-label">Choose File</label>
+        <input class="form-control" type="file" id="formFile" (change)="onFileChange($event)" multiple />
+      </div>
+      <div class="icon-buttons-wrapper d-flex justify-content-start pt-3 pb-4" *ngIf="fileArray.length != 0">
+        <a (click)="uploadFile()" class="btn btn-primary btn-medium saveBtn newbtn" id="generateButton">Upload
+          File(s)
+        </a>
+      </div>
+      <div class="table-section" id="tableview" *ngIf="documents!=null">
+        <table class="table mb-5 align-middle">
+          <thead>
+            <tr>
+
+              <th>
+                NAME
+              </th>
+              <th></th>
+
+              <th>
+
+                Active
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+
+            <tr *ngFor="let doc of documents">
+              <td>
+                <a>
+                  <span class="btn sky iconHover medium me-2">
+                    <i class="fas fa-file">&nbsp;</i>{{ doc?.file_name}}
+                  </span>
+                </a>
+              </td>
+              <td>
+              <td>
+                <label class="switch">
+                  <input type="checkbox" [checked]="doc.is_active" (change)="updateDocStatus(doc, $event)">
+                  <span class="slider round"></span>
+                </label>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+    </form>
+
+    <div class="icon-buttons-wrapper d-flex justify-content-start pt-3 pb-4" *ngIf="documents">
+        <a (click)="createEmbeddings()"
+            class="btn btn-primary btn-medium saveBtn newbtn" id="generateButton">Create Embeddings
+        </a>
+    </div>
+  </div>

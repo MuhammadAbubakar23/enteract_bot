@@ -73,6 +73,7 @@
               (click)="toggleChatVisibility(item)"
               id="active1"
               class="all-inboxes-menu list-group-item list-group-item-action align-items-start"
+              [ngClass]="{ active: item.active }"
             >
               <div class="iconButton medium night berryTransBg fw-bold">
                 <!-- {{ item.session_id }} -->

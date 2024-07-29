@@ -52,6 +52,8 @@ export class ChatBotHistoryComponent implements OnInit {
             if (chatIndex !== -1) {
               this.chats.splice(chatIndex, 1);
               this._chatVisibilityS.notifythirdActiveHistory({ active: false, session_id: newChat.session_id });
+              const refreshIndex = this._chatVisibilityS.refreshHistoryArray.findIndex(session_id => session_id == newChat.session_id);
+              this._chatVisibilityS.refreshHistoryArray.splice(refreshIndex, 1);
               return [];
             } else {
               return this.getChatDetails(newChat);
@@ -105,7 +107,7 @@ export class ChatBotHistoryComponent implements OnInit {
       exhaustMap((res: any) => {
         this._spinner.hide('chat-history1');
         if (res.detail.length > 0) {
-          this._chatVisibilityS.notifythirdActiveHistory({ session_id: data.session_id });
+          this._chatVisibilityS.notifythirdActiveHistory({active:true, session_id: data.session_id });
           res.detail['session_id'] = data.session_id;
           res.detail['last_message'] = data.last_message;
           this.chats.push(res.detail);
