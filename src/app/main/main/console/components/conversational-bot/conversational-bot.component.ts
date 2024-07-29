@@ -60,7 +60,10 @@ export class ConversationalBotComponent implements OnInit {
       
       this.bots = res;
       this.spinner.hide();
-    })
+    }
+  ,error =>{
+    this.spinner.hide();
+  })
   }
   getDocuments(workspace_id:any){
     this.workspace_id = workspace_id;
