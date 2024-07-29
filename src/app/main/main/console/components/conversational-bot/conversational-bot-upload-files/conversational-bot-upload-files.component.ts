@@ -3,47 +3,51 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { HeaderService } from 'src/app/services/header.service';
 import { SidenavService } from 'src/app/services/sidenav.service';
-import { ConversationlBotService } from '../../services/conversationl-bot.service';
+import { ConversationlBotService } from '../../../services/conversationl-bot.service';
 import { HttpParams } from '@angular/common/http';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
-import { ValueSettingServiceService } from '../../services/value-setting-service.service';
+import { ValueSettingServiceService } from '../../../services/value-setting-service.service';
 
 @Component({
-  selector: 'app-conversational-bot',
-  templateUrl: './conversational-bot.component.html',
-  styleUrls: ['./conversational-bot.component.scss']
+  selector: 'app-conversational-bot-upload-files',
+  templateUrl: './conversational-bot-upload-files.component.html',
+  styleUrls: ['./conversational-bot-upload-files.component.scss']
 })
-export class ConversationalBotComponent implements OnInit {
+export class ConversationalBotUploadFilesComponent  implements OnInit {
   bots: any[] = [];
-  default:any = true;
   fileArray: any = [];
   isButtonDisabled = false;
   currentId = 0;
   llms = ['llama3', 'openai', 'mistral', 'groq']
   embeddings = ['mxbai-embed-large', 'nomic-embed-text', 'all-minilm', 'all-MiniLM-L6-v2', 'text-embedding-3-small', 'text-embedding-3-large']
   vdb = ['chroma', 'faiss', 'lancedb']
-  documents: any;
-  workspace_id: any;
+  documents: any = this.ValueSettingServiceService.documents$;
+  workspace_id: any = this.ValueSettingServiceService.workspace_Id$;
   files: any;
   prompt: any;
   workspaceName: any;
   name: any;
   editButtonClicked: any =false;
-  constructor(private ValueSettingServiceService:ValueSettingServiceService ,private toaster:ToastrService, private spinner: NgxSpinnerService ,private _hS: HeaderService, private sidenavService: SidenavService, private _toastr: ToastrService, private _cBS: ConversationlBotService) {
+  constructor(private ValueSettingServiceService: ValueSettingServiceService,private toaster:ToastrService, private spinner: NgxSpinnerService ,private _hS: HeaderService, private sidenavService: SidenavService, private _toastr: ToastrService, private _cBS: ConversationlBotService) {
     _hS.updateHeaderData({
       title: 'Conversational Bot',
       tabs: [{ title: '', url: '', isActive: true }],
       isTab: false,
-      class: "fa-light fa-calendar",
-      subTab: true
+      class: "fa-light fa-calendar"
     })
   }
   ngOnInit(): void {
     this.getBots();
-    this.ValueSettingServiceService.botList$.subscribe(bots => {
-      if (bots) {
-        this.bots = bots;
+    this.ValueSettingServiceService.workspace_Id$.subscribe(id => {
+      this.workspace_id = id;
+    }),
+    this.ValueSettingServiceService.documents$.subscribe(documents => {
+      if (documents && documents != "null") {
+        this.documents = documents;
         // this.patchWorkspace(currentBot);
+      }
+      else if(documents && documents == "null"){
+        this.documents = null;
       }
     })
   }
@@ -65,6 +69,7 @@ export class ConversationalBotComponent implements OnInit {
   getDocuments(workspace_id:any){
     this.workspace_id = workspace_id;
     this.getName();
+
     const params = new HttpParams()
     .set('bot_id', '1')
     .set('workspace_id', workspace_id);
@@ -72,14 +77,11 @@ export class ConversationalBotComponent implements OnInit {
     this._cBS.getDocuments(params).subscribe((res:any)=>{
       this.documents = res;
       this.ValueSettingServiceService.setDocuments(res, this.workspace_id);
-      this.loadUploadComponent();
       this.spinner.hide();
     },
     (error: any) => {
       this.documents = null;
-      this.loadUploadComponent();
       this.spinner.hide();
-      this.ValueSettingServiceService.setDocuments("null", this.workspace_id);
       this._toastr.error( error.error?.detail, 'Failed!',{
         timeOut: 2000,
       });
@@ -91,18 +93,15 @@ export class ConversationalBotComponent implements OnInit {
     this.workspace_id = workspace_id;
     this.editButtonClicked = true
     const currentBot = this.bots.find(bot=> bot.workspace_id == this.workspace_id);
-    this.ValueSettingServiceService.setEditFormValues(currentBot, workspace_id);
     debugger
-    this.loadConfigComponent();
-    // debugger
-    // this.conversationalBotForm.get('botName')?.setValue(currentBot.workspace_name);
-    // this.conversationalBotForm.get('LLM')?.setValue(currentBot.llm);
-    // this.conversationalBotForm.get('llmApiKey')?.setValue(currentBot.llm_api_key);
-    // this.conversationalBotForm.get('Embeddings')?.setValue(currentBot.embeddings);
-    // this.conversationalBotForm.get('EmbeddingsApiKey')?.setValue(currentBot.embeddings_api_key);
-    // this.conversationalBotForm.get('vectorDB')?.setValue(currentBot.vectordb);
-    // this.conversationalBotForm.get('chatLimit')?.setValue(currentBot.chat_limit);
-    // this.conversationalBotForm.get('prompt')?.setValue(currentBot.system_prompt);
+    this.conversationalBotForm.get('botName')?.setValue(currentBot.workspace_name);
+    this.conversationalBotForm.get('LLM')?.setValue(currentBot.llm);
+    this.conversationalBotForm.get('llmApiKey')?.setValue(currentBot.llm_api_key);
+    this.conversationalBotForm.get('Embeddings')?.setValue(currentBot.embeddings);
+    this.conversationalBotForm.get('EmbeddingsApiKey')?.setValue(currentBot.embeddings_api_key);
+    this.conversationalBotForm.get('vectorDB')?.setValue(currentBot.vectordb);
+    this.conversationalBotForm.get('chatLimit')?.setValue(currentBot.chat_limit);
+    this.conversationalBotForm.get('prompt')?.setValue(currentBot.system_prompt);
   }
   setLLMDetails(){
 
@@ -234,7 +233,6 @@ export class ConversationalBotComponent implements OnInit {
       this.workspaceName = res.detail;
       // this.conversationalBotForm.get('botName')?.setValue(res.detail);
       this.name = res.detail;
-      this.ValueSettingServiceService.setName(this.name);
     })
   }
 
@@ -467,10 +465,13 @@ export class ConversationalBotComponent implements OnInit {
 
   }
 
-  loadUploadComponent(){
-    this.default = false;
-  }
-  loadConfigComponent(){
-    this.default = true;
+  createEmbeddings(){
+    const formData = new FormData;
+    formData.append('bot_id', "1");
+    formData.append('workspace_id', String(this.workspace_id));
+    this.spinner.show()
+    this._cBS.createEmbeddings(formData).subscribe((res:any)=>{
+      this.spinner.hide();
+    })
   }
 }

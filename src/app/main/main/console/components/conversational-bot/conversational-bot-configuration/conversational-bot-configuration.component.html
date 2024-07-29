@@ -1,0 +1,153 @@
+<div role="tabpanel" aria-labelledby="create-post-tab">
+    <div class="col">
+        <form [formGroup]="conversationalBotForm">
+            <div class="mb-3 mt-3">
+                <label for="">Name</label>
+                <input name="" class="form-control" formControlName="botName"
+                    [class.is-invalid]="cBF['botName'].invalid && cBF['botName'].touched"
+                    [class.is-valid]="cBF['botName'].valid && cBF['botName'].touched" />
+                <div class="invalid-feedback">
+                    <div *ngIf="cBF['botName'].errors?.['required']">
+                        Name is required.
+                    </div>
+                </div>
+                <div class="valid-feedback">Looks good!</div>
+            </div>
+            <div class="row">
+                <div class="col-6 mb-3">
+                    <label> LLM</label>
+                    <select name="" formControlName="LLM" class="form-select"
+                        [class.is-invalid]="cBF['LLM'].invalid && cBF['LLM'].touched"
+                        [class.is-valid]="cBF['LLM'].valid && cBF['LLM'].touched">
+                        <option [value]=null selected disabled>Select LLM</option>
+                        <option *ngFor="let llm of llms" [value]="llm">{{ llm }}
+                        </option>
+                    </select>
+                    <div class="invalid-feedback">
+                        <div *ngIf="cBF['LLM'].errors?.['required']">
+                            LLM is required.
+                        </div>
+                    </div>
+                    <div class="valid-feedback">Looks good!</div>
+                </div>
+                <div class="col-6 mb-3">
+                    <label for="">LLM Api Key </label>
+                    <input name="" class="form-control" formControlName="llmApiKey" />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="mb-3">
+                    <label for="">LLM URL </label>
+                    <input name="" class="form-control" formControlName="llm_url" />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-6 mb-3">
+                    <label> Embeddings</label>
+                    <select name="" formControlName="Embeddings" class="form-select"
+                        [class.is-invalid]="cBF['Embeddings'].invalid && cBF['Embeddings'].touched"
+                        [class.is-valid]="cBF['Embeddings'].valid && cBF['Embeddings'].touched">
+                        <option [value]=null selected disabled>Select Embedding</option>
+                        <option *ngFor="let embedding of embeddings" [value]="embedding">{{ embedding }}
+                        </option>
+                    </select>
+                    <div class="invalid-feedback">
+                        <div *ngIf="cBF['Embeddings'].errors?.['required']">
+                            Embedding is required.
+                        </div>
+                    </div>
+                    <div class="valid-feedback">Looks good!</div>
+                </div>
+                <div class="col-6 mb-3">
+                    <label for="">Embeddings Api Key </label>
+                    <input name="" class="form-control" formControlName="EmbeddingsApiKey" />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="mb-3">
+                    <label for="">Embeddings URL </label>
+                    <input name="" class="form-control" formControlName="embeddings_url" />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-6 mb-3">
+                    <label> Vector Database</label>
+                    <select name="" formControlName="vectorDB" class="form-select"
+                        [class.is-invalid]="cBF['vectorDB'].invalid && cBF['vectorDB'].touched"
+                        [class.is-valid]="cBF['vectorDB'].valid && cBF['vectorDB'].touched">
+                        <option [value]=null selected disabled>Select Vector DB</option>
+                        <option *ngFor="let v of vdb" [value]="v">{{ v }}
+                    </select>
+                    <div class="invalid-feedback">
+                        <div *ngIf="cBF['vectorDB'].errors?.['required']">
+                            vectorDB is required.
+                        </div>
+                    </div>
+                    <div class="valid-feedback">Looks good!</div>
+                </div>
+                <div class="col-6 mb-3">
+                    <label for="">Vector DB Api Key </label>
+                    <input name="" class="form-control" formControlName="vectordb_api_key" />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="mb-3">
+                    <label for="">Vector DB URL </label>
+                    <input name="" class="form-control" formControlName="vectordb_url" />
+                </div>
+            </div>
+
+            <div class="mb-3 mt-3">
+                <label for="">Chat Limit (min) </label>
+                <input name="" class="form-control" formControlName="chatLimit"
+                    [class.is-invalid]="cBF['chatLimit'].invalid && cBF['chatLimit'].touched"
+                    [class.is-valid]="cBF['chatLimit'].valid && cBF['chatLimit'].touched" />
+                <div class="invalid-feedback">
+                    <div *ngIf="cBF['chatLimit'].errors?.['required']">
+                        Chat Limit is required.
+                    </div>
+                </div>
+                <div class="valid-feedback">Looks good!</div>
+            </div>
+
+            <div class="mb-3">
+                <label for="">Prompt </label>
+                <textarea name="" class="form-control" formControlName="prompt"
+                    [class.is-invalid]="cBF['prompt'].invalid && cBF['prompt'].touched"
+                    [class.is-valid]="cBF['prompt'].valid && cBF['prompt'].touched" style="height: 100px;"></textarea>
+                <div class="invalid-feedback">
+                    <div *ngIf="cBF['prompt'].errors?.['required']">
+                        Prompt is required.
+                    </div>
+                </div>
+                <div class="valid-feedback">Looks good!</div>
+            </div>
+
+            <div class="icon-buttons-wrapper d-flex justify-content-start pt-3 pb-4">
+                <a (click)="createWorkspace()" *ngIf="editButtonClicked==false"
+                    class="btn btn-primary btn-medium saveBtn newbtn" id="generateButton">Create Workspace
+                </a>
+            </div>
+            <div class="row">
+                <div class="col-6 mb-3">
+                    <a (click)="updateWorkspace()" *ngIf="editButtonClicked==true"
+                        class="btn btn-primary btn-medium saveBtn newbtn" id="generateButton">Update Workspace
+                    </a>
+                </div>
+                <div class="col-6 mb-3 d-flex justify-content-end">
+                    <a (click)="cancel()" *ngIf="editButtonClicked==true" class="btn btn-danger btn-medium cancelBtn newbtn"
+                        id="generateButton">Cancel
+                    </a>
+                </div>
+            </div>
+        </form>
+
+
+    </div>
+
+</div>

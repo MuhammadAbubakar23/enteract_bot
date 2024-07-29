@@ -53,6 +53,12 @@ export class ConversationlBotService {
 
     return this.http.put(baseUrl + "Loan/UpdateLoan", data)
   }
+
+  createEmbeddings(body:any){
+    return this.http.post(baseUrl + "embeddings/create", body)
+  }
+
+  
   uploadFile(formData: any): Observable<any>{
     return this.http.post(baseUrl+ "documents/upload", formData);
   }

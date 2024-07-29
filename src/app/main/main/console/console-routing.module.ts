@@ -13,6 +13,8 @@ import { IntentBotComponent } from './components/intent-bot/intent-bot.component
 import { MenuBotComponent } from './components/menu-bot/menu-bot.component';
 import { TemplatesComponent } from './components/templates/templates.component';
 import { CreateUserComponent } from './components/user-management/create-user/create-user.component';
+import { ConversationalBotConfigurationComponent } from './components/conversational-bot/conversational-bot-configuration/conversational-bot-configuration.component';
+import { ConversationalBotUploadFilesComponent } from './components/conversational-bot/conversational-bot-upload-files/conversational-bot-upload-files.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'event-logs', pathMatch: 'full' },
@@ -21,6 +23,8 @@ const routes: Routes = [
   { path: 'intent-bot', component: IntentBotComponent },
   { path: 'bot-management/menu-bot', component: MenuBotComponent},
   { path: 'bot-management/conversational-bot', component: ConversationalBotComponent },
+  { path: 'bot-management/conversational-bot/configuration', component: ConversationalBotConfigurationComponent },
+  { path: 'bot-management/conversational-bot/upload', component: ConversationalBotUploadFilesComponent },
   { path: 'bot-management/configurations', component: ConfigurationsComponent},
   { path: 'bot-management/templates', component: TemplatesComponent},
  

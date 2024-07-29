@@ -1,453 +1,284 @@
-<!-- <div class="content-box-wrapper d-flex w-100">
-  <div class="middle-content d-flex"> -->
-<!-- <div class="agent-page-main-content"> -->
-  
-  <ngx-spinner   bdColor = "rgba(0, 0, 0, 0.5)" size = "small" color = "#fff" type ="square-jelly-box" [fullScreen]="false"
-  ><p style="color: white" > Loading... </p></ngx-spinner>
-  <div class="page-content-wrapper console-body-wrapper footerheight" data-scrollbar="true" tabindex="-1"
-    style="overflow: auto; outline: none">
-    <div class="scroll-content" style="transform: translate3d(0px, 0px, 0px)">
-  
-  
-      <div class="p-4">
-  
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.5)" size="small" color="#fff" type="square-jelly-box" [fullScreen]="false">
+  <p style="color: white"> Loading... </p>
+</ngx-spinner>
+<div class="page-content-wrapper console-body-wrapper footerheight" data-scrollbar="true" tabindex="-1"
+  style="overflow: auto; outline: none">
+  <div class="scroll-content" style="transform: translate3d(0px, 0px, 0px)">
+
+
+    <div class="p-4">
+      <!--   
         <div class="col-3 mb-3" *ngIf="name != null && name != ''">
             <label for="" class="bold-text"><h5>Name: {{name}}</h5></label>
-        </div>
-        <div class="nav nav-tabs mb-4" id="myTab" role="tablist">
-          <button class="nav-link active" id="kbase-tab" data-bs-toggle="tab" data-bs-target="#kbase" type="button"
-            role="tab" aria-controls="kbase" aria-selected="true">Upload Files</button>
-          <button class="nav-link" id="create-category-tab" data-bs-toggle="tab" data-bs-target="#create-category"
-            type="button" role="tab" aria-controls="create-category" aria-selected="false" tabindex="-1">Create
-            Documents</button>
-          <button class="nav-link" id="create-post-tab" data-bs-toggle="tab" data-bs-target="#create-post" type="button"
-            role="tab" aria-controls="create-post" aria-selected="false" tabindex="-1">Configuration</button>
-        </div>
-        <div class="row align-items-start justify-content-between">
-          <div class="col-md-5">
-            <div class="tab-content" id="myTabContent">
-              <div class="tab-pane fade active show" id="kbase" role="tabpanel" aria-labelledby="kbase-tab">
-  
-                <form>
-                  <div class="mb-1">
-                    <label for="formFile" class="form-label">Choose File</label>
-                    <input class="form-control" type="file" id="formFile" (change)="onFileChange($event)" multiple />
-                  </div>
-                  <div class="icon-buttons-wrapper d-flex justify-content-start pt-3 pb-4" *ngIf="fileArray.length != 0">
-                    <a (click)="uploadFile()" class="btn btn-primary btn-medium saveBtn newbtn" id="generateButton">Upload
-                      File(s)
-                    </a>
-                  </div>
-                  <div class="table-section" id="tableview" *ngIf="documents!=null">
-                    <table class="table mb-5 align-middle">
-                      <thead>
-                        <tr>
-  
-                          <th>
-                            NAME
-                          </th>
-                          <th></th>
-  
-                          <th>
-  
-                            Active
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-  
-                        <tr *ngFor="let doc of documents">
-                          <td>
-                            <a>
-                              <span class="btn sky iconHover medium me-2">
-                                <i class="fas fa-file"></i>{{ doc?.file_name}}
-                              </span>
-                            </a>
-                          </td>
-                          <td>
-                            <td>
-                              <label class="switch">
-                                <input type="checkbox" [checked]="doc.is_active" (change)="updateDocStatus(doc, $event)">
-                                <span class="slider round"></span>
-                              </label>
-                            </td>
-                        </tr>
-  
-                      </tbody>
-                    </table>
-                  </div>
-  
-                </form>
-              </div>
-              <div class="tab-pane fade" id="create-category" role="tabpanel" aria-labelledby="create-category-tab">
-                <form [formGroup]="documentsForm">
-                  <div class="mb-3">
-                    <label for="">Document </label>
-                    <textarea name="" class="form-control" formControlName="document"
-                      [class.is-invalid]="pF['document'].invalid && pF['document'].touched"
-                      [class.is-valid]="pF['document'].valid && pF['document'].touched" style="height:200px"></textarea>
-  
-                  </div>
-                  <div class="icon-buttons-wrapper d-flex justify-content-start pt-3 pb-4">
-                    <a (click)="createDocument()" *ngIf="documentsUpdateCheck()"
-                      class="btn btn-primary btn-medium saveBtn newbtn" id="generateButton">Create Document
-                    </a>
-                  </div>
-                  <div class="table-section" id="tableview" *ngIf="documents!=null">
-                    <table class="table mb-5 align-middle">
-                      <thead>
-                        <tr>
-  
-                          <th>
-                            NAME
-                          </th>
-                          <th></th>
-  
-                          <th>
-  
-                            Active
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-  
-                        <tr *ngFor="let doc of documents">
-                          <td>
-                            <a>
-                              <span class="btn sky iconHover medium me-2">
-                                <i class="fas fa-file"></i>{{ doc?.file_name}}
-                              </span>
-                            </a>
-                          </td>
-                          <td>
-                            <td>
-                              <label class="switch">
-                                <input type="checkbox" [checked]="doc.is_active" (change)="updateDocStatus(doc, $event)">
-                                <span class="slider round"></span>
-                              </label>
-                            </td>
-                        </tr>
-  
-                      </tbody>
-                    </table>
-                  </div>
-                </form>
-  
-              </div>
-              <div class="tab-pane fade" id="create-post" role="tabpanel" aria-labelledby="create-post-tab">
-                <div class="col">
-                  <form [formGroup]="conversationalBotForm">
-                    <div class="col-6 mb-3 mt-3">
-                      <label for="">Name</label>
-                      <input name="" class="form-control" formControlName="botName"
-                        [class.is-invalid]="cBF['botName'].invalid && cBF['botName'].touched"
-                        [class.is-valid]="cBF['botName'].valid && cBF['botName'].touched" />
-                      <div class="invalid-feedback">
-                        <div *ngIf="cBF['botName'].errors?.['required']">
-                          Name is required.
-                        </div>
+        </div> -->
+
+        <!-- <div *ngIf="default"><app-conversational-bot-configuration></app-conversational-bot-configuration></div>
+        <div *ngIf="!default"><app-conversational-bot-upload-files></app-conversational-bot-upload-files></div> -->
+
+      <!-- <div class="nav nav-tabs mb-4" id="myTab" role="tablist">
+        <button class="nav-link active" id="kbase-tab" data-bs-toggle="tab" data-bs-target="#kbase" type="button"
+          role="tab" aria-controls="kbase" aria-selected="true">Upload Files</button>
+        <button class="nav-link" id="create-category-tab" data-bs-toggle="tab" data-bs-target="#create-category"
+          type="button" role="tab" aria-controls="create-category" aria-selected="false" tabindex="-1">Create
+          Documents</button>
+        <button class="nav-link" id="create-post-tab" data-bs-toggle="tab" data-bs-target="#create-post" type="button"
+          role="tab" aria-controls="create-post" aria-selected="false" tabindex="-1">Configuration</button>
+      </div> -->
+      <div class="row align-items-start justify-content-between">
+        <div class="col-md-5">
+          <div class="tab-content" id="myTabContent">
+            <!-- <div class="tab-pane fade active show" id="kbase" role="tabpanel" aria-labelledby="kbase-tab">
+
+              <form>
+                <div class="mb-1">
+                  <label for="formFile" class="form-label">Choose File</label>
+                  <input class="form-control" type="file" id="formFile" (change)="onFileChange($event)" multiple />
+                </div>
+                <div class="icon-buttons-wrapper d-flex justify-content-start pt-3 pb-4" *ngIf="fileArray.length != 0">
+                  <a (click)="uploadFile()" class="btn btn-primary btn-medium saveBtn newbtn" id="generateButton">Upload
+                    File(s)
+                  </a>
+                </div>
+                <div class="table-section" id="tableview" *ngIf="documents!=null">
+                  <table class="table mb-5 align-middle">
+                    <thead>
+                      <tr>
+
+                        <th>
+                          NAME
+                        </th>
+                        <th></th>
+
+                        <th>
+
+                          Active
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+
+                      <tr *ngFor="let doc of documents">
+                        <td>
+                          <a>
+                            <span class="btn sky iconHover medium me-2">
+                              <i class="fas fa-file"></i>{{ doc?.file_name}}
+                            </span>
+                          </a>
+                        </td>
+                        <td>
+                        <td>
+                          <label class="switch">
+                            <input type="checkbox" [checked]="doc.is_active" (change)="updateDocStatus(doc, $event)">
+                            <span class="slider round"></span>
+                          </label>
+                        </td>
+                      </tr>
+
+                    </tbody>
+                  </table>
+                </div>
+
+              </form>
+            </div>
+            <div class="tab-pane fade" id="create-category" role="tabpanel" aria-labelledby="create-category-tab">
+              <form [formGroup]="documentsForm">
+                <div class="mb-3">
+                  <label for="">Document </label>
+                  <textarea name="" class="form-control" formControlName="document"
+                    [class.is-invalid]="pF['document'].invalid && pF['document'].touched"
+                    [class.is-valid]="pF['document'].valid && pF['document'].touched" style="height:200px"></textarea>
+
+                </div>
+                <div class="icon-buttons-wrapper d-flex justify-content-start pt-3 pb-4">
+                  <a (click)="createDocument()" *ngIf="documentsUpdateCheck()"
+                    class="btn btn-primary btn-medium saveBtn newbtn" id="generateButton">Create Document
+                  </a>
+                </div>
+                <div class="table-section" id="tableview" *ngIf="documents!=null">
+                  <table class="table mb-5 align-middle">
+                    <thead>
+                      <tr>
+
+                        <th>
+                          NAME
+                        </th>
+                        <th></th>
+
+                        <th>
+
+                          Active
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+
+                      <tr *ngFor="let doc of documents">
+                        <td>
+                          <a>
+                            <span class="btn sky iconHover medium me-2">
+                              <i class="fas fa-file"></i>{{ doc?.file_name}}
+                            </span>
+                          </a>
+                        </td>
+                        <td>
+                        <td>
+                          <label class="switch">
+                            <input type="checkbox" [checked]="doc.is_active" (change)="updateDocStatus(doc, $event)">
+                            <span class="slider round"></span>
+                          </label>
+                        </td>
+                      </tr>
+
+                    </tbody>
+                  </table>
+                </div>
+              </form>
+
+            </div>
+            <div class="tab-pane fade" id="create-post" role="tabpanel" aria-labelledby="create-post-tab">
+              <div class="col">
+                <form [formGroup]="conversationalBotForm">
+                  <div class="col-6 mb-3 mt-3">
+                    <label for="">Name</label>
+                    <input name="" class="form-control" formControlName="botName"
+                      [class.is-invalid]="cBF['botName'].invalid && cBF['botName'].touched"
+                      [class.is-valid]="cBF['botName'].valid && cBF['botName'].touched" />
+                    <div class="invalid-feedback">
+                      <div *ngIf="cBF['botName'].errors?.['required']">
+                        Name is required.
                       </div>
-                      <div class="valid-feedback">Looks good!</div>
                     </div>
-                    <div class="row">
-                      <div class="col-6 mb-3">
-                        <label> LLM</label>
-                        <select name="" formControlName="LLM" class="form-select" [class.is-invalid]="cBF['LLM'].invalid && cBF['LLM'].touched"
+                    <div class="valid-feedback">Looks good!</div>
+                  </div>
+                  <div class="row">
+                    <div class="col-6 mb-3">
+                      <label> LLM</label>
+                      <select name="" formControlName="LLM" class="form-select"
+                        [class.is-invalid]="cBF['LLM'].invalid && cBF['LLM'].touched"
                         [class.is-valid]="cBF['LLM'].valid && cBF['LLM'].touched">
-                          <option [value]=null selected disabled>Select LLM</option>
-                          <option *ngFor="let llm of llms" [value]="llm">{{ llm }}
-                          </option>
-                        </select>
-                        <div class="invalid-feedback">
-                          <div *ngIf="cBF['LLM'].errors?.['required']">
-                            LLM is required.
-                          </div>
+                        <option [value]=null selected disabled>Select LLM</option>
+                        <option *ngFor="let llm of llms" [value]="llm">{{ llm }}
+                        </option>
+                      </select>
+                      <div class="invalid-feedback">
+                        <div *ngIf="cBF['LLM'].errors?.['required']">
+                          LLM is required.
                         </div>
-                        <div class="valid-feedback">Looks good!</div>
                       </div>
-                      <div class="col-6 mb-3">
-                        <label for="">LLM Api Key </label>
-                        <input name="" class="form-control" formControlName="llmApiKey"/>
-                      </div>
+                      <div class="valid-feedback">Looks good!</div>
                     </div>
-  
-  
-                    <!-- <div class="col-6 mb-3">
-                      <div class="form-floating mb-3">
-                        <select name="" formControlName="LLM" class="form-select" style="width:190px">
-                          <option [value]="" selected disabled>Select Bot</option>
-                          <option *ngFor="let llm of llms" [value]="llm">{{ llm }}
-                          </option>
-                        </select>
-                        <label> LLM</label>
-                      </div>
-                    </div>
-  
-                    <div class="mb-3 mt-3">
+                    <div class="col-6 mb-3">
                       <label for="">LLM Api Key </label>
-                      <input name="" class="form-control" formControlName="llmApiKey"
-                        [class.is-invalid]="cBF['llmApiKey'].invalid && cBF['llmApiKey'].touched"
-                        [class.is-valid]="cBF['llmApiKey'].valid && cBF['llmApiKey'].touched" />
-                      <div class="invalid-feedback">
-                        <div *ngIf="cBF['llmApiKey'].errors?.['required']">
-                          LLM Api Key is required.
-                        </div>
-                      </div>
-                      <div class="valid-feedback">Looks good!</div>
-                    </div> -->
-                    <div class="row">
-                      <div class="col-6 mb-3">
-                        <label> Embeddings</label>
-                        <select name="" formControlName="Embeddings" class="form-select" [class.is-invalid]="cBF['Embeddings'].invalid && cBF['Embeddings'].touched"
+                      <input name="" class="form-control" formControlName="llmApiKey" />
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-6 mb-3">
+                      <label> Embeddings</label>
+                      <select name="" formControlName="Embeddings" class="form-select"
+                        [class.is-invalid]="cBF['Embeddings'].invalid && cBF['Embeddings'].touched"
                         [class.is-valid]="cBF['Embeddings'].valid && cBF['Embeddings'].touched">
-                          <option [value]=null selected disabled>Select Embedding</option>
-                          <option *ngFor="let embedding of embeddings" [value]="embedding">{{ embedding }}
-                          </option>
-                        </select>
-                        <div class="invalid-feedback">
-                          <div *ngIf="cBF['Embeddings'].errors?.['required']">
-                            Embedding is required.
-                          </div>
+                        <option [value]=null selected disabled>Select Embedding</option>
+                        <option *ngFor="let embedding of embeddings" [value]="embedding">{{ embedding }}
+                        </option>
+                      </select>
+                      <div class="invalid-feedback">
+                        <div *ngIf="cBF['Embeddings'].errors?.['required']">
+                          Embedding is required.
                         </div>
-                        <div class="valid-feedback">Looks good!</div>
                       </div>
-                      <div class="col-6 mb-3">
-                        <label for="">Embeddings Api Key </label>
-                        <input name="" class="form-control" formControlName="EmbeddingsApiKey"/>
-                      </div>
+                      <div class="valid-feedback">Looks good!</div>
                     </div>
-                    <!-- <div class="col-6 mb-3">
-                      <div class="form-floating mb-3">
-                        <select name="" formControlName="Embeddings" class="form-select" style="width:190px">
-                          <option [value]="null" selected disabled>Select Embedding</option>
-                          <option *ngFor="let embedding of embeddings" [value]="embedding">{{ embedding }}
-                          </option>
-                        </select>
-                        <label> Embeddings</label>
-                      </div>
-                    </div>
-  
-                    <div class="mb-3 mt-3">
+                    <div class="col-6 mb-3">
                       <label for="">Embeddings Api Key </label>
-                      <input name="" class="form-control" formControlName="EmbeddingsApiKey"
-                        [class.is-invalid]="cBF['EmbeddingsApiKey'].invalid && cBF['EmbeddingsApiKey'].touched"
-                        [class.is-valid]="cBF['EmbeddingsApiKey'].valid && cBF['EmbeddingsApiKey'].touched" />
-                      <div class="invalid-feedback">
-                        <div *ngIf="cBF['EmbeddingsApiKey'].errors?.['required']">
-                          Embeddings Api Key is required.
-                        </div>
-                      </div>
-                      <div class="valid-feedback">Looks good!</div>
-                    </div> -->
-  
-                    <div class="row">
-                      <div class="col-6 mb-3">
-                        <label> Vector Database</label>
-                        <select name="" formControlName="vectorDB" class="form-select" [class.is-invalid]="cBF['vectorDB'].invalid && cBF['vectorDB'].touched"
+                      <input name="" class="form-control" formControlName="EmbeddingsApiKey" />
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-6 mb-3">
+                      <label> Vector Database</label>
+                      <select name="" formControlName="vectorDB" class="form-select"
+                        [class.is-invalid]="cBF['vectorDB'].invalid && cBF['vectorDB'].touched"
                         [class.is-valid]="cBF['vectorDB'].valid && cBF['vectorDB'].touched">
-                          <option [value]=null selected disabled>Select Vector DB</option>
-                          <option *ngFor="let v of vdb" [value]="v">{{ v }}
-                        </select>
-                        <div class="invalid-feedback">
-                          <div *ngIf="cBF['vectorDB'].errors?.['required']">
-                            vectorDB is required.
-                          </div>
-                        </div>
-                        <div class="valid-feedback">Looks good!</div>
-                      </div>
-                    </div>
-                    <!-- <div class="col-6 mb-3">
-                      <div class="form-floating mb-3">
-                        <select name="" formControlName="vectorDB" class="form-select" style="width:190px">
-                          <option [value]="null" selected disabled>Select Vector Database</option>
-                          <option *ngFor="let llm of llms" [value]="llm">{{ llm }}
-                          </option>
-                        </select>
-                        <label> Vector Database</label>
-                      </div>
-                    </div> -->
-  
-                    <div class="mb-3 mt-3">
-                      <label for="">Chat Limit (min) </label>
-                      <input name="" class="form-control" formControlName="chatLimit"
-                        [class.is-invalid]="cBF['chatLimit'].invalid && cBF['chatLimit'].touched"
-                        [class.is-valid]="cBF['chatLimit'].valid && cBF['chatLimit'].touched" />
+                        <option [value]=null selected disabled>Select Vector DB</option>
+                        <option *ngFor="let v of vdb" [value]="v">{{ v }}
+                      </select>
                       <div class="invalid-feedback">
-                        <div *ngIf="cBF['chatLimit'].errors?.['required']">
-                          Chat Limit is required.
+                        <div *ngIf="cBF['vectorDB'].errors?.['required']">
+                          vectorDB is required.
                         </div>
                       </div>
                       <div class="valid-feedback">Looks good!</div>
                     </div>
-  
-                    <div class="mb-3">
-                      <label for="">Prompt </label>
-                      <textarea name="" class="form-control" formControlName="prompt"
+                  </div>
+
+                  <div class="mb-3 mt-3">
+                    <label for="">Chat Limit (min) </label>
+                    <input name="" class="form-control" formControlName="chatLimit"
+                      [class.is-invalid]="cBF['chatLimit'].invalid && cBF['chatLimit'].touched"
+                      [class.is-valid]="cBF['chatLimit'].valid && cBF['chatLimit'].touched" />
+                    <div class="invalid-feedback">
+                      <div *ngIf="cBF['chatLimit'].errors?.['required']">
+                        Chat Limit is required.
+                      </div>
+                    </div>
+                    <div class="valid-feedback">Looks good!</div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="">Prompt </label>
+                    <textarea name="" class="form-control" formControlName="prompt"
                       [class.is-invalid]="cBF['prompt'].invalid && cBF['prompt'].touched"
                       [class.is-valid]="cBF['prompt'].valid && cBF['prompt'].touched" style="height: 100px;"></textarea>
-                      <div class="invalid-feedback">
-                        <div *ngIf="cBF['prompt'].errors?.['required']">
-                          Prompt is required.
-                        </div>
+                    <div class="invalid-feedback">
+                      <div *ngIf="cBF['prompt'].errors?.['required']">
+                        Prompt is required.
                       </div>
-                      <div class="valid-feedback">Looks good!</div>
                     </div>
-  
-                    <div class="icon-buttons-wrapper d-flex justify-content-start pt-3 pb-4">
-                      <a (click)="createWorkspace()" *ngIf="editButtonClicked==false"
-                        class="btn btn-primary btn-medium saveBtn newbtn" id="generateButton">Create Workspace
-                      </a>
-                    </div>
-                    <div class="icon-buttons-wrapper d-flex justify-content-start pt-3 pb-4">
-                      <a (click)="updateWorkspace()" *ngIf="editButtonClicked==true"
-                        class="btn btn-primary btn-medium saveBtn newbtn" id="generateButton">Update Workspace
-                      </a>
-                    </div>
-                  </form>
-  
-  
-                </div>
-  
+                    <div class="valid-feedback">Looks good!</div>
+                  </div>
+
+                  <div class="icon-buttons-wrapper d-flex justify-content-start pt-3 pb-4">
+                    <a (click)="createWorkspace()" *ngIf="editButtonClicked==false"
+                      class="btn btn-primary btn-medium saveBtn newbtn" id="generateButton">Create Workspace
+                    </a>
+                  </div>
+                  <div class="icon-buttons-wrapper d-flex justify-content-start pt-3 pb-4">
+                    <a (click)="updateWorkspace()" *ngIf="editButtonClicked==true"
+                      class="btn btn-primary btn-medium saveBtn newbtn" id="generateButton">Update Workspace
+                    </a>
+                  </div>
+                </form>
+
+
               </div>
-            </div>
+
+            </div> -->
+            <div *ngIf="default"><app-conversational-bot-configuration></app-conversational-bot-configuration></div>
+            <div *ngIf="!default"><app-conversational-bot-upload-files></app-conversational-bot-upload-files></div>
           </div>
-          <!-- <div class="col-md-5">
-                  <form [formGroup]="conversationalBotForm">
-                    <div class="mb-3">
-                      <label for="">Bot Name</label>
-                      <input class="form-control" formControlName="botName" [class.is-invalid]="
-                                cBF['botName'].invalid && cBF['botName'].touched
-                              " [class.is-valid]="
-                                cBF['botName'].valid && cBF['botName'].touched
-                              " />
-                      <div class="invalid-feedback">
-                        <div *ngIf="cBF['botName'].errors?.['required']">
-                          Bot Name is required.
-                        </div>
-                      </div>
-                      <div class="valid-feedback">Looks good!</div>
-                    </div>
-                    <div class="mb-1">
-                      <label for="formFile" class="form-label">Choose File</label>
-                      <input class="form-control" type="file" id="formFile" (change)="onFileChange($event)" multiple />
-                    </div>
-                    <small class="coal mb-3 d-inline-block">File types must be .zip / .md / .yml. Maximum file size is
-                      25MB.</small>
-  
-                    <span class="iconButton small bg-white">OR</span>
-  
-                    <div class="mb-3 mt-3">
-                      <label for="">URL </label>
-                      <input name="" class="form-control" formControlName="url"
-                        [class.is-invalid]="cBF['url'].invalid && cBF['url'].touched"
-                        [class.is-valid]="cBF['url'].valid && cBF['url'].touched" />
-                      <div class="invalid-feedback">
-                        <div *ngIf="cBF['url'].errors?.['required']">
-                          Url is required.
-                        </div>
-                      </div>
-                      <div class="valid-feedback">Looks good!</div>
-                    </div>
-                    <div class="mb-3">
-                      <label for="">Prompts </label>
-                      <textarea name="" class="form-control" formControlName="prompts"
-                        [class.is-invalid]="cBF['prompts'].invalid && cBF['prompts'].touched"
-                        [class.is-valid]="cBF['prompts'].valid && cBF['prompts'].touched"></textarea>
-                      <div class="invalid-feedback">
-                        <div *ngIf="cBF['prompts'].errors?.['required']">
-                          Prompts is required.
-                        </div>
-                      </div>
-                      <div class="valid-feedback">Looks good!</div>
-                    </div>
-                    <div class="col-6 mb-3">
-                      <div class="form-floating mb-3">
-                        <select name="" formControlName="LLM" class="form-select" (change)="setLLMDetails()">
-                          <option [value]="null" selected disabled>Select Bot</option>
-                          <option *ngFor="let llm of llms" [value]="llm">{{ llm }}
-                          </option>
-                        </select>
-                        <label> LLM</label>
-                      </div>
-                    </div>
-  
-                    <div class="col-6 mb-3">
-                      <div class="form-floating mb-3">
-                        <select name="" formControlName="LLM" class="form-select" (change)="setLLMDetails()">
-                          <option [value]="null" selected disabled>Select Bot</option>
-                          <option *ngFor="let embedding of embeddings" [value]="embedding">{{ embedding }}
-                          </option>
-                        </select>
-                        <label> Embeddings</label>
-                      </div>
-                    </div>
-  
-                    <div class="col-6 mb-3">
-                      <div class="form-floating mb-3">
-                        <select name="" formControlName="LLM" class="form-select" (change)="setLLMDetails()">
-                          <option [value]="null" selected disabled>Select Bot</option>
-                          <option *ngFor="let llm of llms" [value]="llm">{{ llm }}
-                          </option>
-                        </select>
-                        <label> Vector Database</label>
-                      </div>
-                    </div>
-  
-                    <div class="mb-3 mt-3">
-                      <label for="">Session Time Out (min) </label>
-                      <input name="" class="form-control" formControlName="sessionTimeOut"
-                        [class.is-invalid]="cBF['sessionTimeOut'].invalid && cBF['sessionTimeOut'].touched"
-                        [class.is-valid]="cBF['sessionTimeOut'].valid && cBF['sessionTimeOut'].touched" />
-                      <div class="invalid-feedback">
-                        <div *ngIf="cBF['sessionTimeOut'].errors?.['required']">
-                          Session TimeOut is required.
-                        </div>
-                      </div>
-                      <div class="valid-feedback">Looks good!</div>
-                    </div>
-                  </form>
-  
-  
-                </div> -->
-  
-  
-          <div class="col-md-5 ps-5">
-            <ul class="list-group list-group-flush bg-white rounded" id="botList">
-              <li class="list-group-item d-flex align-items-center border-bottom-0 py-3">
-                <h5 class="m-0 ps-3">Agents</h5>
-              </li>
-              <li class="list-group-item d-flex align-items-center" *ngFor="let bot of bots"
-                (click)="getDocuments(bot.workspace_id)">
-                <span class="iconButton medium skyTransBg"><i [ngClass]="bot.icon"></i></span>
-                <h6 class="m-0 ps-3">{{ bot.workspace_name }}</h6>
-                <div class="ms-auto d-flex">
-                  <span class="iconButton small night" (click)="patchWorkspace(bot.workspace_id)"><i class="fa-light fa-edit"></i></span>
-                  <span class="iconButton small night"><i class="fa-light fa-trash"></i></span>
-                </div>
-              </li>
-            </ul>
-          </div>
+        </div>
+
+        <div class="col-md-5 ps-5">
+          <ul class="list-group list-group-flush bg-white rounded" id="botList">
+            <li class="list-group-item d-flex align-items-center border-bottom-0 py-3">
+              <h5 class="m-0 ps-3">Agents</h5>
+            </li>
+            <li class="list-group-item d-flex align-items-center" *ngFor="let bot of bots">
+              <span class="iconButton medium skyTransBg"><i [ngClass]="bot.icon"></i></span>
+              <h6 class="m-0 ps-3">{{ bot.workspace_name }}</h6>
+              <div class="ms-auto d-flex">
+                <span class="iconButton small night" (click)="getDocuments(bot.workspace_id)"><i class="fa-light fa-upload"></i></span>
+                <span class="iconButton small night" (click)="patchWorkspace(bot.workspace_id)"><i
+                    class="fa-light fa-edit"></i></span>
+                <span class="iconButton small night"><i class="fa-light fa-trash"></i></span>
+              </div>
+            </li>
+          </ul>
         </div>
       </div>
     </div>
-    <!-- <div class="scrollbar-track scrollbar-track-x" style="display: none">
-            <div class="scrollbar-thumb scrollbar-thumb-x" style="width: 1608px; transform: translate3d(0px, 0px, 0px)">
-            </div>
-          </div>
-          <div class="scrollbar-track scrollbar-track-y" style="display: none">
-            <div class="scrollbar-thumb scrollbar-thumb-y"
-              style="height: 508.744px; transform: translate3d(0px, 0px, 0px)"></div>
-          </div> -->
   </div>
-  
-  <!-- <footer class="footer">
-          <div class="ps-3 pe-3">
-            <div class="icon-buttons-wrapper d-flex justify-content-end pt-3 pb-4">
-              <a (click)="submitForm()" class="btn btn-primary btn-medium saveBtn newbtn" id="generateButton">Generate
-              </a>
-            </div>
-          </div>
-        </footer> -->
-  <!-- </div> -->
-  <!-- </div>
-  </div> -->
+</div>
