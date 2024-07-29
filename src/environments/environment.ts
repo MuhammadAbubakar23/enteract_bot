@@ -8,6 +8,7 @@ export const environment = {
     imageBaseUrl: "https://hnbackend.enteract.app:8445",
     visitorUrl: "LogsHub",
     chatBotBaseUrl: 'http://52.77.162.250:5005/',
+    conversationBotBaseUrl: "http://52.77.162.250:5005/",
     link:{
       analytics:{
         getTotalBotConversation:'analytics/total_bot_conversations?bot_id=6&filter_days=7',
@@ -28,7 +29,7 @@ export const environment = {
       }
     },
     superTeam:"1001",
-    superTeam1:"1001",
+    superTeam1:"100",
     bot_id:"6",
     workspace_id:"1",
     appKey:"eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoibXVoYW1tYWQucml4dmFuLndhaGVlZEBnbWFpbC5jb20iLCJleHAiOjE2NzYyMzA4MjYsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjQ0MzY5LyIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjQyMDAifQ.NlSFdJSUQfDF0_hbXkfL_smZkfV8b9KFt4ToBFZDzO0",
