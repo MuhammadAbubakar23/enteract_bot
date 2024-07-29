@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { SharedService } from 'src/app/services/shared.service';
 import { BotMonitoringService } from 'src/app/main/main/ai-bot/bot-monitoring.service';
 import { ChatVisibilityService } from 'src/app/services/chat-visibility.service';
+import { environment } from 'src/environments/environment';
 declare var toggleNavPanel: any;
 @Component({
   selector: 'app-expanded-bot-conversation',
@@ -39,6 +40,7 @@ export class ExpandedBotConversationComponent {
 //       ]
 //     }
 //   ];
+
   activeIndex = 0;
   isActive = false;
   searchText: any = '';
@@ -48,6 +50,8 @@ export class ExpandedBotConversationComponent {
   completedConversation: any[] = [];
   showBotMonitoringContent: boolean = false;
   interval: any;
+  workspace_id = environment.workspace_id;
+  bot_id = environment.bot_id;
   constructor(private chatVisibilityService: ChatVisibilityService,
     private headerService: HeaderService, private _botService: BotMonitoringService,
     private _route:Router,private _sharedS:SharedService
@@ -62,14 +66,11 @@ export class ExpandedBotConversationComponent {
     this.getChatBotHistory();
     this.chatVisibilityService.thirdActiveHistory$.subscribe((obj: any) => {
       if (obj) {
-        debugger
-        const index = this.activechatBotHistory.findIndex((item: any) => item.slug === obj.slug)
+        const index = this.activechatBotHistory.findIndex((item: any) => item.session_id === obj.session_id)
         if(index!=-1){
           this.activechatBotHistory[index]['active'] = obj.active;
         }
-        
       }
-
     })
 
     this.interval = setInterval(() => {
@@ -122,43 +123,39 @@ export class ExpandedBotConversationComponent {
   }
   getChatBotHistory() {
     this._spinner.show('chat-history-menu1');
-    
-    this._botService.chatBotHistory().subscribe((res: any) => {
-      res.slugs.forEach((item: any, index: any) => {
-        item.name = "Unknown" + `${index + 1}`
-        item['active'] = false;
-      })
-      if(res.slugs.length>0){
+    const formData = {bot_id:this.bot_id,workspace_id:this.workspace_id}
+    this._botService.chatBotHistory(formData).subscribe((res: any) => {
+      // res.slugs.forEach((item: any, index: any) => {
+      //   item.name = "Unknown" + `${index + 1}`
+      //   item['active'] = false;
+      // })
+      if(res.detail.length>0){
          this._spinner.hide('chat-history-menu1');
-        this.activechatBotHistory = res.slugs;
+        this.activechatBotHistory = res.detail;
       }
     },
       (error: any) => {
         alert('Service unavailable');
       })
-
-
-
   }
 
 
   getChatBotHistoryonRefresh() {
     //this._spinner.show('chat-history-menu1');
-    
-    this._botService.chatBotHistory().subscribe((res: any) => {
-      res.slugs.forEach((item: any, index: any) => {
-        item.name = "Unknown" + `${index + 1}`
-        item['active'] = false;
-      })
-      if(res.slugs.length>0){
+    const formData = {bot_id:this.bot_id,workspace_id:this.workspace_id}
+    this._botService.chatBotHistory(formData).subscribe((res: any) => {
+      // res.slugs.forEach((item: any, index: any) => {
+      //   item.name = "Unknown" + `${index + 1}`
+      //   item['active'] = false;
+      // })
+      if(res.detail.length>0){
          //this._spinner.hide('chat-history-menu1');
-        this.activechatBotHistory = res.slugs;
+        this.activechatBotHistory = res.detail;
       }
-      
-      this.chatVisibilityService.refreshHistoryArray.forEach((slug)=>{
+      this.chatVisibilityService.refreshHistoryArray.forEach((session_id)=>{
         
         this.activechatBotHistory.forEach((item:any)=>{
-          if(item.slug == slug){
+          if(item.session_id == session_id){
             item.active = true;
           }
         })

@@ -42,7 +42,6 @@ export class SidenavComponent implements OnInit {
   //   }
   // ];
   menus:any =[];
-  actorId = environment.actorId;
 
   ConsoleRouteName = '/bot/console/event-logs';
   activeConsole = false;

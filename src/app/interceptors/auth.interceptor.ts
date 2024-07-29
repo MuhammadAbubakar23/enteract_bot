@@ -11,6 +11,7 @@ export class AuthInterceptor implements HttpInterceptor {
   constructor(private authService: AuthService, private _r: Router) { }
    appkey = environment.appKey;
    superTeam = environment.superTeam;
+   superTeam1 = environment.superTeam1;
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
     if (req.url.endsWith("/Authentication/Login")) {
@@ -48,11 +49,12 @@ export class AuthInterceptor implements HttpInterceptor {
       console.log("No token found");
       this._r.navigateByUrl('/auth/login');
     }
+
     req = req.clone({
       setHeaders: {
         Authorization: authToken ? "Bearer "+authToken : '',
         'x-app-key':this.appkey,
-        'x-super-team':this.superTeam,
+        'x-super-team':req.url.includes("http://52.77.162.250:5005/") ? this.superTeam1 : this.superTeam,
       }
     });
     return next.handle(req);

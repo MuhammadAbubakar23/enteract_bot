@@ -19,6 +19,13 @@ export class AiBotAnalyticsComponent {
   avgTokenCount: any;
   totalTokenCount: any;
   tokenPerDayCount: any;
+  agents: any;
+  avgBotConversationTime: any;
+  botEsclationRate: any;
+  avgWaitTime: any;
+  sentimentAnalysis: any;
+  tagsAnalatics: any;
+  peakHours: any;
   constructor(private _hS: HeaderService, private _analytics: AnalyticsService) {
     _hS.updateHeaderData({
       title: 'Ai Bot Analytics',
@@ -28,6 +35,20 @@ export class AiBotAnalyticsComponent {
     })
   }
   ngOnInit(): void {
+    //New
+    this.TotalConversation();
+    this.TotalAgents();
+    this.AvgBotConversationTime();
+    this.BotEsclationRate();
+    this.AvgWaitTime();
+    this.SentimentAnalysis();
+    this.TagsAnalatics();
+    this.TotalToken();
+    this.AvgToken();
+    this.TimeoutCount();
+    this.TokenPerDay();
+
+    //Old
     this.totalBotConversation();
     this.botEscalationRate();
     this.fullBackRate();
@@ -39,19 +60,14 @@ export class AiBotAnalyticsComponent {
     this.averageToken();
     this.heatMap();
     this.fallBackRate();
-    this.getTotalConversation();
-    this.TokenPerDay();
-    this.TotalToken();
-    this.AvgToken();
     this.FallBackCount();
-    this.TimeoutCount();
+
 
   }
-  getTotalConversation() {
+  TotalConversation() {
     this._analytics.GetTotalBotConversation().subscribe(
       (res: any) => {
-        this.botConversation = res;
-
+        this.botConversation = res.detail;
       },
       (error: any) => {
         console.error("An error occurred while fetching the bot conversation:", error);
@@ -59,21 +75,142 @@ export class AiBotAnalyticsComponent {
       }
     );
   }
+  TotalAgents(){
+    this._analytics.GetTotalAgents().subscribe(
+      (res: any) => {
+        this.agents = res.detail;
+        this.fallBackRate();
+      },
+      (error: any) => {
+        console.error("An error occurred while fetching the bot agents:", error);
+
+      }
+    );
+  }
+  AvgBotConversationTime(){
+    this._analytics.GetAvgBotConversationTime().subscribe(
+      (res: any) => {
+        this.avgBotConversationTime = res.detail;
+      },
+      (error: any) => {
+        console.error("An error occurred while fetching the average bot converstion time:", error);
+
+      }
+    );
+  }
+  BotEsclationRate(){
+    this._analytics.GetBotEsclationRate().subscribe(
+      (res: any) => {
+        this.botEsclationRate = res.detail;
+      },
+      (error: any) => {
+        console.error("An error occurred while fetching the bot esclation rate:", error);
+
+      }
+    );
+  }
+  AvgWaitTime(){
+    this._analytics.GetAvgWaitTime().subscribe(
+      (res: any) => {
+        this.avgWaitTime = res.detail;
+      },
+      (error: any) => {
+        console.error("An error occurred while fetching the bot avgerage wait time:", error);
+
+      }
+    );
+  }
+  SentimentAnalysis(){
+    this._analytics.GetSentimentAnalysis().subscribe(
+      (res: any) => {
+        this.sentimentAnalysis = res.detail;
+      },
+      (error: any) => {
+        console.error("An error occurred while fetching the bot sentiment analysis:", error);
+
+      }
+    );
+  }
+  TagsAnalatics(){
+    this._analytics.GetTagsAnalatics().subscribe(
+      (res: any) => {
+        this.tagsAnalatics = res.detail;
+      },
+      (error: any) => {
+        console.error("An error occurred while fetching the tag analytics:", error);
+
+      }
+    );
+  }
+  PeakHours(){
+    this._analytics.GetPeakHours().subscribe(
+      (res: any) => {
+        this.peakHours = res.detail;
+        this.heatMap();
+      },
+      (error: any) => {
+        console.error("An error occurred while fetching the peak hours:", error);
+
+      }
+    );
+  }
+  TotalToken() {
+    this._analytics.TotalToken().subscribe(
+      (res: any) => {
+        this.totalTokenCount = res.detail;
+      },
+      (error: any) => {
+        console.error("An error occurred while fetching the total token:", error);
+
+      }
+    );
+  }  
+  AvgToken() {
+    this._analytics.AvgToken().subscribe(
+      (res: any) => {
+        // const tokenData = res.tokens; 
+        // const tokenValues = Object.values(tokenData) as number[];
+        // const totalTokens = tokenValues.reduce((acc, value) => acc + value, 0);
+        // const averageTokens = totalTokens / tokenValues.length;
+        // this.avgTokenCount = averageTokens.toFixed(0);
+        //res && res['avg tokens'] !== undefined
+        this.avgTokenCount = res.detail;
+      },
+      (error: any) => {
+        console.error("An error occurred while fetching the avgerage token:", error);
+      }
+    );
+    }
 
   TimeoutCount() {
     this._analytics.TimeoutCount().subscribe(
       (res: any) => {
-        const countData = res.count
-        const countKey = Object.keys(countData)[0];
-        this.sessiontimeout = countData[countKey];;
+        // const countData = res.count
+        // const countKey = Object.keys(countData)[0];
+        // this.sessiontimeout = countData[countKey];;
+        this.sessiontimeout = res.detail;
 
       },
       (error: any) => {
-        console.error("An error occurred while fetching the bot conversation:", error);
+        console.error("An error occurred while fetching the timeout count:", error);
 
       }
     );
   }
+  TokenPerDay() {
+    this._analytics.TokenPerDay().subscribe(
+      (res: any) => {
+        this.tokenPerDayCount = res.detail;
+      },
+      (error: any) => {
+        console.error("An error occurred while fetching the token per day:", error);
+
+      }
+    );
+  }
+
+
+
   FallBackCount() {
     this._analytics.FallBackCount().subscribe(
       (res: any) => {
@@ -88,52 +225,12 @@ export class AiBotAnalyticsComponent {
       }
     );
   }
-  
-AvgToken() {
-  this._analytics.AvgToken().subscribe(
-    (res: any) => {
-      // const tokenData = res.tokens; 
-      // const tokenValues = Object.values(tokenData) as number[];
-      // const totalTokens = tokenValues.reduce((acc, value) => acc + value, 0);
-      // const averageTokens = totalTokens / tokenValues.length;
-      // this.avgTokenCount = averageTokens.toFixed(0);
-      res && res['avg tokens'] !== undefined
-      this.avgTokenCount = res['avg tokens'];
-    },
-    (error: any) => {
-      console.error("An error occurred while fetching the bot conversation:", error);
-    }
-  );
-}
-
-  TotalToken() {
-    this._analytics.TotalToken().subscribe(
-      (res: any) => {
-        res && res['total tokens'] !== undefined
-        this.totalTokenCount = res['total tokens'];
 
 
-      },
-      (error: any) => {
-        console.error("An error occurred while fetching the bot conversation:", error);
-
-      }
-    );
-  }
-  TokenPerDay() {
-    this._analytics.TokenPerDay().subscribe(
-      (res: any) => {
-        this.tokenPerDayCount = res;
-
-      },
-      (error: any) => {
-        console.error("An error occurred while fetching the bot conversation:", error);
-
-      }
-    );
-  }
 
   totalBotConversation() {
+    
+
     var chartDom = document.getElementById('main');
     this.totalBot = echarts.init(chartDom);
     var option;
@@ -615,7 +712,7 @@ AvgToken() {
       },
       series: [
         {
-          name: 'Access From',
+          name: 'BOTS AGENT',
           type: 'pie',
           radius: ['40%', '70%'],
           avoidLabelOverlap: false,
@@ -639,8 +736,8 @@ AvgToken() {
             show: false
           },
           data: [
-            { value: 1048, name: 'Search Engine' },
-            { value: 735, name: 'Direct' }
+            { value: this.agents.total_agents, name: 'Total Agent' },
+            { value: this.agents.available_agents, name: 'Available Agent' }
           ]
         }
       ]

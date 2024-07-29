@@ -16,6 +16,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MenuBotComponent } from './components/menu-bot/menu-bot.component';
 import { TemplatesComponent } from './components/templates/templates.component';
 import { ToastrModule } from 'ngx-toastr';
+import { CreateUserComponent } from './components/user-management/create-user/create-user.component';
 
 
 @NgModule({
@@ -31,7 +32,8 @@ import { ToastrModule } from 'ngx-toastr';
     TagsComponent,
     KnowledgeBaseComponent,
     MenuBotComponent,
-    TemplatesComponent
+    TemplatesComponent,
+    CreateUserComponent
   ],
   imports: [
     CommonModule,

@@ -12,6 +12,7 @@ import { ConversationalBotComponent } from './components/conversational-bot/conv
 import { IntentBotComponent } from './components/intent-bot/intent-bot.component';
 import { MenuBotComponent } from './components/menu-bot/menu-bot.component';
 import { TemplatesComponent } from './components/templates/templates.component';
+import { CreateUserComponent } from './components/user-management/create-user/create-user.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'event-logs', pathMatch: 'full' },
@@ -27,7 +28,11 @@ const routes: Routes = [
   { path: 'connect-channels', component: ConnectChannelsComponent},
   { path: 'settings', component: SettingsComponent },
  
-  { path: 'user-management', component: UserManagementComponent },
+  { path: 'users', component: UserManagementComponent },
+  {
+    path: 'users/create',component: CreateUserComponent },
+  {
+    path: 'users/create/:id',component: CreateUserComponent },
   { path: 'tags', component: TagsComponent},
   { path: 'knowledge-base', component: KnowledgeBaseComponent },
 ];

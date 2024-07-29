@@ -1,1 +1,114 @@
-<p>user-management works!</p>
+<div class="team-user-wrap console-body-wrapper inbox-container" data-scrollbar="true" tabindex="-1"
+    style="overflow-y:auto; outline: none;">
+    <ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="square-jelly-box"
+    [fullScreen]="false">
+    <p style="color: white"> Loading... </p>
+    </ngx-spinner>
+<div class="scroll-content">
+<div class="row h-auto justify-content-center">
+  <div class="col-md-11">
+    <div class="tab-content" id="nav-tabContent">
+      <div id="members" class="tab-pane fade list-group-section active show" role="tabpanel" aria-labelledby="members-tab">
+
+        <div class="w-100 inbox-container">
+
+          <div class="filter-container">
+            <div class="row">
+              <div class="col-md-5">
+              </div>
+              <div class="col-md-7">
+                <div class="d-flex align-items-center justify-content-end">
+
+                  <a [routerLink]="['/bot/console/users/create']" class="me-2">
+                    <button type="button" class="btn btn-success">
+                      <i class="fal fa-plus me-2"></i>
+                      Create User
+                    </button>
+                  </a>
+
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-5">
+                <ul class="list-group list-group-horizontal border-0">
+                  <li class="list-group-item border-0 p-0">
+                    <div class="icon-input">
+                      <i class="fa-light fa-magnifying-glass"></i>
+                      <input class="form-control" placeholder="Search User.. ">
+                    </div>
+                  </li>
+                  <li class="list-group-item border-0 refreshicon iconHover iconButton medium rounded-circle" aria-label="..." data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="Refresh">
+                    <i class="fal fa-redo"></i>
+                  </li>
+                </ul>
+              </div>
+              <div class="col-md-7">
+                <div *ngIf="totalCount > 0" class="d-flex align-items-center justify-content-end">
+                   {{startPoint}} - {{endPoint}} of {{totalCount}}
+                 <span class="iconButton medium iconHover" (click)="previousPage()">
+                   <i class="fal fa-chevron-left"></i>
+                 </span>
+                 <span class="iconButton medium iconHover" (click)="nextPage()">
+                   <i class="fal fa-chevron-right"></i>
+                 </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="query-container perfect-scrollbar" data-scrollbar="data-scrollbar">
+            <div class="table-section">
+              <table class="table table-sm table-nowrap table-reset" id="table">
+                <thead>
+                  <tr>
+                    <th>User</th>
+                    <th>Email </th>
+                    <th>Role </th>
+                    <th> </th>
+                  </tr>
+                </thead>
+                <tbody >
+                  <tr *ngFor="let user of messages">
+                    <td>
+                        {{user.name}}
+                    </td>
+                    <td>
+                      {{user.email}}
+                    </td>
+                    <td>{{user.role}}</td>
+                    <td>
+                      <div class="icons-list d-flex justify-content-end dropstart">
+                        <button class="btn iconButton small iconHover btn-group" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          <i class="far fa-ellipsis-v"></i>
+                        </button>
+                        <ul class="dropdown-menu fade">
+                          <li>
+                            <a class="dropdown-item" (click)="editTemplate(user)"><i class="fal fa-edit me-2"></i> Edit</a>
+                          </li>
+                          <li>
+                            <a class="dropdown-item delete-dd" (click)="deleteTemplate(user)"><i class="fal fa-trash me-2"></i> Delete</a>
+                          </li>
+
+                        </ul>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+
+
+
+
+

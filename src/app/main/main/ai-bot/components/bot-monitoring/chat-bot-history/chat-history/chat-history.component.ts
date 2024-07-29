@@ -4,6 +4,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ChatVisibilityService } from 'src/app/services/chat-visibility.service';
 import { SharedModuleModule } from 'src/app/shared-module/shared-module.module';
 import { BotMonitoringService } from '../../../../bot-monitoring.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-chat-history',
@@ -19,6 +20,8 @@ export class ChatHistoryComponent implements OnInit {
   isRemoved: boolean = false;
   @Output() minimizeToggle: EventEmitter<void> = new EventEmitter<void>();
   interval: any;
+  bot_id= environment.bot_id;
+  workspace_id= environment.workspace_id;
 
   constructor(private chatVisibilityService: ChatVisibilityService, private _botS: BotMonitoringService,private _spinner:NgxSpinnerService) { }
   ngOnInit(): void {
@@ -29,9 +32,9 @@ export class ChatHistoryComponent implements OnInit {
   }
   removeScreen() {
     let newChat =
-      { "slug": this.chat[0].slug }
+      { "session_id": this.chat.session_id }
     this.chatVisibilityService.notifyNewChatIdHistory(newChat);
-    const index = this.chatVisibilityService.refreshHistoryArray.indexOf(this.chat[0].slug);
+    const index = this.chatVisibilityService.refreshHistoryArray.indexOf(this.chat.session_id);
     if (index !== -1) {
       this.chatVisibilityService.refreshHistoryArray.splice(index, 1);
 }
@@ -41,12 +44,12 @@ export class ChatHistoryComponent implements OnInit {
     this.isMinimized = !this.isMinimized;
   }
   refreshHistory() {
-
-    this._botS.ChatHistory({ 'slug': this.chat[0].slug }).subscribe((res: any) => {
-      if (res[0].history.length > 0) {
-        res[0].history[0]['slug'] = this.chat[0].slug;
-        res[0].history[0]['name'] = this.chat[0].name;
-        this.chat = res[0].history;
+    const formData = {bot_id:this.bot_id,workspace_id:this.workspace_id,session_id:this.chat.session_id}
+    this._botS.ChatHistory(formData).subscribe((res: any) => {
+      if (res.detail.length > 0) {
+        res.detail['session_id'] = this.chat.session_id;
+        res.detail['last_message'] = this.chat.last_message;
+        this.chat = res.detail;
         //this.chats.push(res[0].history);
       } else {
         this._spinner.hide('chat-history')

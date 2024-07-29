@@ -66,9 +66,7 @@ export class MainComponent {
   }
 
   loadComponent(leftSideName: string): void {
-    debugger
     let componentFactory = null;
-
     switch (leftSideName) {
       // case 'Bot Interactions':
       //   componentFactory = this.resolver.resolveComponentFactory(ExpandedAiBotComponent);

@@ -30,7 +30,7 @@ export class ExpandedConsoleComponent {
     // { DisplayName: "Rules Bot", RouteName: "console/rules-bot" ,expanded: false, isChild: false, class:"fal fa-eye pe-2"},
     { DisplayName: "Connect Channels", RouteName: "console/connect-channels", expanded: false, isChild: false, class:"fa-light fa-message-bot pe-2"},
     
-    { DisplayName: "User Management", RouteName: "console/user-management", expanded: false , isChild: false, class:"fal fa-users pe-2"},
+    { DisplayName: "User Management", RouteName: "console/users", expanded: false , isChild: false, class:"fal fa-users pe-2"},
     { DisplayName: "Tags", RouteName: "console/tags", expanded: false, isChild: false, class:"fal fa-tags pe-2" },
     { DisplayName: "Knowledge Base", RouteName: "console/knowledge-base", expanded: false , isChild: false, class:"fal fa-book-open pe-2"},
     { DisplayName: "Settings", RouteName: "console/settings", expanded: false, isChild: false, class:"fa-light fa-gear pe-2" }
@@ -40,7 +40,6 @@ export class ExpandedConsoleComponent {
   constructor(private sidenavService: SidenavService, private chatVisibilityServicee : ChatVisibilityService) {
   }
   toggleCollapse(menu: any) {
-    debugger
       menu.expanded = !menu.expanded;
       // if(menu.DisplayName == " Bot Monitoring "){
       //   this.sidenavService.updateMessage("Bot Conversation")
@@ -51,7 +50,6 @@ export class ExpandedConsoleComponent {
   }
 
   ngOnInit(): void {
-    debugger
     this.chatVisibilityServicee.refreshHistoryArray = [];
 
   }
@@ -61,7 +59,6 @@ export class ExpandedConsoleComponent {
   }
   
   toggle() {
-    ;
   }
 
   toggleNavTest() {

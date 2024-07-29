@@ -46,10 +46,8 @@ export class LoginComponent implements OnInit {
       (res: any) => {
         if (res) {
           console.log("Login response:", res);
-          debugger
           localStorage.setItem('access_token', res.loginResponse.loginResponse.accessToken);
 
-          console.log(localStorage.getItem('access_token'));
           // const decodeToken = this._aS.decodeToken(res.data);
           // console.log(decodeToken);
           this.router.navigateByUrl('/bot/ai-bot/bot-interaction');

@@ -72,23 +72,23 @@
               <a
                 (click)="toggleChatVisibility(item)"
                 id="active1"
-                class="all-inboxes-menu list-group-item list-group-item-action align-items-start"
-                [ngClass]="{ active: item.active }"
+                class="all-inboxes-menu list-group-item list-group-item-action align-items-start" style="height: 60px;"
+                
               >
                 <div class="iconButton medium night berryTransBg fw-bold">
-                  {{ item.name | initialLetters }}
+                  <!-- {{ item.session_id | initialLetters}} -->
                 </div>
                 <div class="ms-2 flex-grow-1">
                   <div class="d-flex align-items-center">
-                    <h6 class="dark m-0">{{ item.name }}</h6>
+                    <h6 class="dark m-0">{{ item.session_id }}</h6>
 
                     <small class="coal ms-auto top-0">{{
-                      item.createdAt | date : "shortTime"
+                      item.last_timestamp
                     }}</small>
                   </div>
                   <div class="d-flex flex-column">
                     <span class="coal text-truncate last-chatmsg">
-                      <p>{{ item.slug }}</p>
+                      <p>{{ item.last_message }}</p>
                     </span>
                   </div>
                 </div>

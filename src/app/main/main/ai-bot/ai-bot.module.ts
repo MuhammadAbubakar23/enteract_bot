@@ -12,7 +12,7 @@ import { ChatBotHistoryComponent } from './components/bot-monitoring/chat-bot-hi
   imports: [
     CommonModule,
     AiBotRoutingModule,
-    ChatBotHistoryComponent,
+    ChatBotHistoryComponent
 ]
 })
 export class AiBotModule { }

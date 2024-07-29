@@ -2,6 +2,7 @@ import { Component, OnInit, } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/auth/authService/auth.service';
 import { HeaderService } from 'src/app/services/header.service';
+import { SharedService } from 'src/app/services/shared.service';
 
 @Component({
   selector: 'app-header',
@@ -21,7 +22,8 @@ export class HeaderComponent implements OnInit {
     // isTab: true,
   };
   currentroute: any;
-  constructor(private _headerService: HeaderService, private router: Router, private _authS: AuthService) {
+  isWidget: boolean = false;
+  constructor(private _headerService: HeaderService, private router: Router, private _authS: AuthService,private sharedService: SharedService) {
     const urlSegments = this.router.url.split('/');
     const moduleSegment = urlSegments[2];
   }
@@ -37,6 +39,12 @@ export class HeaderComponent implements OnInit {
 
 
   }
+
+  showChatWidget() {
+    this.isWidget = !this.isWidget;
+    this.sharedService.setShowChatWidget(this.isWidget);
+  }
+  
   signOut() {
     this._authS.doLogout();
   }

@@ -13,4 +13,11 @@ export class SharedService {
   setShowGenerativeMenu(value: any) {
     this.showGenerativeMenuSubject.next(value);
   }
+  
+  private showChatWidgetSubject = new BehaviorSubject<any>(false);
+  showChatWidget$ = this.showChatWidgetSubject.asObservable();
+
+  setShowChatWidget(value: any) {
+    this.showChatWidgetSubject.next(value);
+  }
 }
