@@ -17,6 +17,8 @@ import { MenuBotComponent } from './components/menu-bot/menu-bot.component';
 import { TemplatesComponent } from './components/templates/templates.component';
 import { ToastrModule } from 'ngx-toastr';
 import { CreateUserComponent } from './components/user-management/create-user/create-user.component';
+import { ConversationalBotConfigurationComponent } from './components/conversational-bot/conversational-bot-configuration/conversational-bot-configuration.component';
+import { ConversationalBotUploadFilesComponent } from './components/conversational-bot/conversational-bot-upload-files/conversational-bot-upload-files.component';
 
 
 @NgModule({
@@ -33,7 +35,9 @@ import { CreateUserComponent } from './components/user-management/create-user/cr
     KnowledgeBaseComponent,
     MenuBotComponent,
     TemplatesComponent,
-    CreateUserComponent
+    CreateUserComponent,
+    ConversationalBotConfigurationComponent,
+    ConversationalBotUploadFilesComponent
   ],
   imports: [
     CommonModule,
