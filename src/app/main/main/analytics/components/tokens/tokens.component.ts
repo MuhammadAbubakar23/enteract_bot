@@ -10,6 +10,7 @@ import { AnalyticsService } from '../../service/analytics.service';
 export class TokensComponent {
   avgTokenCount:any
   totalTokenCount:any
+  tokenPerDayCount: any;
   constructor(private _hS: HeaderService,private _analytics: AnalyticsService) {
     _hS.updateHeaderData({
       title: 'Tokens',
@@ -20,39 +21,44 @@ export class TokensComponent {
   }
   ngOnInit(): void {
     this.averageToken();
-    this.TotalToken()
-    this.AvgToken()
-  }
-  AvgToken() {
-    this._analytics.AvgToken().subscribe(
-      (res: any) => {
-        // const tokenData = res.tokens; 
-        // const tokenValues = Object.values(tokenData) as number[];
-        // const totalTokens = tokenValues.reduce((acc, value) => acc + value, 0);
-        // const averageTokens = totalTokens / tokenValues.length;
-        // this.avgTokenCount = averageTokens.toFixed(0);
-        res && res['avg tokens'] !== undefined
-        this.avgTokenCount = res['avg tokens'];
-      },
-      (error: any) => {
-        console.error("An error occurred while fetching the bot conversation:", error);
-      }
-    );
+    this.TotalToken();
+    this.AvgToken();
+    this.TokenPerDay();
   }
   TotalToken() {
     this._analytics.TotalToken().subscribe(
       (res: any) => {
-        res && res['total tokens'] !== undefined
-        this.totalTokenCount = res['total tokens'];
-
-
+        this.totalTokenCount = res.detail;
       },
       (error: any) => {
-        console.error("An error occurred while fetching the bot conversation:", error);
+        console.error("An error occurred while fetching the total token:", error);
+
+      }
+    );
+  }  
+  AvgToken() {
+    this._analytics.AvgToken().subscribe(
+      (res: any) => {
+        this.avgTokenCount = res.detail;
+      },
+      (error: any) => {
+        console.error("An error occurred while fetching the avgerage token:", error);
+      }
+    );
+  }
+  TokenPerDay() {
+    this._analytics.TokenPerDay().subscribe(
+      (res: any) => {
+        this.tokenPerDayCount = res.detail;
+      },
+      (error: any) => {
+        console.error("An error occurred while fetching the token per day:", error);
 
       }
     );
   }
+
+
   averageToken() {
     var chartDom = document.getElementById('average');
     var myChart = echarts.init(chartDom);

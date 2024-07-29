@@ -12,6 +12,9 @@ export class ConversationAnalyticsComponent {
   fallback: any
   humanbot: any;
   botConversation: any;
+  agents: any;
+  avgBotConversationTime: any;
+  tagsAnalatics: any;
   constructor(private _hS: HeaderService,private _analytics: AnalyticsService) {
     _hS.updateHeaderData({
       title: 'Conversation Analytics',
@@ -21,12 +24,68 @@ export class ConversationAnalyticsComponent {
     })
   }
   ngOnInit(): void {
-    this.totalBotConversation();
+    this.TotalConversation();
+    this.TotalAgents();
+    this.AvgBotConversationTime();
+    this.TagsAnalatics();
+
+
+    
     this.botEscalationRate();
     this.BotTagst();
     this.fallBackRate()
     this.getTotalConversation()
   }
+  TotalConversation() {
+    this._analytics.GetTotalBotConversation().subscribe(
+      (res: any) => {
+        this.botConversation = res.detail;
+      },
+      (error: any) => {
+        console.error("An error occurred while fetching the bot conversation:", error);
+
+      }
+    );
+  }
+  TotalAgents(){
+    this._analytics.GetTotalAgents().subscribe(
+      (res: any) => {
+        this.agents = res.detail;
+        this.fallBackRate();
+      },
+      (error: any) => {
+        console.error("An error occurred while fetching the bot agents:", error);
+
+      }
+    );
+  }
+  AvgBotConversationTime(){
+    this._analytics.GetAvgBotConversationTime().subscribe(
+      (res: any) => {
+        this.avgBotConversationTime = res.detail;
+      },
+      (error: any) => {
+        console.error("An error occurred while fetching the average bot converstion time:", error);
+
+      }
+    );
+  }
+  TagsAnalatics(){
+    this._analytics.GetTagsAnalatics().subscribe(
+      (res: any) => {
+        this.tagsAnalatics = res.detail;
+      },
+      (error: any) => {
+        console.error("An error occurred while fetching the tag analytics:", error);
+
+      }
+    );
+  }
+
+
+  
+
+
   getTotalConversation() {
     this._analytics.GetTotalBotConversation().subscribe(
       (res: any) => {
@@ -153,18 +212,24 @@ export class ConversationAnalyticsComponent {
   }
   fallBackRate() {
     var chartDom = document.getElementById('fallbackrate');
-    this.fallback= echarts.init(chartDom);
+    var myChart = echarts.init(chartDom);
     var option;
 
     option = {
-
-
+      tooltip: {
+        trigger: 'item'
+      },
       series: [
         {
-          name: 'Access From',
+          name: 'BOTS AGENT',
           type: 'pie',
           radius: ['40%', '70%'],
-
+          avoidLabelOverlap: false,
+          itemStyle: {
+            borderRadius: 10,
+            borderColor: '#fff',
+            borderWidth: 0
+          },
           label: {
             show: false,
             position: 'center'
@@ -180,15 +245,14 @@ export class ConversationAnalyticsComponent {
             show: false
           },
           data: [
-            { value: 1048, name: 'Search Engine' },
-            { value: 735, name: 'Direct' },
-    
+            { value: this.agents.total_agents, name: 'Total Agent' },
+            { value: this.agents.available_agents, name: 'Available Agent' }
           ]
         }
       ]
     };
 
-    option && this.fallback.setOption(option);
+    option && myChart.setOption(option);
   }
   makeChart() {
     window.addEventListener('resize', () => {

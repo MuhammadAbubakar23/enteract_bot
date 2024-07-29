@@ -84,7 +84,7 @@
                             <div class="card mb-3">
                                 <div class="card-body">
                                     <h6>Total Tokens</h6>
-                                    <h2>{{totalTokenCount | thousandSuff  }}</h2>
+                                    <h2>{{ (totalTokenCount > 0 ? totalTokenCount :0) | thousandSuff  }}</h2>
                                 </div>
                             </div>
                             <div class="card mb-3">
@@ -96,7 +96,7 @@
                             <div class="card mb-3">
                                 <div class="card-body">
                                     <h6>Tokens per day</h6>
-                                    <h2>50K</h2>
+                                    <h2>{{(tokenPerDayCount > 0 ? tokenPerDayCount :0) | thousandSuff  }}</h2>
                                 </div>
                             </div>
                         </div>
