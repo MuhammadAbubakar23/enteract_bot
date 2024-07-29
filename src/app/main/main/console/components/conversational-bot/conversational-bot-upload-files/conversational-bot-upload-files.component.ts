@@ -472,6 +472,15 @@ export class ConversationalBotUploadFilesComponent  implements OnInit {
     this.spinner.show()
     this._cBS.createEmbeddings(formData).subscribe((res:any)=>{
       this.spinner.hide();
-    })
+      this._toastr.success('Success!', res.detail, {
+        timeOut: 3000,
+      });
+    }, (error: any) => {
+      this.spinner.hide();
+      this._toastr.error('Failed!', error.error.detail, {
+        timeOut: 3000,
+      });
+    }
+    )
   }
 }

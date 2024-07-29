@@ -131,7 +131,7 @@ export class ConversationalBotConfigurationComponent  implements OnInit {
     EmbeddingsApiKey: new FormControl(''),
     embeddings_url: new FormControl(''),
     vectorDB: new FormControl(null, [Validators.required]),
-    vectordb_api_key: new FormControl(null, [Validators.required]),
+    vectordb_api_key: new FormControl(null),
     vectordb_url: new FormControl(''),
     chatLimit: new FormControl('', [Validators.required]),
     prompt: new FormControl('', [Validators.required]),
@@ -295,6 +295,7 @@ export class ConversationalBotConfigurationComponent  implements OnInit {
   }
 
   updateWorkspace(){
+    debugger
     if(this.conversationalBotForm.valid){
       // const formData = new FormData;
       // formData.append('bot_id', "1");
