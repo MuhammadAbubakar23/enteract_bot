@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { SharedService } from 'src/app/services/shared.service';
 import { BotMonitoringService } from 'src/app/main/main/ai-bot/bot-monitoring.service';
 import { ChatHistoryVisibilityServiceService } from 'src/app/services/chat-history-visibility-service.service';
+import { environment } from 'src/environments/environment';
 
 declare var toggleNavPanel: any;
 @Component({
@@ -25,6 +26,8 @@ export class ExpandedChatHistoryComponent {
   completedConversation: any[] = [];
   showBotMonitoringContent: boolean = false;
   interval: any;
+  workspace_id = environment.workspace_id;
+  bot_id = environment.bot_id;
   constructor(private chatVisibilityService: ChatHistoryVisibilityServiceService,
     private headerService: HeaderService, private _botService: BotMonitoringService,
     private _route:Router,private _sharedS:SharedService
@@ -61,7 +64,6 @@ export class ExpandedChatHistoryComponent {
 
   }
   toggleChatVisibility(clickedItem: any) {
-    debugger
     this.chatVisibilityService.notifyNewChatIdHistory(clickedItem);
   }
 
@@ -70,22 +72,25 @@ export class ExpandedChatHistoryComponent {
   }
   getChatBotHistory() {
     this._spinner.show('chat-history-menu');
-    
-    this._botService.chatBotHistoryForChatHistoryModule().subscribe((res: any) => {
-      res.slugs = this.transformLogsResponse(res);
-      debugger
-      res.slugs.forEach((item: any, index: any) => {
-        item.name = "Unknown" + `${index + 1}`
-        item['active'] = false;
-      })
-      if(res.slugs.length>0){
-         this._spinner.hide('chat-history-menu');
-        this.activechatBotHistory = res.slugs;
-      }
-      debugger
+    const formData = {bot_id:this.bot_id,workspace_id:this.workspace_id}
+    this._botService.chatBotHistoryForChatHistoryModule(formData).subscribe((res: any) => {
+      // res.slugs = this.transformLogsResponse(res);
+      // res.slugs.forEach((item: any, index: any) => {
+      //   item.name = "Unknown" + `${index + 1}`
+      //   item['active'] = false;
+      // })
+      // if(res.slugs.length>0){
+      //    this._spinner.hide('chat-history-menu');
+      //   this.activechatBotHistory = res.slugs;
+      // }
+      if(res.detail.length>0){
+        this._spinner.hide('chat-history-menu');
+       this.activechatBotHistory = res.detail;
+     }
     },
       (error: any) => {
-        alert('Service unavailable');
+        this._spinner.hide('chat-history-menu');
+        //alert('Service unavailable');
       })
   }
 
@@ -98,29 +103,36 @@ export class ExpandedChatHistoryComponent {
   }
 
   getChatBotHistoryonRefresh() {
-    this._spinner.show('chat-history-menu');
-    
-    this._botService.chatBotHistoryForChatHistoryModule().subscribe((res: any) => {
-      res.slugs = this.transformLogsResponse(res);
+    // this._spinner.show('chat-history-menu');
+    const formData = {bot_id:this.bot_id,workspace_id:this.workspace_id}
+    this._botService.chatBotHistoryForChatHistoryModule(formData).subscribe((res: any) => {
+      // res.slugs = this.transformLogsResponse(res);
 
-      res.slugs.forEach((item: any, index: any) => {
-        item.name = "Unknown" + `${index + 1}`
-        item['active'] = false;
-      })
-      if(res.slugs.length>0){
-         this._spinner.hide('chat-history-menu');
-        this.activechatBotHistory = res.slugs;
-      }
-      this.chatVisibilityService.refreshHistoryArray.forEach((slug)=>{
-        debugger
-        this.activechatBotHistory.forEach((item:any)=>{
-          if(item.slug == slug){
-            item.active = true;
-          }
-        })
+      // res.slugs.forEach((item: any, index: any) => {
+      //   item.name = "Unknown" + `${index + 1}`
+      //   item['active'] = false;
+      // })
+      // if(res.slugs.length>0){
+      //    this._spinner.hide('chat-history-menu');
+      //   this.activechatBotHistory = res.slugs;
+      // }
+      if(res.detail.length>0){
+       // this._spinner.hide('chat-history-menu');
+       this.activechatBotHistory = res.detail;
+     }
+     this.chatVisibilityService.refreshHistoryArray.forEach((session_id)=>{
+        
+      this.activechatBotHistory.forEach((item:any)=>{
+        if(item.session_id == session_id){
+          item.active = true;
+        }
       })
     })
-  }
+  },
+  (error: any) => {
+    //alert('Service unavailable');
+  })
+}
 
   toggle() {
     ;

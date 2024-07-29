@@ -70,7 +70,7 @@
                                     <div class="card-body">
                                         <h6 class="mb-5 text-uppercase"> Total bot conversations</h6>
                                         <div class="mb-5 pb-3">
-                                            <h1 class="m-0 fw-bold">{{this.botConversation?.agent_count}}</h1>
+                                            <h1 class="m-0 fw-bold">{{this.botConversation.detail}}</h1>
                                             <small><i class="fa-light fa-arrow-up mint"></i> <span
                                                     class="mint">13.8%</span> than last
                                                 week</small>
@@ -104,7 +104,7 @@
                                                     </div>
                                                     <p class="mb-1 ms-2">Website</p>
                                                 </div>
-                                                <h4 class="m-0 fw-bold">5k</h4>
+                                                <h4 class="m-0 fw-bold">{{this.botConversation.detail}}</h4>
                                             </div>
                                         </div>
 
@@ -126,7 +126,7 @@
                                                         <span>
                                                             <i class="fa-regular fa-circle me-2 sky"></i> Total Agent
                                                         </span>
-                                                        <strong>25</strong>
+                                                        <strong>{{agents.total_agents}}</strong>
                                                     </li>
                                                     <li
                                                         class="list-group-item d-flex align-items-center justify-content-between">
@@ -135,7 +135,7 @@
                                                             <i class="fa-regular fa-circle me-2 cherry"></i>Available
                                                             Agent
                                                         </span>
-                                                        <strong>10</strong>
+                                                        <strong>{{agents.available_agents}}</strong>
                                                     </li>
 
                                                 </ul>
@@ -156,7 +156,7 @@
                                         <h6 class="mb-4 text-uppercase">Avg Bot Conversation Time</h6>
                                         <div class="d-flex align-items-center justify-content-between">
                                             <div class="d-flex align-items-center">
-                                                <h3 class="m-0 fw-bold">9.3 <small class="small">min</small></h3>
+                                                <h3 class="m-0 fw-bold">{{avgBotConversationTime}} <small class="small">min</small></h3>
                                                 <small class="ms-2"><i class="fa-light fa-arrow-up mint"></i> <span
                                                         class="mint">13.8%</span> than last
                                                     week</small>
@@ -209,7 +209,7 @@
                                                 <span>
                                                     <i class="fa-regular fa-circle me-2 sky"></i> Information
                                                 </span>
-                                                <strong>356</strong>
+                                                <strong>{{tagsAnalatics.Information}}</strong>
                                             </li>
                                             <li
                                                 class="list-group-item d-flex align-items-center justify-content-between">
@@ -217,7 +217,7 @@
                                                 <span>
                                                     <i class="fa-regular fa-circle me-2 cherry"></i> Sell
                                                 </span>
-                                                <strong>245</strong>
+                                                <strong>{{tagsAnalatics.Sell}}</strong>
                                             </li>
                                             <li
                                                 class="list-group-item d-flex align-items-center justify-content-between">
@@ -225,7 +225,7 @@
                                                 <span>
                                                     <i class="fa-regular fa-circle me-2 berry"></i> Analysis
                                                 </span>
-                                                <strong>112</strong>
+                                                <strong>{{tagsAnalatics.Analysis}}</strong>
                                             </li>
                                             <li
                                                 class="list-group-item d-flex align-items-center justify-content-between">
@@ -233,7 +233,7 @@
                                                 <span>
                                                     <i class="fa-regular fa-circle me-2 radical"></i> Reservation
                                                 </span>
-                                                <strong>98</strong>
+                                                <strong>{{tagsAnalatics.Reservation}}</strong>
                                             </li>
                                             <li
                                                 class="list-group-item d-flex align-items-center justify-content-between">
@@ -241,7 +241,7 @@
                                                 <span>
                                                     <i class="fa-regular fa-circle me-2 pearl"></i> Complaint
                                                 </span>
-                                                <strong>15</strong>
+                                                <strong>{{tagsAnalatics.Complaint}}</strong>
                                             </li>
 
                                         </ul>
