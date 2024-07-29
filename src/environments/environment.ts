@@ -7,8 +7,8 @@ export const environment = {
     //baseUrlAI: "http://52.77.162.250:5005/",
     imageBaseUrl: "https://hnbackend.enteract.app:8445",
     visitorUrl: "LogsHub",
-    chatBotBaseUrl: 'http://52.77.162.250:5005/',
-    conversationBotBaseUrl: "http://52.77.162.250:5005/",
+    chatBotBaseUrl: 'https://engage-rag.enteract.live/',
+    conversationBotBaseUrl: "https://engage-rag.enteract.live/",
     link:{
       analytics:{
         getTotalBotConversation:'analytics/total_bot_conversations?bot_id=1&filter_days=7',
