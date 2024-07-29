@@ -102,7 +102,7 @@ export class ExpandedBotConversationComponent {
       return;
     }
     this.activechatBotHistory = this.defaultchatBotHistory.filter(
-      (item: any) => item?.name.toLowerCase().includes(this.searchText.toLowerCase())
+      (item: any) => item?.last_message.toLowerCase().includes(this.searchText.toLowerCase())
     );
 
   }
@@ -135,7 +135,8 @@ export class ExpandedBotConversationComponent {
       }
     },
       (error: any) => {
-        alert('Service unavailable');
+        this._spinner.hide('chat-history-menu1');
+        //alert('Service unavailable');
       })
   }
 
@@ -162,7 +163,7 @@ export class ExpandedBotConversationComponent {
       })
     },
       (error: any) => {
-        alert('Service unavailable');
+        //alert('Service unavailable');
       })
 
 
@@ -177,6 +178,7 @@ export class ExpandedBotConversationComponent {
     toggleNavPanel();
   }
   ngOnDestroy(){
+    this.chatVisibilityService.refreshHistoryArray = []
     clearInterval(this.interval);
   }
 }

@@ -19,8 +19,9 @@ export class BotMonitoringService {
     const formData = new FormData();
     formData.append('bot_id', obj.bot_id);
     formData.append('workspace_id', obj.workspace_id);
-    return this.http.post(this.chatBotBaseUrl + "chats/get_all",formData);
+    return this.http.post(this.chatBotBaseUrl + "chats/active/get_all",formData);
   }
+
   ChatBotWdidget(form: any) {
     const formData = new FormData();
     formData.append('bot_id', form.bot_id);
@@ -37,8 +38,11 @@ export class BotMonitoringService {
     return this.http.post(this.chatBotBaseUrl + "chats/get", formData);
   }
 
-  chatBotHistoryForChatHistoryModule() {
-    return this.http.get(this.chatBotBaseUrl + "/historylogs");
+  chatBotHistoryForChatHistoryModule(obj:any) {
+    const formData = new FormData();
+    formData.append('bot_id', obj.bot_id);
+    formData.append('workspace_id', obj.workspace_id);
+    return this.http.post(this.chatBotBaseUrl + "chats/inactive/get_all",formData);
   }
 
   chatBotHistoryForHumanInteraction() {

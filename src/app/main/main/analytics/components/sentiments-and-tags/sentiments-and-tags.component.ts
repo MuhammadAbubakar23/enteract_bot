@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { HeaderService } from 'src/app/services/header.service';
 import * as echarts from 'echarts';
+import { AnalyticsService } from '../../service/analytics.service';
 
 @Component({
   selector: 'app-sentiments-and-tags',
@@ -8,7 +9,8 @@ import * as echarts from 'echarts';
   styleUrls: ['./sentiments-and-tags.component.scss']
 })
 export class SentimentsAndTagsComponent {
-  constructor(private _hS: HeaderService) {
+  sentimentAnalysis: any;
+  constructor(private _hS: HeaderService, private _analytics: AnalyticsService) {
     _hS.updateHeaderData({
       title: 'Sentiments and Tags',
       tabs: [{ title: '', url: '', isActive: true }],
@@ -17,9 +19,22 @@ export class SentimentsAndTagsComponent {
     })
   }
   ngOnInit(): void {
-    this.sentimentsBOTCsat()
+    this.SentimentAnalysis()
     this.humanCsat()
   }
+  SentimentAnalysis(){
+    this._analytics.GetSentimentAnalysis().subscribe(
+      (res: any) => {
+        this.sentimentAnalysis = res.detail;
+        this.sentimentsBOTCsat();
+      },
+      (error: any) => {
+        console.error("An error occurred while fetching the bot sentiment analysis:", error);
+
+      }
+    );
+  }
+
   sentimentsBOTCsat() {
     var chartDom = document.getElementById('analysisCsat');
     var myChart = echarts.init(chartDom);
@@ -32,7 +47,7 @@ export class SentimentsAndTagsComponent {
 
       series: [
         {
-          name: 'Access From',
+          name: 'Sentiment Form',
           type: 'pie',
           radius: ['40%', '70%'],
           avoidLabelOverlap: false,
@@ -51,11 +66,9 @@ export class SentimentsAndTagsComponent {
             show: false
           },
           data: [
-            { value: 1048, name: 'Search Engine' },
-            { value: 735, name: 'Direct' },
-            { value: 580, name: 'Email' },
-            { value: 484, name: 'Union Ads' },
-            { value: 300, name: 'Video Ads' }
+            { value: this.sentimentAnalysis?.Positive, name: 'Positive' },
+            { value: this.sentimentAnalysis?.Negative, name: 'Negative' },
+            { value: this.sentimentAnalysis?.Neutral, name: 'Neutral' }
           ]
         }
       ]

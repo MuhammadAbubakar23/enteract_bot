@@ -13,6 +13,9 @@ export class BotKpiComponent {
   fallRate: any;
   fallbackRateCount: any;
   sessiontimeout: any;
+  botEsclationRate: any;
+  avgWaitTime: any;
+  peakHours: any;
   constructor(private _hS: HeaderService, private _analytics: AnalyticsService) {
     _hS.updateHeaderData({
       title: 'Bot Kpi',
@@ -22,6 +25,11 @@ export class BotKpiComponent {
     })
   }
   ngOnInit(): void {
+    this.BotEsclationRate();
+    this.AvgWaitTime();
+    this.TimeoutCount();
+    this.PeakHours();
+
 
     this.fallback();
     this.abadonRate();
@@ -31,20 +39,61 @@ export class BotKpiComponent {
     this.heatMap();
     this.TimeoutCount()
   }
-  TimeoutCount() {
-    this._analytics.TimeoutCount().subscribe(
-      (res: any) => {
-        const countData = res.count
-        const countKey = Object.keys(countData)[0];
-        this.sessiontimeout = countData[countKey];;
 
+  BotEsclationRate(){
+    this._analytics.GetBotEsclationRate().subscribe(
+      (res: any) => {
+        this.botEsclationRate = res.detail;
       },
       (error: any) => {
-        console.error("An error occurred while fetching the bot conversation:", error);
+        console.error("An error occurred while fetching the bot esclation rate:", error);
 
       }
     );
   }
+  AvgWaitTime(){
+    this._analytics.GetAvgWaitTime().subscribe(
+      (res: any) => {
+        this.avgWaitTime = res.detail;
+      },
+      (error: any) => {
+        console.error("An error occurred while fetching the bot avgerage wait time:", error);
+
+      }
+    );
+  }
+  TimeoutCount() {
+    this._analytics.TimeoutCount().subscribe(
+      (res: any) => {
+        // const countData = res.count
+        // const countKey = Object.keys(countData)[0];
+        // this.sessiontimeout = countData[countKey];;
+        this.sessiontimeout = res.detail;
+
+      },
+      (error: any) => {
+        console.error("An error occurred while fetching the timeout count:", error);
+
+      }
+    );
+  }
+  PeakHours(){
+    this._analytics.GetPeakHours().subscribe(
+      (res: any) => {
+        this.peakHours = res.detail;
+        this.heatMap();
+      },
+      (error: any) => {
+        console.error("An error occurred while fetching the peak hours:", error);
+
+      }
+    );
+  }
+
+
+
+
+
   FallBackCount() {
     this._analytics.FallBackCount().subscribe(
       (res: any) => {

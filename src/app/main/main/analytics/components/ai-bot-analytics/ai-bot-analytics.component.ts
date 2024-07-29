@@ -180,8 +180,7 @@ export class AiBotAnalyticsComponent {
         console.error("An error occurred while fetching the avgerage token:", error);
       }
     );
-    }
-
+  }
   TimeoutCount() {
     this._analytics.TimeoutCount().subscribe(
       (res: any) => {

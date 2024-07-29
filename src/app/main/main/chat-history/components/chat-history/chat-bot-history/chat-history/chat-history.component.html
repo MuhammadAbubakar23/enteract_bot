@@ -15,7 +15,7 @@
         <span class="iconButton medium bg-white fw-bold"></span>
         <div class="ms-3">
           <h6 class="user-status m-0">
-            {{ chat[0].name }}
+            {{ chat[0].text }}
             <!-- <i class="fa fa-circle user-status-icon sun" title="away"></i> -->
           </h6>
         </div>
@@ -48,31 +48,31 @@
             <div
               class="message-wrap agent-message-wrap"
               [ngClass]="{
-                right: msg.role === 'user',
-                left: msg.role === 'assistant'
+                right: msg.type === 'human',
+                left: msg.type === 'ai'
               }"
             >
-              <div class="d-flex align-items-center agent-container">
-                <div class="card w-d-inline messageUpper">
-                  <div class="card-body">
-                    <div class="d-flex msg-user-info">
-                      <div class="d-flex align-items-center w-100">
-                        <h6 class="card-title navy m-0">
-                          {{
-                            msg.role === "assistant" ? "enteract.bot" : msg.role
-                          }}
-                        </h6>
-                        <small class="silver ms-auto">{{
-                          msg.sentAt | date : "shortTime"
-                        }}</small>
-                      </div>
+            <div class="d-flex align-items-center agent-container" [ngClass]="{'mb-5': i === chat.length - 1}">
+              <div class="card w-d-inline messageUpper">
+                <div class="card-body">
+                  <div class="d-flex msg-user-info">
+                    <div class="d-flex align-items-center w-100">
+                      <h6 class="card-title navy m-0">
+                        {{
+                          msg.type === "ai" ? "enteract.bot" : chat.session_id
+                        }}
+                      </h6>
+                      <small class="silver ms-auto">{{
+                        msg.timestamp
+                      }}</small>
                     </div>
-                    <p class="card-text nignt">
-                      {{ msg.content }}
-                    </p>
                   </div>
+                  <p class="card-text nignt">
+                    {{ msg.text }}
+                  </p>
                 </div>
               </div>
+            </div>
             </div>
           </ng-container>
         </div>
