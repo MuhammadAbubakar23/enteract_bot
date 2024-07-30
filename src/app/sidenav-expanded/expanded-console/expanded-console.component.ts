@@ -23,7 +23,7 @@ export class ExpandedConsoleComponent {
     Children: [
     // { DisplayName: "Menu Bot", RouteName: "console/bot-management/menu-bot", expanded: false, isChild: false},
     { DisplayName: "Conversational Bot", RouteName: "console/bot-management/conversational-bot" ,expanded: false, isChild: false},
-    { DisplayName: "Configurations", RouteName: "console/bot-management/configurations", expanded: false, isChild: false },
+    // { DisplayName: "Configurations", RouteName: "console/bot-management/configurations", expanded: false, isChild: false },
     // { DisplayName: "Templates", RouteName: "console/bot-management/templates", expanded: false, isChild: false },
   ]
   },

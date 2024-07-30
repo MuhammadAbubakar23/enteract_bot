@@ -51,9 +51,21 @@
 
     </form>
 
-    <div class="icon-buttons-wrapper d-flex justify-content-start pt-3 pb-4" *ngIf="documents">
+    <!-- <div class="icon-buttons-wrapper d-flex justify-content-start pt-3 pb-4" *ngIf="documents">
         <a (click)="createEmbeddings()"
             class="btn btn-primary btn-medium saveBtn newbtn" id="generateButton">Create Embeddings
         </a>
-    </div>
+    </div> -->
+    <div class="row">
+      <div class="col-6 mb-3">
+        <a (click)="createEmbeddings()"
+            class="btn btn-primary btn-small saveBtn newbtn" id="generateButton">Create Embeddings
+        </a>
+      </div>
+      <div class="col-6 mb-3 d-flex justify-content-end">
+          <a (click)="routeToCreate()" class="btn btn-default btn-small cancelBtn newbtn"
+              id="generateButton" style="background-color: grey; color: white;">Cancel
+          </a>
+      </div>
+  </div>
   </div>
