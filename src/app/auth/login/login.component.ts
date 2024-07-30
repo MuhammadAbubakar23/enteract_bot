@@ -46,11 +46,12 @@ export class LoginComponent implements OnInit {
       (res: any) => {
         if (res) {
           console.log("Login response:", res);
-          localStorage.setItem('access_token', res.loginResponse.loginResponse.accessToken);
+          localStorage.setItem('access_token', res?.loginResponse?.loginResponse?.accessToken);
+          localStorage.setItem('username', res?.loginResponse?.loginResponse?.username);
 
           // const decodeToken = this._aS.decodeToken(res.data);
           // console.log(decodeToken);
-          this.router.navigateByUrl('/bot/ai-bot/bot-interaction');
+          this.router.navigateByUrl('/bot/analytics/ai-bot-analytics');
           const toasterObject = { isShown: true, isSuccess: true, toastHeading: "Success", toastParagrahp: "Login Successfully!" }
           // this._toastS.updateToastData(toasterObject)
           // this._toastS.hide();

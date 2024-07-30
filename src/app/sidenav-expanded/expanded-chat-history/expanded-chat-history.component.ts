@@ -54,16 +54,12 @@ export class ExpandedChatHistoryComponent {
     }, 15000)
   }
 
-  filterResults(text: string) {
-
-    if (!this.searchText) {
-      this.activechatBotHistory = this.defaultchatBotHistory.slice();
-      return;
-    }
-    this.activechatBotHistory = this.defaultchatBotHistory.filter(
-      (item: any) => item?.name.toLowerCase().includes(this.searchText.toLowerCase())
-    );
-
+  filterResults() {
+  if (!this.searchText) {
+   this.activechatBotHistory = this.defaultchatBotHistory.slice();
+   return;
+   }
+   this.activechatBotHistory = this.defaultchatBotHistory.filter((item: any) => item?.session_id.toLowerCase().includes(this.searchText.toLowerCase())||item?.last_message.toLowerCase().includes(this.searchText.toLowerCase()));
   }
   toggleChatVisibility(clickedItem: any) {
     this.chatVisibilityService.notifyNewChatIdHistory(clickedItem);
@@ -90,7 +86,8 @@ export class ExpandedChatHistoryComponent {
       res.detail.forEach((item: any, index: any) => {
           item['active'] = false;
        })
-       this.activechatBotHistory = res.detail;
+       this.defaultchatBotHistory = res.detail;
+       this.activechatBotHistory =this.defaultchatBotHistory.slice();
      }
     },
       (error: any) => {
@@ -123,7 +120,8 @@ export class ExpandedChatHistoryComponent {
       // }
       if(res.detail.length>0){
        // this._spinner.hide('chat-history-menu');
-       this.activechatBotHistory = res.detail;
+       this.defaultchatBotHistory = res.detail;
+      this.activechatBotHistory =this.defaultchatBotHistory.slice();
      }
      this.chatVisibilityService.refreshHistoryArray.forEach((session_id)=>{
       this.activechatBotHistory.forEach((item:any)=>{
