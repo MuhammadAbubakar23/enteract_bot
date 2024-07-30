@@ -17,6 +17,7 @@ export class ConversationalBotConfigurationComponent  implements OnInit {
   bots: any[] = [];
   fileArray: any = [];
   isButtonDisabled = false;
+  twoDigitValue: string = '';
   currentId = 0;
   llms = ['llama3', 'openai', 'mistral', 'groq']
   embeddings = ['mxbai-embed-large', 'nomic-embed-text', 'all-minilm', 'all-MiniLM-L6-v2', 'text-embedding-3-small', 'text-embedding-3-large']
@@ -43,8 +44,11 @@ export class ConversationalBotConfigurationComponent  implements OnInit {
       this.workspace_id = id;
     }),
     this.ValueSettingServiceService.editFormValues$.subscribe(currentBot => {
-      if (currentBot) {
+      if (currentBot && currentBot !="null") {
         this.patchWorkspace(currentBot);
+      }
+      else if( currentBot && currentBot == "null"){
+        this.cancel()
       }
     })
       // if(this.workspace_id != null){this.patchWorkspace();}
@@ -65,31 +69,6 @@ export class ConversationalBotConfigurationComponent  implements OnInit {
       this.spinner.hide();
     })
   }
-  getDocuments(workspace_id:any){
-    this.workspace_id = workspace_id;
-    // this.getPrompt();
-    this.getName();
-    // this.patchWorkspace();
-    // const formData = new FormData();
-    // formData.append('bot_id', "1");
-    // formData.append('workspace_id', workspace_id);
-    const params = new HttpParams()
-    .set('bot_id', '1')
-    .set('workspace_id', workspace_id);
-    this.spinner.show();
-    this._cBS.getDocuments(params).subscribe((res:any)=>{
-      this.documents = res;
-      this.spinner.hide();
-    },
-    (error: any) => {
-      this.documents = null;
-      this.spinner.hide();
-      this._toastr.error( error.error?.detail, 'Failed!',{
-        timeOut: 2000,
-      });
-    }
-    )
-  }
 
   patchWorkspace(currentBot:any){
     this.workspace_id = this.ValueSettingServiceService.workspace_Id$;
@@ -109,19 +88,7 @@ export class ConversationalBotConfigurationComponent  implements OnInit {
     this.conversationalBotForm.get('chatLimit')?.setValue(currentBot.chat_limit);
     this.conversationalBotForm.get('prompt')?.setValue(currentBot.system_prompt);
   }
-  setLLMDetails(){
 
-  }
-  getBotDetails() {
-    this._cBS.getBotById(this.currentId).subscribe((res) => {
-      const parsedpfDate = new Date(res.data.date);
-      //res.data.date = this.datePipe.transform(parsedpfDate, 'yyyy-MM-dd');
-      this.conversationalBotForm.patchValue({
-
-      });
-
-    })
-  }
   conversationalBotForm = new FormGroup({
     botName: new FormControl('', [Validators.required]),
     LLM: new FormControl(null, [Validators.required]),
@@ -136,17 +103,12 @@ export class ConversationalBotConfigurationComponent  implements OnInit {
     chatLimit: new FormControl('', [Validators.required]),
     prompt: new FormControl('', [Validators.required]),
   });
-  documentsForm = new FormGroup({
-    document: new FormControl("", [Validators.required]),
-  })
+
   WorkspaceNameForm = new FormGroup({
     name : new FormControl('')
   })
   get cBF() {
     return this.conversationalBotForm.controls
-  }
-  get pF(){
-    return this.documentsForm.controls
   }
 
   private markFormGroupTouched(formGroup: FormGroup) {
@@ -157,83 +119,6 @@ export class ConversationalBotConfigurationComponent  implements OnInit {
         this.markFormGroupTouched(control);
       }
     });
-  }
-  onFileChange(event: any) {
-    const files = event.target.files;
-    let flag = true;
-  
-    for (let i = 0; i < files.length; i++) {
-      if (!files[i].name.toLowerCase().endsWith('.pdf')) {
-        event.target.files = null;
-        this.fileArray = [];
-        flag = false;
-        break; // Exit the loop immediately if a non-PDF file is found
-      }
-    }
-  
-    if (flag) {
-      if (files && files.length > 0) {
-        for (let i = 0; i < files.length; i++) {
-          this.fileArray.push(files.item(i));
-        }
-      }
-    } else {
-      this._toastr.error('Only PDF files are allowed', 'Failed!', {
-        timeOut: 2000,
-      });
-    }
-  }
-  
-  uploadFile(){
-    if(this.workspace_id!=null){
-      const formData = new FormData();
-      for (let i = 0; i < this.fileArray.length; i++) {
-        formData.append('documents', this.fileArray[i]);
-      }
-      formData.append('bot_id', "1");
-      formData.append('workspace_id', String(this.workspace_id));
-      this.spinner.show();
-      this._cBS.uploadFile(formData).subscribe(
-        (res:any)=>{
-        this.spinner.hide();
-        this.files = res;
-        this.getDocuments(this.workspace_id);
-        }, 
-        (error: any) => {
-          this.spinner.hide();
-          this._toastr.error( error.error?.detail, 'Failed!',{
-            timeOut: 3000,
-          });
-        }
-    );
-    }
-    else{
-      this._toastr.error('Please select an agent first','Failed!', {
-        timeOut: 2000,
-      });
-    }
-    // this.updateName();
-  }
-
-  createDocument(){
-    if(this.workspace_id!=null){
-      const formData = new FormData();
-      formData.append('text', String(this.documentsForm.value.document));
-      formData.append('bot_id', "1");
-      formData.append('workspace_id', String(this.workspace_id));
-      
-      this._cBS.createDocument(formData).subscribe((res:any)=>{
-        this.files = res;
-        this.getDocuments(this.workspace_id);
-        this.documentsForm.reset()
-      });
-      // this.updateName();
-    }
-    else{
-      this._toastr.error( 'Please select an agent first','Failed!', {
-        timeOut: 2000,
-      });
-    }
   }
 
   getName(){
@@ -246,16 +131,13 @@ export class ConversationalBotConfigurationComponent  implements OnInit {
     })
   }
 
-  documentsUpdateCheck(){
-    if(this.documentsForm.value.document == null || this.documentsForm.value.document == ""){
-      return false
+  validateInput(event: KeyboardEvent) {
+    const input = event.target as HTMLInputElement;
+    if (input.value.length >= 2 && !['Backspace', 'Delete'].includes(event.key)) {
+      event.preventDefault();
     }
-    else{
-      return true
-    }
-
   }
-
+  
   createWorkspace(){
     if(this.conversationalBotForm.valid){
       const formData = new FormData;
@@ -408,87 +290,5 @@ export class ConversationalBotConfigurationComponent  implements OnInit {
     })
   }
 
-  getPrompt(){
-    this.spinner.show();
-    this._cBS.getPrompt(this.workspace_id).subscribe((res:any)=>{
-      this.spinner.hide();
-      this.documentsForm.get('document')?.setValue(res.detail);
-    })
-  }
-  updateDocStatus(doc: any,event: any) {
-    debugger
-    const formData = new FormData;
-    formData.append('bot_id', "1");
-    formData.append('workspace_id', String(this.workspace_id));
-    formData.append('document_id', String(doc.document_id))
-    this.spinner.show()
-    if(event.target.checked){
-      this._cBS.enableDocument(formData).subscribe((res:any)=>{
-        this.getDocuments(this.workspace_id);
-        this.spinner.hide()
-      })
-    }
-    else{
-      this._cBS.disableDocument(formData).subscribe((res:any)=>{
-        this.getDocuments(this.workspace_id);
-        this.spinner.hide()
-      })
-    }
-    // documentid
-    // this.workspace_id
-    // botid
-  }
 
-  submitForm() {
-   
-    
-    if (this.conversationalBotForm.valid) {
-      this.isButtonDisabled = true;
-      const formData = new FormData();
-      formData.append('botName', String(this.conversationalBotForm.value['botName']));
-      formData.append('sessionTimeOut', String(this.conversationalBotForm.value['chatLimit']));
-      for (let i = 0; i < this.fileArray.length; i++) {
-        formData.append('Files', this.fileArray[i]);
-      }
-      if (this.currentId !== 0 && this.currentId !== undefined) {
-        this._cBS.updateBot(formData).subscribe((res) => {
-          this.isButtonDisabled = false;
-          if (res.statusCode === 200) {
-            this._toastr.success('Bot Updated SuccessFully!', 'Success!', {
-              timeOut: 3000,
-            });
-            //this.getBots();
-          }
-
-        }, (error: any) => {
-          this._toastr.error('Failed!', 'Error', {
-            timeOut: 3000,
-          });
-        })
-      }
-      else {
-        this._cBS.createBot(formData).subscribe((res) => {
-          if (res.statusCode === 200) {
-
-            this._toastr.success('Bot Created SuccessFully!', 'Success!', {
-              timeOut: 3000,
-            });
-           // this.getBots();
-          }
-
-
-        }, (error: any) => {
-
-          this._toastr.error('Failed!', 'Error', {
-            timeOut: 3000,
-          });
-        })
-      }
-    }
-
-    else {
-      this.markFormGroupTouched(this.conversationalBotForm);
-    }
-
-  }
 }
