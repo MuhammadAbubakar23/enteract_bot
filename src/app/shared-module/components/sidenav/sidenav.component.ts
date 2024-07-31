@@ -70,6 +70,8 @@ export class SidenavComponent implements OnInit {
       this.activeConsole = true;
     }
     else this.activeConsole = false;
+    localStorage.setItem('analyticActiveParentIndex', '0');
+    localStorage.setItem('consoleActiveParentIndex', '0');
   }
 
 

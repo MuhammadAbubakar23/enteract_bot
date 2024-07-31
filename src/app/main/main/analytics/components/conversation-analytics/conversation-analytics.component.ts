@@ -15,6 +15,8 @@ export class ConversationAnalyticsComponent {
   agents: any;
   avgBotConversationTime: any;
   tagsAnalatics: any;
+  totalAgentChart:any;
+  botTagsChart:any;
   constructor(private _hS: HeaderService,private _analytics: AnalyticsService) {
     _hS.updateHeaderData({
       title: 'Conversation Analytics',
@@ -29,16 +31,13 @@ export class ConversationAnalyticsComponent {
     this.AvgBotConversationTime();
     this.TagsAnalatics();
 
-
-    
     this.botEscalationRate();
-    this.fallBackRate()
-    this.getTotalConversation()
+    this.botConversationOverTime();
   }
   TotalConversation() {
     this._analytics.GetTotalBotConversation().subscribe(
       (res: any) => {
-        this.botConversation = res.detail;
+        this.botConversation = res?.detail;
       },
       (error: any) => {
         console.error("An error occurred while fetching the bot conversation:", error);
@@ -49,7 +48,7 @@ export class ConversationAnalyticsComponent {
   TotalAgents(){
     this._analytics.GetTotalAgents().subscribe(
       (res: any) => {
-        this.agents = res.detail;
+        this.agents = res?.detail;
         this.fallBackRate();
       },
       (error: any) => {
@@ -58,10 +57,56 @@ export class ConversationAnalyticsComponent {
       }
     );
   }
+  fallBackRate() {
+    var chartDom = document.getElementById('fallbackrate');
+   this.totalAgentChart = echarts.init(chartDom);
+    var option;
+
+    option = {
+      tooltip: {
+        trigger: 'item'
+      },
+      series: [
+        {
+
+          type: 'pie',
+          radius: ['40%', '70%'],
+          avoidLabelOverlap: false,
+          itemStyle: {
+            borderRadius: 0,
+            borderColor: '#fff',
+            borderWidth: 0
+          },
+          label: {
+            show: false,
+            position: 'center'
+          },
+          emphasis: {
+            label: {
+              show: false,
+              fontSize: 50,
+              fontWeight: 'bold'
+            }
+          },
+          labelLine: {
+            show: false
+          },
+          data: [
+            { value: this.agents?.total_agents, name: 'Total Agents', itemStyle: { color: '#2f9df2' } },
+            { value: this.agents?.available_agents, name: 'Available Agents', itemStyle: { color: '#cf61ea' } }
+          ]
+        }
+      ]
+    };
+
+    
+    option && this.totalAgentChart.setOption(option);
+  }
+
   AvgBotConversationTime(){
     this._analytics.GetAvgBotConversationTime().subscribe(
       (res: any) => {
-        this.avgBotConversationTime = res.detail;
+        this.avgBotConversationTime = res?.detail;
       },
       (error: any) => {
         console.error("An error occurred while fetching the average bot converstion time:", error);
@@ -72,7 +117,7 @@ export class ConversationAnalyticsComponent {
   TagsAnalatics(){
     this._analytics.GetTagsAnalatics().subscribe(
       (res: any) => {
-        this.tagsAnalatics = res.detail;
+        this.tagsAnalatics = res?.detail;
         this.BotTagst();
       },
       (error: any) => {
@@ -81,22 +126,63 @@ export class ConversationAnalyticsComponent {
       }
     );
   }
+  BotTagst() {
+    var chartDom = document.getElementById('Botatgs');
+    this.botTagsChart = echarts.init(chartDom);
+    var option;
 
-
-  
-
-
-  getTotalConversation() {
-    this._analytics.GetTotalBotConversation().subscribe(
-      (res: any) => {
-        this.botConversation = res;
-
+    option = {
+      tooltip: {
+        trigger: 'item'
       },
-      (error: any) => {
-        console.error("An error occurred while fetching the bot conversation:", error);
+      series: [
+        {
+          name: 'Tags From',
+          type: 'pie',
+          radius: ['40%', '70%'],
 
-      }
-    );
+          label: {
+            show: false,
+            position: 'center'
+          },
+          emphasis: {
+            label: {
+              show: false,
+              fontSize: 40,
+              fontWeight: 'bold'
+            }
+          },
+          labelLine: {
+            show: false
+          },
+          data: [
+            { value: this.tagsAnalatics?.Information, name: 'Information', 
+              itemStyle: {
+              color: '#2f9df2'
+            }},
+            { value: this.tagsAnalatics?.Sell, name: 'Sell',
+              itemStyle: {
+              color: '#cf61ea'
+            }},
+            { value: this.tagsAnalatics?.Analysis, name: 'Analysis',
+            itemStyle: {
+              color: '#9c87ee'
+            }},
+            { value: this.tagsAnalatics?.Reservation, name: 'Reservation',
+            itemStyle: {
+              color: '#ff505c'
+            }},
+            { value: this.tagsAnalatics?.Complaint, name: 'Complaint',
+            itemStyle: {
+              color: '#3cc2cc'
+            }}
+          ]
+        }
+      ]
+    };
+
+    option &&  this.botTagsChart.setOption(option);
+
   }
 
   botEscalationRate() {
@@ -143,50 +229,7 @@ export class ConversationAnalyticsComponent {
 
     option && this.humanbot.setOption(option);
   }
-  BotTagst() {
-    var chartDom = document.getElementById('Botatgs');
-    var myChart = echarts.init(chartDom);
-    var option;
-
-    option = {
-      tooltip: {
-        trigger: 'item'
-      },
-      series: [
-        {
-          name: 'Tags From',
-          type: 'pie',
-          radius: ['40%', '70%'],
-
-          label: {
-            show: false,
-            position: 'center'
-          },
-          emphasis: {
-            label: {
-              show: false,
-              fontSize: 40,
-              fontWeight: 'bold'
-            }
-          },
-          labelLine: {
-            show: false
-          },
-          data: [
-            { value: this.tagsAnalatics?.Information, name: 'Information' },
-            { value: this.tagsAnalatics?.Sell, name: 'Sell' },
-            { value: this.tagsAnalatics?.Analysis, name: 'Analysis' },
-            { value: this.tagsAnalatics?.Reservation, name: 'Reservation' },
-            { value: this.tagsAnalatics?.Complaint, name: 'Complaint' }
-          ]
-        }
-      ]
-    };
-
-    option && myChart.setOption(option);
-
-  }
-  totalBotConversation() {
+  botConversationOverTime() {
     var chartDom = document.getElementById('main');
     this.totalBot = echarts.init(chartDom);
     var option;
@@ -210,50 +253,6 @@ export class ConversationAnalyticsComponent {
     };
     option && this.totalBot.setOption(option);
 
-  }
-  fallBackRate() {
-    var chartDom = document.getElementById('fallbackrate');
-    var myChart = echarts.init(chartDom);
-    var option;
-
-    option = {
-      tooltip: {
-        trigger: 'item'
-      },
-      series: [
-        {
-          name: 'BOTS AGENT',
-          type: 'pie',
-          radius: ['40%', '70%'],
-          avoidLabelOverlap: false,
-          itemStyle: {
-            borderRadius: 10,
-            borderColor: '#fff',
-            borderWidth: 0
-          },
-          label: {
-            show: false,
-            position: 'center'
-          },
-          emphasis: {
-            label: {
-              show: false,
-              fontSize: 40,
-              fontWeight: 'bold'
-            }
-          },
-          labelLine: {
-            show: false
-          },
-          data: [
-            { value: this.agents.total_agents, name: 'Total Agent' },
-            { value: this.agents.available_agents, name: 'Available Agent' }
-          ]
-        }
-      ]
-    };
-
-    option && myChart.setOption(option);
   }
   makeChart() {
     window.addEventListener('resize', () => {

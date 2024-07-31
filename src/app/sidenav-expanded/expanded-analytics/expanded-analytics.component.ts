@@ -30,8 +30,25 @@ export class ExpandedAnalyticsComponent {
 
 
   ngOnInit(): void {
-    this.activeParentIndex = 0;
-    this.expandedIndex = 0;
+    const storedParentValue = localStorage.getItem('analyticActiveParentIndex');
+    const storedChildValue = localStorage.getItem('analyticActiveChildIndex');
+    let parnetindex = 0;
+    let childIndex = 0;
+
+    if (storedParentValue != null) {parnetindex = parseInt(storedParentValue);}
+    if (storedChildValue != null) {childIndex = parseInt(storedChildValue);}
+
+
+    if(parnetindex > 0 || childIndex > 0)
+    {
+      this.activeParentIndex = parnetindex;
+      this.expandedIndex = 0;
+    }
+    else
+    {
+      this.activeParentIndex = 0;
+      this.expandedIndex = 0;
+    }
     this.chatVisibilityService.refreshHistoryArray = [];
   }
 
@@ -42,6 +59,8 @@ export class ExpandedAnalyticsComponent {
     } else {
       this.expandedIndex = null; 
     }
+    localStorage.setItem('analyticActiveParentIndex', index.toString());
+    //localStorage.setItem('analyticActiveChildIndex', childIndex.toString());
     this.activeParentIndex = index; 
   }
 

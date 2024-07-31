@@ -31,11 +31,11 @@ export class BotKpiComponent {
     this.PeakHours();
 
 
-    this.fallback();
-    this.abadonRate();
-    this.waitTime();
+    //this.fallback();
+    //this.abadonRate();
+    //this.waitTime();
     this.botSessionTime();
-    this.FallBackCount()
+    //this.FallBackCount()
     this.heatMap();
     this.TimeoutCount()
   }
@@ -215,7 +215,10 @@ export class BotKpiComponent {
         calculable: true,
         orient: 'horizontal',
         left: 'center',
-        bottom: '15%'
+        bottom: '15%',
+        inRange: {
+          color: ['#b9ddf4', '#0e90e2']
+        }
       },
       series: [
         {

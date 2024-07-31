@@ -44,9 +44,24 @@ export class ExpandedConsoleComponent {
   }
 
   ngOnInit(): void {
-    this.activeParentIndex = 0;
-    this.activeChildIndex = 0;
-    this.expandedIndex = 0;
+    // debugger
+    // const storedParentValue = localStorage.getItem('consoleActiveParentIndex');
+    // const storedChildValue = localStorage.getItem('consoleActiveChildIndex');
+    // let parnetindex = 0;
+    // let childIndex = 0;
+    // if (storedParentValue != null) {parnetindex = parseInt(storedParentValue);}
+    // if (storedChildValue != null) {childIndex = parseInt(storedChildValue);}
+
+
+    // if(parnetindex > 0 || childIndex > 0)
+    // {
+    //   this.activeParentIndex = parnetindex;
+    //   this.expandedIndex = 0;
+    // }else{
+      this.activeParentIndex = 0;
+      this.activeChildIndex = 0;
+      this.expandedIndex = 0;
+    //}
     this.chatVisibilityServicee.refreshHistoryArray = [];
   }
 
@@ -58,6 +73,7 @@ export class ExpandedConsoleComponent {
       this.expandedIndex = null; 
     }
     this.activeParentIndex = index; 
+    //localStorage.setItem('consoleActiveParentIndex', index.toString());
   }
 
   activeMenu(parentIndex: number, childIndex: number) {

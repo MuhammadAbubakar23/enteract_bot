@@ -26,6 +26,7 @@ export class AiBotAnalyticsComponent {
   sentimentAnalysis: any;
   tagsAnalatics: any;
   peakHours: any[] = [];
+  peakhoursData:any[]=[]
   constructor(private _hS: HeaderService, private _analytics: AnalyticsService) {
     _hS.updateHeaderData({
       title: 'Ai Bot Analytics',
@@ -53,11 +54,11 @@ export class AiBotAnalyticsComponent {
     //Old
     this.totalBotConversation();
     this.botEscalationRate();
-    this.fullBackRate();
-    this.abadonRate();
-    this.waitTime();
     this.botSessionTime();
     this.averageToken();
+    //this.waitTime();
+    //this.abadonRate();
+    //this.fullBackRate();
     // this.heatMap();
     // this.fallBackRate();
 
@@ -87,6 +88,52 @@ export class AiBotAnalyticsComponent {
       }
     );
   }
+  fallBackRate() {
+    var chartDom = document.getElementById('fallbackrate');
+    var myChart = echarts.init(chartDom);
+    var option;
+
+    option = {
+      tooltip: {
+        trigger: 'item'
+      },
+      series: [
+        {
+
+          type: 'pie',
+          radius: ['40%', '70%'],
+          avoidLabelOverlap: false,
+          itemStyle: {
+            borderRadius: 0,
+            borderColor: '#fff',
+            borderWidth: 0
+          },
+          label: {
+            show: false,
+            position: 'center'
+          },
+          emphasis: {
+            label: {
+              show: false,
+              fontSize: 50,
+              fontWeight: 'bold'
+            }
+          },
+          labelLine: {
+            show: false
+          },
+          data: [
+            { value: this.agents?.total_agents, name: 'Total Agents', itemStyle: { color: '#2f9df2' } },
+            { value: this.agents?.available_agents, name: 'Available Agents', itemStyle: { color: '#cf61ea' } }
+          ]
+        }
+      ]
+    };
+
+    
+    option && myChart.setOption(option);
+  }
+
   AvgBotConversationTime(){
     this._analytics.GetAvgBotConversationTime().subscribe(
       (res: any) => {
@@ -144,7 +191,7 @@ export class AiBotAnalyticsComponent {
       }
     );
   }
-  peakhoursData:any[]=[]
+
   PeakHours(){
     this._analytics.GetPeakHours().subscribe(
       (res: any) => {
@@ -227,7 +274,7 @@ export class AiBotAnalyticsComponent {
         const countData = res.count
         const countKey = Object.keys(countData)[0];
         this.fallbackRateCount = countData[countKey];;
-        this.fullBackRate();
+        //this.fullBackRate();
 
       },
       (error: any) => {
@@ -236,14 +283,20 @@ export class AiBotAnalyticsComponent {
       }
     );
   }
-  totalBotConversation() {
-    
 
+  totalBotConversation() {
     var chartDom = document.getElementById('main');
     this.totalBot = echarts.init(chartDom);
     var option;
-
     option = {
+      tooltip: {
+        trigger: 'axis',
+        formatter: function (params: any) {
+          const date = params[0].name;
+          const conversationCount = params[0].value;
+          return `${date}<br/>Conversations: ${conversationCount}`;
+        }
+      },
       xAxis: {
         type: 'category',
         boundaryGap: false,
@@ -257,24 +310,32 @@ export class AiBotAnalyticsComponent {
           data: [820, 932, 901, 934, 1290, 1330, 1320],
           type: 'line',
           barWidth: '80%',
-          areaStyle: {}
+          areaStyle: {
+            color: 'rgba(0, 123, 255, 0.5)'
+          },
+          lineStyle: {
+            color: '#007bff',
+            width: 3
+          },
+          itemStyle: {
+            color: '#007bff'
+          },
         }
       ]
     };
     option && this.totalBot.setOption(option);
 
   }
+
   botEscalationRate() {
     var chartDom = document.getElementById('BotRate');
     var myChart = echarts.init(chartDom);
     var option;
 
+    var option;
     option = {
       tooltip: {
         trigger: 'axis',
-        axisPointer: {
-          type: 'shadow'
-        }
       },
       grid: {
         left: '3%',
@@ -301,7 +362,10 @@ export class AiBotAnalyticsComponent {
           name: 'Direct',
           type: 'bar',
           barWidth: '40%',
-          data: [10, 52, 200, 334, 390, 330, 220]
+          data: [10, 52, 200, 334, 390, 330, 220],
+          itemStyle: {
+            color: '#007bff'
+          },
         }
       ]
     };
@@ -435,10 +499,7 @@ export class AiBotAnalyticsComponent {
     var chartDom = document.getElementById('sessionTime');
     this.sessionTime = echarts.init(chartDom);
     var option;
-
     option = {
-
-
       tooltip: {
         trigger: 'axis'
       },
@@ -465,14 +526,13 @@ export class AiBotAnalyticsComponent {
         type: 'value'
       },
       series: [
-
         {
           name: 'Facebook',
           type: 'line',
           stack: 'Total',
           data: [120, 132, 101, 134, 90, 230, 210],
           lineStyle: {
-            color: '#5470C6',
+            color: '#91CC75',
             type: 'dashed'
           }
         },
@@ -482,7 +542,7 @@ export class AiBotAnalyticsComponent {
           stack: 'Total',
           data: [220, 182, 191, 234, 290, 330, 310],
           lineStyle: {
-            color: '#5470C6',
+            color: '#FAC858',
             type: 'dashed'
           }
         },
@@ -507,45 +567,89 @@ export class AiBotAnalyticsComponent {
   sentimentsBOTCsat() {
     var chartDom = document.getElementById('analysisCsat');
     var myChart = echarts.init(chartDom);
-    var option;
+    const sentiments = this.sentimentAnalysis;
+    const totalSentiments = sentiments?.Positive + sentiments?.Negative + sentiments?.Neutral;
+    const data = [
+      {
+        value: sentiments?.Positive,
+        name: 'Positive',
+        itemStyle: {
+          color: '#abedd0'
+        }
+      },
+      {
+        value: sentiments?.Negative,
+        name: 'Negative',
+        itemStyle: {
+          color: '#ffcccf'
+        }
+      },
+      {
+        value: sentiments?.Neutral,
+        name: 'Neutral',
+        itemStyle: {
+          color: '#ffe0b3'
+        }
+      }
+    ];
 
-    option = {
+    var option = {
       tooltip: {
         trigger: 'item'
       },
-
       series: [
         {
-          name: 'Sentiment Form',
+          name: 'Sentiments',
           type: 'pie',
           radius: ['40%', '70%'],
           avoidLabelOverlap: false,
           label: {
-            show: false,
-            position: 'center'
+            show: true,
+            position: 'center',
+            formatter: function() {
+              // Apply the thousandSuff logic directly here
+              const formatValue = (value: number): string => {
+                if (value >= 1000000) {
+                  return (value / 1000000).toFixed(1) + 'M';
+                }
+                if (value >= 1000) {
+                  return (value / 1000).toFixed(1) + 'K';
+                }
+                return value.toString();
+              };
+              return `\n${formatValue(totalSentiments)}\n{interaction|Interactions}`;
+            },
+            rich: {
+              interaction: {
+                fontSize: 12,
+                padding: [10, 0, 0, 0]
+              }
+            },
+            fontSize: 20,
+            fontWeight: 'bold'
           },
           emphasis: {
             label: {
-              show: true,
-              fontSize: 15,
-              fontWeight: 'bold'
+              show: false,
+              fontSize: 24,
+              fontWeight: 'bold',
+              formatter: '{c}'
             }
           },
           labelLine: {
             show: false
           },
-          data: [
-            { value: this.sentimentAnalysis?.Positive, name: 'Positive' },
-            { value: this.sentimentAnalysis?.Negative, name: 'Negative' },
-            { value: this.sentimentAnalysis?.Neutral, name: 'Neutral' }
-          ]
+          data: data
         }
       ]
     };
 
-    option && myChart.setOption(option);
+    //option.series[0].label.formatter = `\n${totalSentiments}\n{interaction|Interactions}`;
+    myChart.setOption(option);
 
   }
+
+
   BotTagst() {
     var chartDom = document.getElementById('Botatgs');
     var myChart = echarts.init(chartDom);
@@ -576,11 +680,26 @@ export class AiBotAnalyticsComponent {
             show: false
           },
           data: [
-            { value: this.tagsAnalatics?.Information, name: 'Information' },
-            { value: this.tagsAnalatics?.Sell, name: 'Sell' },
-            { value: this.tagsAnalatics?.Analysis, name: 'Analysis' },
-            { value: this.tagsAnalatics?.Reservation, name: 'Reservation' },
-            { value: this.tagsAnalatics?.Complaint, name: 'Complaint' }
+            { value: this.tagsAnalatics?.Information, name: 'Information', 
+              itemStyle: {
+              color: '#2f9df2'
+            }},
+            { value: this.tagsAnalatics?.Sell, name: 'Sell',
+              itemStyle: {
+              color: '#cf61ea'
+            }},
+            { value: this.tagsAnalatics?.Analysis, name: 'Analysis',
+            itemStyle: {
+              color: '#9c87ee'
+            }},
+            { value: this.tagsAnalatics?.Reservation, name: 'Reservation',
+            itemStyle: {
+              color: '#ff505c'
+            }},
+            { value: this.tagsAnalatics?.Complaint, name: 'Complaint',
+            itemStyle: {
+              color: '#3cc2cc'
+            }}
           ]
         }
       ]
@@ -685,7 +804,10 @@ export class AiBotAnalyticsComponent {
         calculable: true,
         orient: 'horizontal',
         left: 'center',
-        bottom: '15%'
+        bottom: '15%',
+        inRange: {
+          color: ['#b9ddf4', '#0e90e2']
+        }
       },
       series: [
         {
@@ -708,50 +830,8 @@ export class AiBotAnalyticsComponent {
     option && myChart.setOption(option);
 
   }
-  fallBackRate() {
-    var chartDom = document.getElementById('fallbackrate');
-    var myChart = echarts.init(chartDom);
-    var option;
 
-    option = {
-      tooltip: {
-        trigger: 'item'
-      },
-      series: [
-        {
-          name: 'BOTS AGENT',
-          type: 'pie',
-          radius: ['40%', '70%'],
-          avoidLabelOverlap: false,
-          itemStyle: {
-            borderRadius: 10,
-            borderColor: '#fff',
-            borderWidth: 0
-          },
-          label: {
-            show: false,
-            position: 'center'
-          },
-          emphasis: {
-            label: {
-              show: false,
-              fontSize: 40,
-              fontWeight: 'bold'
-            }
-          },
-          labelLine: {
-            show: false
-          },
-          data: [
-            { value: this.agents.total_agents, name: 'Total Agent' },
-            { value: this.agents.available_agents, name: 'Available Agent' }
-          ]
-        }
-      ]
-    };
 
-    option && myChart.setOption(option);
-  }
   makeChartResponsive() {
     window.addEventListener('resize', () => {
       if (this.totalBot) {
