@@ -9,7 +9,7 @@
   <p class="m-0 coal">Select the conversation to load the messages</p>
 </section>
 <section class="chatitem col" id="chatitem1">
-  <div class="query-container chat-message-component" data-scrollbar="true">
+  <div class="query-container chat-message-component p-0" data-scrollbar="true">
     <header class="chat-header">
       <div class="d-flex align-items-center">
         <span class="iconButton medium bg-white fw-bold"></span>
@@ -44,8 +44,6 @@
       <div class="main-chat">
         <div class="chat-box-wrap">
           <ng-container *ngFor="let msg of chat; let i = index">
-            <!-- <pre  >{{msg | json}}</pre> -->
-
             <div
               class="message-wrap agent-message-wrap"
               [ngClass]="{
@@ -58,14 +56,12 @@
                   <div class="card-body">
                     <div class="d-flex msg-user-info">
                       <div class="d-flex align-items-center w-100">
-                        <h6 class="card-title navy m-0">
+                        <h6 class="card-title navy m-0 me-2">
                           {{
                             msg.type === "ai" ? "enteract.bot" : chat.session_id
                           }}
                         </h6>
-                        <small class="silver ms-auto">{{
-                          msg.timestamp
-                        }}</small>
+                        <small class="silver ms-auto">{{msg.timestamp}}</small>
                       </div>
                     </div>
                     <p class="card-text nignt">

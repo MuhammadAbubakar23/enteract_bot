@@ -32,7 +32,6 @@ export class ConversationAnalyticsComponent {
 
     
     this.botEscalationRate();
-    this.BotTagst();
     this.fallBackRate()
     this.getTotalConversation()
   }
@@ -74,6 +73,7 @@ export class ConversationAnalyticsComponent {
     this._analytics.GetTagsAnalatics().subscribe(
       (res: any) => {
         this.tagsAnalatics = res.detail;
+        this.BotTagst();
       },
       (error: any) => {
         console.error("An error occurred while fetching the tag analytics:", error);
@@ -149,11 +149,12 @@ export class ConversationAnalyticsComponent {
     var option;
 
     option = {
-
-
+      tooltip: {
+        trigger: 'item'
+      },
       series: [
         {
-          name: 'Access From',
+          name: 'Tags From',
           type: 'pie',
           radius: ['40%', '70%'],
 
@@ -172,11 +173,11 @@ export class ConversationAnalyticsComponent {
             show: false
           },
           data: [
-            { value: 1048, name: 'Search Engine' },
-            { value: 735, name: 'Direct' },
-            { value: 580, name: 'Email' },
-            { value: 484, name: 'Union Ads' },
-            { value: 300, name: 'Video Ads' }
+            { value: this.tagsAnalatics?.Information, name: 'Information' },
+            { value: this.tagsAnalatics?.Sell, name: 'Sell' },
+            { value: this.tagsAnalatics?.Analysis, name: 'Analysis' },
+            { value: this.tagsAnalatics?.Reservation, name: 'Reservation' },
+            { value: this.tagsAnalatics?.Complaint, name: 'Complaint' }
           ]
         }
       ]

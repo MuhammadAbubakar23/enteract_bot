@@ -7,15 +7,48 @@
       </div>
       <ul class="list-group console-list mt-2" data-scrollbar="true" tabindex="-1" style="overflow: hidden; outline: none;"><div class="scroll-content">
   
-        <li class="list-group-item list-group-item-action"
-        [ngClass]="!menu?.expanded?'collapsed':''"
-        *ngFor="let menu of subMenus; let i = index">
-            <a [routerLink]="menu['RouteName']" class="d-flex  align-items-center" [ngClass]="menu?.isChild?'chevron-icon':''" type="button" (click)="toggleCollapse(menu)">
-          
-            <!-- <i [ngClass]="menu?.class"></i> -->
-            {{ menu["DisplayName"] }}
-          </a>
-        </li>
+        <li
+        class="list-group-item list-group-item-action"
+        [ngClass]="{
+          'collapsed': expandedIndex !== i,
+          'background': activeParentIndex === i && activeChildIndex === null
+        }"
+        *ngFor="let menu of subMenus; let i = index"
+      >
+        <a
+          class="d-flex align-items-center"
+          [routerLink]="menu['RouteName'] || null"
+          [ngClass]="menu.isChild ? 'chevron-icon' : ''"
+          type="button"
+          (click)="toggleCollapse(menu, i)"
+        >
+          <i [ngClass]="menu.class"></i>
+          {{ menu['DisplayName'] }}
+        </a>
+      
+        <ul
+          *ngIf="menu.Children"
+          class="list-unstyled-inner collapse"
+          [ngClass]="{'show': expandedIndex === i}"
+        >
+          <li
+            *ngFor="let child of menu.Children; let j = index"
+            class="list-group-item list-group-item-action"
+            [ngClass]="{
+              'background': activeParentIndex === i && activeChildIndex === j
+            }"
+          >
+            <a
+              [routerLinkActive]="'active'"
+              [routerLink]="child['RouteName']"
+              class="d-flex align-items-center"
+              (click)="activeMenu(i, j)"
+            >
+              {{ child['DisplayName'] }}
+            </a>
+          </li>
+        </ul>
+      </li>
         
        
       </div><div class="scrollbar-track scrollbar-track-x" style="display: none;"><div class="scrollbar-thumb scrollbar-thumb-x" style="width: 293px; transform: translate3d(0px, 0px, 0px);"></div></div><div class="scrollbar-track scrollbar-track-y" style="display: none;"><div class="scrollbar-thumb scrollbar-thumb-y" style="height: 221px; transform: translate3d(0px, 0px, 0px);"></div></div></ul>

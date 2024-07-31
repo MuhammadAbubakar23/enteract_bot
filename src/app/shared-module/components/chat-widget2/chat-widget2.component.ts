@@ -1,5 +1,6 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 import { BotMonitoringService } from 'src/app/main/main/ai-bot/bot-monitoring.service';
 import { environment } from 'src/environments/environment';
 
@@ -21,7 +22,7 @@ export class ChatWidget2Component implements OnInit {
   })
   workspace_id = environment.workspace_id;
   bot_id = environment.bot_id;
-  constructor(private _botService: BotMonitoringService) { }
+  constructor(private _botService: BotMonitoringService,private _toastS:ToastrService) { }
 
   ngOnInit(): void {
     this.session_id = this.generateRandomString(6);
@@ -57,7 +58,15 @@ export class ChatWidget2Component implements OnInit {
     //this.messages = [];
   }
   submitMessage() {
-    if (!this.session_id) {
+    const message = this.chatForm.value['message'];
+
+    if (!message.trim()) {
+      this._toastS.error('Message is Required', '', {
+        timeOut: 2000,
+      });
+    }
+    else{
+ if (!this.session_id) {
       this._botService.chatInit().subscribe(
         (res: any) => {
           this.session_id = res.session_id;
@@ -70,7 +79,12 @@ export class ChatWidget2Component implements OnInit {
     } else {
       this.sendMessage();
     }
+    }
+   
   }
+
+
+  
 
   sendMessage() {
     const body = {

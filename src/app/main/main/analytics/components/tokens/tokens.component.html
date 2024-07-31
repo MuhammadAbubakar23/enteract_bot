@@ -84,19 +84,19 @@
                             <div class="card mb-3">
                                 <div class="card-body">
                                     <h6>Total Tokens</h6>
-                                    <h2>{{ (totalTokenCount > 0 ? totalTokenCount :0) | thousandSuff  }}</h2>
+                                    <h2>{{ (totalTokenCount > 0 ? totalTokenCount : 0 ) | thousandSuff  }}</h2>
                                 </div>
                             </div>
                             <div class="card mb-3">
                                 <div class="card-body">
                                     <h6>Average Token <small class="coal">per conversation</small></h6>
-                                    <h2>{{avgTokenCount |  number : '1.2-2' }}</h2>
+                                    <h2>{{ (avgTokenCount > 0 ? avgTokenCount : 0 )  |  number : '1.2-2' }}</h2>
                                 </div>
                             </div>
                             <div class="card mb-3">
                                 <div class="card-body">
                                     <h6>Tokens per day</h6>
-                                    <h2>{{(tokenPerDayCount > 0 ? tokenPerDayCount :0) | thousandSuff  }}</h2>
+                                    <h2>{{(tokenPerDayCount > 0 ? tokenPerDayCount : 0 ) | thousandSuff  }}</h2>
                                 </div>
                             </div>
                         </div>

@@ -16,6 +16,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ExpandedHumanInteractionsComponent } from './sidenav-expanded/expanded-human-interactions/expanded-human-interactions.component';
 import { ToastrModule } from 'ngx-toastr';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { CustomDatePipe } from './services/pipes/custom-date.pipe';
 @NgModule({
   declarations: [
     AppComponent,
@@ -25,6 +26,7 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
     ExpandedChatHistoryComponent,
     InitialLettersPipe,
     ExpandedHumanInteractionsComponent,
+    CustomDatePipe,
   ],
   imports: [
     BrowserModule,
