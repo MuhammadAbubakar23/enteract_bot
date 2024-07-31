@@ -504,7 +504,7 @@ export class AiBotAnalyticsComponent {
         trigger: 'axis'
       },
       legend: {
-        data: ['Facebook', 'Whatsapp', 'Website', 'Direct', 'Search Engine'],
+        data: ['Facebook', 'Whatsapp', 'Website'],
         icon: 'square',
         // bottom: 'right',
       },
@@ -532,8 +532,7 @@ export class AiBotAnalyticsComponent {
           stack: 'Total',
           data: [120, 132, 101, 134, 90, 230, 210],
           lineStyle: {
-            color: '#91CC75',
-            type: 'dashed'
+            color: '#5470C6',
           }
         },
         {
@@ -542,8 +541,7 @@ export class AiBotAnalyticsComponent {
           stack: 'Total',
           data: [220, 182, 191, 234, 290, 330, 310],
           lineStyle: {
-            color: '#FAC858',
-            type: 'dashed'
+            color: '#91CC75',
           }
         },
         {
@@ -552,8 +550,7 @@ export class AiBotAnalyticsComponent {
           stack: 'Total',
           data: [150, 232, 201, 154, 190, 330, 410],
           lineStyle: {
-            color: '#5470C6',
-            type: 'dashed'
+            color: '#FAC858',
           }
         },
 
