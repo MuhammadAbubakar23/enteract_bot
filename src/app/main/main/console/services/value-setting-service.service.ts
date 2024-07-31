@@ -5,6 +5,8 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class ValueSettingServiceService {
+  default:any="create";
+
   private nameSubject = new BehaviorSubject<any>(null);
   private documentsSubject = new BehaviorSubject<any>(null);
   private editFormValuesSubject = new BehaviorSubject<any>(null);

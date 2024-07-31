@@ -28,16 +28,15 @@ export class ConversationalBotUploadFilesComponent  implements OnInit {
   workspaceName: any;
   name: any;
   editButtonClicked: any =false;
-  constructor(private ValueSettingServiceService: ValueSettingServiceService,private toaster:ToastrService, private spinner: NgxSpinnerService ,private _hS: HeaderService, private sidenavService: SidenavService, private _toastr: ToastrService, private _cBS: ConversationlBotService) {
+  constructor(public ValueSettingServiceService: ValueSettingServiceService,private toaster:ToastrService, private spinner: NgxSpinnerService ,private _hS: HeaderService, private sidenavService: SidenavService, private _toastr: ToastrService, private _cBS: ConversationlBotService) {
     _hS.updateHeaderData({
-      title: 'Conversational Bot',
+      title: 'Conversational Bot > Upload File',
       tabs: [{ title: '', url: '', isActive: true }],
       isTab: false,
       class: "fa-light fa-calendar"
     })
   }
   ngOnInit(): void {
-    this.getBots();
     this.ValueSettingServiceService.workspace_Id$.subscribe(id => {
       this.workspace_id = id;
     }),
@@ -51,21 +50,7 @@ export class ConversationalBotUploadFilesComponent  implements OnInit {
       }
     })
   }
-  getBots() {
-    // this.bots.push(
-    //   { name: 'Generative Ai', icon: 'fa-light fa-message-bot' },
-    //   { name: 'HelperBot', icon: 'fa-light fa-message-bot' },
-    //   { name: 'Proxima Ai', icon: 'fa-light fa-message-bot' },
-    //   { name: 'ChatSensei Ai', icon: 'fa-light fa-message-bot' },
-    //   { name: 'MegaBot Ai', icon: 'fa-light fa-message-bot' },
-    // )
-    this.spinner.show()
-    this._cBS.getBots().subscribe((res: any) => {
-      
-      this.bots = res;
-      this.spinner.hide();
-    })
-  }
+
   getDocuments(workspace_id:any){
     this.workspace_id = workspace_id;
     this.getName();
@@ -89,52 +74,17 @@ export class ConversationalBotUploadFilesComponent  implements OnInit {
     )
   }
 
-  patchWorkspace(workspace_id:any){
-    this.workspace_id = workspace_id;
-    this.editButtonClicked = true
-    const currentBot = this.bots.find(bot=> bot.workspace_id == this.workspace_id);
-    debugger
-    this.conversationalBotForm.get('botName')?.setValue(currentBot.workspace_name);
-    this.conversationalBotForm.get('LLM')?.setValue(currentBot.llm);
-    this.conversationalBotForm.get('llmApiKey')?.setValue(currentBot.llm_api_key);
-    this.conversationalBotForm.get('Embeddings')?.setValue(currentBot.embeddings);
-    this.conversationalBotForm.get('EmbeddingsApiKey')?.setValue(currentBot.embeddings_api_key);
-    this.conversationalBotForm.get('vectorDB')?.setValue(currentBot.vectordb);
-    this.conversationalBotForm.get('chatLimit')?.setValue(currentBot.chat_limit);
-    this.conversationalBotForm.get('prompt')?.setValue(currentBot.system_prompt);
-  }
   setLLMDetails(){
 
   }
-  getBotDetails() {
-    this._cBS.getBotById(this.currentId).subscribe((res) => {
-      const parsedpfDate = new Date(res.data.date);
-      //res.data.date = this.datePipe.transform(parsedpfDate, 'yyyy-MM-dd');
-      this.conversationalBotForm.patchValue({
 
-      });
-
-    })
-  }
-  conversationalBotForm = new FormGroup({
-    botName: new FormControl('', [Validators.required]),
-    LLM: new FormControl(null, [Validators.required]),
-    llmApiKey: new FormControl(''),
-    Embeddings: new FormControl(null, [Validators.required]),
-    EmbeddingsApiKey: new FormControl(''),
-    vectorDB: new FormControl(null, [Validators.required]),
-    chatLimit: new FormControl('', [Validators.required]),
-    prompt: new FormControl('', [Validators.required]),
-  });
   documentsForm = new FormGroup({
     document: new FormControl("", [Validators.required]),
   })
   WorkspaceNameForm = new FormGroup({
     name : new FormControl('')
   })
-  get cBF() {
-    return this.conversationalBotForm.controls
-  }
+
   get pF(){
     return this.documentsForm.controls
   }
@@ -246,141 +196,6 @@ export class ConversationalBotUploadFilesComponent  implements OnInit {
 
   }
 
-  createWorkspace(){
-    if(this.conversationalBotForm.valid){
-      const formData = new FormData;
-      formData.append('bot_id', "1");
-      formData.append('workspace_name', String(this.conversationalBotForm.value.botName));
-      formData.append('llm', String(this.conversationalBotForm.value.LLM));
-      formData.append('llm_api_key', String(this.conversationalBotForm.value.llmApiKey));
-      formData.append('embeddings', String(this.conversationalBotForm.value.Embeddings));
-      formData.append('embeddings_api_key', String(this.conversationalBotForm.value.EmbeddingsApiKey));
-      formData.append('prompt', String(this.conversationalBotForm.value.prompt));
-      formData.append('vectordb', String(this.conversationalBotForm.value.vectorDB));
-      formData.append('chat_limit', String(this.conversationalBotForm.value.chatLimit));
-      this.spinner.show();
-      this._cBS.createBot(formData).subscribe((res:any)=>{
-        this.getBots();
-        this.workspace_id = null;
-        this.conversationalBotForm.reset();
-        this.editButtonClicked = false;
-        this.documents = null;
-        this.spinner.hide();
-      },
-      (error: any) => {
-        this._toastr.error( error.error?.detail, 'Failed!', {
-          timeOut: 3000,
-        });
-        this.spinner.hide()
-      }
-      )
-    }
-    else {
-      this.markFormGroupTouched(this.conversationalBotForm);
-    }
-  }
-
-  updateWorkspace(){
-    if(this.conversationalBotForm.valid){
-      // const formData = new FormData;
-      // formData.append('bot_id', "1");
-      // formData.append('workspace_name', String(this.conversationalBotForm.value.botName));
-      // formData.append('llm', String(this.conversationalBotForm.value.LLM));
-      // formData.append('llm_api_key', String(this.conversationalBotForm.value.llmApiKey));
-      // formData.append('embeddings', String(this.conversationalBotForm.value.Embeddings));
-      // formData.append('embeddings_api_key', String(this.conversationalBotForm.value.EmbeddingsApiKey));
-      // formData.append('prompt', String(this.conversationalBotForm.value.prompt));
-      // formData.append('vectordb', String(this.conversationalBotForm.value.vectorDB));
-      // formData.append('chat_limit', String(this.conversationalBotForm.value.chatLimit));
-      this.updateName();
-      this.updateLimit();
-      this.updatePrompt();
-      this.updatellm();
-      this.updateEmbeddings();
-      this.updatevectorDb();
-    }
-    else {
-      this.markFormGroupTouched(this.conversationalBotForm);
-    }
-  }
-  updatellm(){
-    debugger
-    const formData = new FormData();
-    formData.append('bot_id', "1");
-    formData.append('workspace_id', String(this.workspace_id));
-    formData.append('llm', String(this.conversationalBotForm.value.LLM));
-    this._cBS.updatellm(formData).subscribe((res:any)=>{
-      this.getBots()
-    })
-  }
-  updateEmbeddings(){
-    debugger
-    const formData = new FormData();
-    formData.append('bot_id', "1");
-    formData.append('workspace_id', String(this.workspace_id));
-    formData.append('embeddings', String(this.conversationalBotForm.value.Embeddings));
-    formData.append('embeddings_api_key', String(this.conversationalBotForm.value.EmbeddingsApiKey));
-    this._cBS.updateEmbeddings(formData).subscribe((res:any)=>{
-      this.getBots()
-      this.workspace_id = null;
-      this.conversationalBotForm.reset();
-      this.editButtonClicked = false;
-      this.documents = null;
-
-    })
-  }
-  updatevectorDb(){
-    debugger
-    const formData = new FormData();
-    formData.append('bot_id', "1");
-    formData.append('workspace_id', String(this.workspace_id));
-    formData.append('vectordb', String(this.conversationalBotForm.value.vectorDB));
-    this._cBS.updatevectorDb(formData).subscribe((res:any)=>{
-      this.getBots()
-      this.workspace_id = null;
-      this.conversationalBotForm.reset();
-      this.editButtonClicked = false;
-      this.documents = null;
-    })
-  }
-  updateName(){
-    debugger
-    const formData = new FormData();
-    formData.append('bot_id', "1");
-    formData.append('workspace_id', String(this.workspace_id));
-    formData.append('workspace_name', String(this.conversationalBotForm.value.botName));
-    this.spinner.show();
-    this._cBS.updateName(formData).subscribe((res:any)=>{
-      this.getBots()
-      this.spinner.hide();
-    })
-  }
-
-  updateLimit(){
-    debugger
-    const formData = new FormData();
-    formData.append('bot_id', "1");
-    formData.append('workspace_id', String(this.workspace_id));
-    formData.append('chat_limit', String(this.conversationalBotForm.value.chatLimit));
-    this.spinner.show();
-    this._cBS.updateLimit(formData).subscribe((res:any)=>{
-      this.getBots()
-      this.spinner.hide();
-    })
-  }
-  updatePrompt(){
-    debugger
-    const formData = new FormData();
-    formData.append('bot_id', "1");
-    formData.append('workspace_id', String(this.workspace_id));
-    formData.append('system_prompt', String(this.conversationalBotForm.value.prompt));
-    this.spinner.show();
-    this._cBS.updatePrompt(formData).subscribe((res:any)=>{
-      this.getBots();
-      this.spinner.hide();
-    })
-  }
-
   getPrompt(){
     this.spinner.show();
     this._cBS.getPrompt(this.workspace_id).subscribe((res:any)=>{
@@ -412,59 +227,6 @@ export class ConversationalBotUploadFilesComponent  implements OnInit {
     // botid
   }
 
-  submitForm() {
-   
-    
-    if (this.conversationalBotForm.valid) {
-      this.isButtonDisabled = true;
-      const formData = new FormData();
-      formData.append('botName', String(this.conversationalBotForm.value['botName']));
-      formData.append('sessionTimeOut', String(this.conversationalBotForm.value['chatLimit']));
-      for (let i = 0; i < this.fileArray.length; i++) {
-        formData.append('Files', this.fileArray[i]);
-      }
-      if (this.currentId !== 0 && this.currentId !== undefined) {
-        this._cBS.updateBot(formData).subscribe((res) => {
-          this.isButtonDisabled = false;
-          if (res.statusCode === 200) {
-            this._toastr.success('Bot Updated SuccessFully!', 'Success!', {
-              timeOut: 3000,
-            });
-            //this.getBots();
-          }
-
-        }, (error: any) => {
-          this._toastr.error('Failed!', 'Error', {
-            timeOut: 3000,
-          });
-        })
-      }
-      else {
-        this._cBS.createBot(formData).subscribe((res) => {
-          if (res.statusCode === 200) {
-
-            this._toastr.success('Bot Created SuccessFully!', 'Success!', {
-              timeOut: 3000,
-            });
-           // this.getBots();
-          }
-
-
-        }, (error: any) => {
-
-          this._toastr.error('Failed!', 'Error', {
-            timeOut: 3000,
-          });
-        })
-      }
-    }
-
-    else {
-      this.markFormGroupTouched(this.conversationalBotForm);
-    }
-
-  }
-
   createEmbeddings(){
     const formData = new FormData;
     formData.append('bot_id', "1");
@@ -482,5 +244,11 @@ export class ConversationalBotUploadFilesComponent  implements OnInit {
       });
     }
     )
+  }
+
+  routeToCreate() {
+    this.ValueSettingServiceService.default = "create";
+    this.ValueSettingServiceService.setEditFormValues("null",null);
+    debugger
   }
 }

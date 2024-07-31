@@ -102,17 +102,30 @@
                 </div>
             </div>
 
-            <div class="mb-3 mt-3">
-                <label for="">Chat Limit (min) </label>
-                <input name="" class="form-control" formControlName="chatLimit"
-                    [class.is-invalid]="cBF['chatLimit'].invalid && cBF['chatLimit'].touched"
-                    [class.is-valid]="cBF['chatLimit'].valid && cBF['chatLimit'].touched" />
-                <div class="invalid-feedback">
-                    <div *ngIf="cBF['chatLimit'].errors?.['required']">
-                        Chat Limit is required.
+            <div class="row">
+                <div class="col">
+                    <label for="">Chat Limit (min) </label>
+                    <input name="" class="form-control" formControlName="chatLimit"
+                        [class.is-invalid]="cBF['chatLimit'].invalid && cBF['chatLimit'].touched"
+                        [class.is-valid]="cBF['chatLimit'].valid && cBF['chatLimit'].touched" />
+                    <div class="invalid-feedback">
+                        <div *ngIf="cBF['chatLimit'].errors?.['required']">
+                            Chat Limit is required.
+                        </div>
                     </div>
+                    <div class="valid-feedback">Looks good!</div>
                 </div>
-                <div class="valid-feedback">Looks good!</div>
+
+                <div class="col">
+                    <label for="twoDigitInput">Max Session Count</label>
+                    <input type="text" id="twoDigitInput" class="form-control" 
+                        [(ngModel)]="twoDigitValue" 
+                        name="twoDigitInput" 
+                        maxlength="2"
+                        pattern="\d*"
+                        (keypress)="validateInput($event)"
+                        required>
+                </div>
             </div>
 
             <div class="mb-3">
@@ -130,20 +143,20 @@
 
             <div class="icon-buttons-wrapper d-flex justify-content-start pt-3 pb-4">
                 <a (click)="createWorkspace()" *ngIf="editButtonClicked==false"
-                    class="btn btn-primary btn-medium saveBtn newbtn" id="generateButton">Create Workspace
+                    class="btn btn-primary btn-small saveBtn newbtn" id="generateButton">Create Workspace
                 </a>
             </div>
             <div class="row">
                 <div class="col-6 mb-3">
                     <a (click)="updateWorkspace()" *ngIf="editButtonClicked==true"
-                        class="btn btn-primary btn-medium saveBtn newbtn" id="generateButton">Update Workspace
+                        class="btn btn-primary btn-small saveBtn newbtn" id="generateButton">Update Workspace
                     </a>
                 </div>
                 <div class="col-6 mb-3 d-flex justify-content-end">
-                    <a (click)="cancel()" *ngIf="editButtonClicked==true" class="btn btn-danger btn-medium cancelBtn newbtn"
-                        id="generateButton">Cancel
+                    <a (click)="cancel()" *ngIf="editButtonClicked==true" class="btn btn-default btn-small cancelBtn newbtn"
+                        id="generateButton" style="background-color: grey; color: white;">Cancel
                     </a>
-                </div>
+                </div>      
             </div>
         </form>
 

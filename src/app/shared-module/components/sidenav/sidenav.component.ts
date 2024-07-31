@@ -43,7 +43,7 @@ export class SidenavComponent implements OnInit {
   // ];
   menus:any =[];
 
-  ConsoleRouteName = '/bot/console/event-logs';
+  ConsoleRouteName = '/bot/console/bot-management/conversational-bot';
   activeConsole = false;
   activeIndex = 0;
   isActive = false;

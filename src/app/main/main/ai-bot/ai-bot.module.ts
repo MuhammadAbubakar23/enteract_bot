@@ -4,7 +4,6 @@ import { BotMonitoringComponent } from './components/bot-monitoring/bot-monitori
 import { AiBotRoutingModule } from './ai-bot-routing.module';
 import { ChatBotHistoryComponent } from './components/bot-monitoring/chat-bot-history/chat-bot-history.component';
 
-
 @NgModule({
   declarations: [
     BotMonitoringComponent

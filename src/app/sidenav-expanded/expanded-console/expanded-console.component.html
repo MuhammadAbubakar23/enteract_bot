@@ -7,42 +7,47 @@
     </div>
     <ul class="list-group console-list mt-2" data-scrollbar="true">
       <li
-        class="list-group-item list-group-item-action"
-        [ngClass]="!menu.expanded ? 'collapsed' : ''"
-        *ngFor="let menu of subMenus; let i = index"
+      class="list-group-item list-group-item-action"
+      [ngClass]="{
+        'collapsed': expandedIndex !== i,
+        'background': activeParentIndex === i && activeChildIndex === null
+      }"
+      *ngFor="let menu of subMenus; let i = index"
+    >
+      <a
+        class="d-flex align-items-center"
+        [routerLink]="menu['RouteName'] || null"
+        [ngClass]="menu.isChild ? 'chevron-icon' : ''"
+        type="button"
+        (click)="toggleCollapse(menu, i)"
       >
-        <a
-          class="d-flex align-items-center"
-          [routerLink]="menu['RouteName'] || null"
-          [ngClass]="menu.isChild ? 'chevron-icon' : ''"
-          type="button"
-          (click)="toggleCollapse(menu)"
+        <i [ngClass]="menu.class"></i>
+        {{ menu['DisplayName'] }}
+      </a>
+    
+      <ul
+        *ngIf="menu.Children"
+        class="list-unstyled-inner collapse"
+        [ngClass]="{'show': expandedIndex === i}"
+      >
+        <li
+          *ngFor="let child of menu.Children; let j = index"
+          class="list-group-item list-group-item-action"
+          [ngClass]="{
+            'background': activeParentIndex === i && activeChildIndex === j
+          }"
         >
-          <i [ngClass]="menu.class"></i>
-          {{ menu["DisplayName"] }}
-        </a>
-
-        <ul
-          *ngIf="menu.Children"
-          class="list-unstyled-inner collapse"
-          [ngClass]="menu.expanded ? 'show' : ''"
-        >
-          <li
-            *ngFor="let child of menu.Children; let j = index"
-            class="list-group-item list-group-item-action"
-            [ngClass]="{ active: activeIndex === j }"
+          <a
+            [routerLinkActive]="'active'"
+            [routerLink]="child['RouteName']"
+            class="d-flex align-items-center"
+            (click)="activeMenu(i, j)"
           >
-            <a
-              [routerLinkActive]="'active'"
-              [routerLink]="child['RouteName']"
-              class="d-flex align-items-center"
-              (click)="activeMenu(j)"
-            >
-              {{ child["DisplayName"] }}
-            </a>
-          </li>
-        </ul>
-      </li>
+            {{ child['DisplayName'] }}
+          </a>
+        </li>
+      </ul>
+    </li>
     </ul>
   </div>
   <a class="panelToggle" (click)="toggleNavTest()"></a>

@@ -256,8 +256,9 @@
               </div>
 
             </div> -->
-            <div *ngIf="default"><app-conversational-bot-configuration></app-conversational-bot-configuration></div>
-            <div *ngIf="!default"><app-conversational-bot-upload-files></app-conversational-bot-upload-files></div>
+            <div *ngIf="ValueSettingServiceService.default == 'create'"><app-conversational-bot-configuration></app-conversational-bot-configuration></div>
+            <div *ngIf="ValueSettingServiceService.default == 'upload'"><app-conversational-bot-upload-files></app-conversational-bot-upload-files></div>
+            <div *ngIf="ValueSettingServiceService.default == 'time'"><app-configurations></app-configurations></div>
           </div>
         </div>
 
@@ -270,6 +271,7 @@
               <span class="iconButton medium skyTransBg"><i [ngClass]="bot.icon"></i></span>
               <h6 class="m-0 ps-3">{{ bot.workspace_name }}</h6>
               <div class="ms-auto d-flex">
+                <span class="iconButton small night" (click)="loadTimeComponent()"><i class="fa-solid fa-clock">‌</i></span>
                 <span class="iconButton small night" (click)="getDocuments(bot.workspace_id)"><i class="fa-light fa-upload"></i></span>
                 <span class="iconButton small night" (click)="patchWorkspace(bot.workspace_id)"><i
                     class="fa-light fa-edit"></i></span>

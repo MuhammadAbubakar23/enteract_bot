@@ -17,7 +17,7 @@ import { ConversationalBotConfigurationComponent } from './components/conversati
 import { ConversationalBotUploadFilesComponent } from './components/conversational-bot/conversational-bot-upload-files/conversational-bot-upload-files.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'event-logs', pathMatch: 'full' },
+  { path: '', redirectTo: 'bot-management/conversational-bot', pathMatch: 'full' },
   {path:'bot-management',redirectTo:'conversational-bot'},
   { path: 'event-logs', component: EventLogsComponent },
   { path: 'intent-bot', component: IntentBotComponent },
