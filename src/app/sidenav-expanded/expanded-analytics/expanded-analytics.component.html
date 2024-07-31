@@ -11,7 +11,7 @@
         class="list-group-item list-group-item-action"
         [ngClass]="{
           'collapsed': expandedIndex !== i,
-          'background': activeParentIndex === i && activeChildIndex === null
+          'background': activeParentIndex === i && menu.isChild == false
         }"
         *ngFor="let menu of subMenus; let i = index"
       >
@@ -20,13 +20,13 @@
           [routerLink]="menu['RouteName'] || null"
           [ngClass]="menu.isChild ? 'chevron-icon' : ''"
           type="button"
-          (click)="toggleCollapse(menu, i)"
-        >
+          (click)="toggleCollapse(i)"
+          >
           <i [ngClass]="menu.class"></i>
           {{ menu['DisplayName'] }}
         </a>
       
-        <ul
+        <!-- <ul
           *ngIf="menu.Children"
           class="list-unstyled-inner collapse"
           [ngClass]="{'show': expandedIndex === i}"
@@ -35,19 +35,19 @@
             *ngFor="let child of menu.Children; let j = index"
             class="list-group-item list-group-item-action"
             [ngClass]="{
-              'background': activeParentIndex === i && activeChildIndex === j
+              'background': activeParentIndex == null && activeChildIndex == j
             }"
           >
             <a
               [routerLinkActive]="'active'"
               [routerLink]="child['RouteName']"
               class="d-flex align-items-center"
-              (click)="activeMenu(i, j)"
-            >
+              (click)="activeMenu(j)"
+              >
               {{ child['DisplayName'] }}
             </a>
           </li>
-        </ul>
+        </ul> -->
       </li>
         
        

@@ -36,42 +36,55 @@ export class LoginComponent implements OnInit {
     return this.loginForm.controls;
   }
   onSubmit() {
-    const loginData = {
-      userName: this.loginForm?.get('userName')?.value,
-      password: this.loginForm?.get('password')?.value,
-      rememberMe:true
-    };
-    this._aS.doLogout();
-    this._aS.signIn(loginData).subscribe(
-      (res: any) => {
-        if (res) {
-          console.log("Login response:", res);
-          localStorage.setItem('access_token', res?.loginResponse?.loginResponse?.accessToken);
-          localStorage.setItem('username', res?.loginResponse?.loginResponse?.username);
+    if(this.loginForm.valid){
+      const loginData = {
+        userName: this.loginForm?.get('userName')?.value,
+        password: this.loginForm?.get('password')?.value,
+        rememberMe:true
+      };
+      this._aS.doLogout();
+      this._aS.signIn(loginData).subscribe(
+        (res: any) => {
+          if (res) {
+            console.log("Login response:", res);
+            localStorage.setItem('access_token', res?.loginResponse?.loginResponse?.accessToken);
+            localStorage.setItem('username', res?.loginResponse?.loginResponse?.username);
 
-          // const decodeToken = this._aS.decodeToken(res.data);
-          // console.log(decodeToken);
-          this.router.navigateByUrl('/bot/analytics/ai-bot-analytics');
-          const toasterObject = { isShown: true, isSuccess: true, toastHeading: "Success", toastParagrahp: "Login Successfully!" }
+            // const decodeToken = this._aS.decodeToken(res.data);
+            // console.log(decodeToken);
+            this.router.navigateByUrl('/bot/analytics/ai-bot-analytics');
+            const toasterObject = { isShown: true, isSuccess: true, toastHeading: "Success", toastParagrahp: "Login Successfully!" }
+            // this._toastS.updateToastData(toasterObject)
+            // this._toastS.hide();
+          }
+          if (res.statuscode === 400) {
+            const toasterObject = { isShown: true, isSuccess: false, toastHeading: "Failed", toastParagrahp: "Inavlid Username or Password!" }
+            // this._toastS.updateToastData(toasterObject)
+            // this._toastS.hide();
+            // this.router.navigateByUrl('/auth/login');
+          }
+
+        }, (error: any) => {
+          console.error("Internal Server Error", error);
+          const toasterObject = { isShown: true, isSuccess: false, toastHeading: "Failed", toastParagrahp: "Internal Server Error!" }
           // this._toastS.updateToastData(toasterObject)
           // this._toastS.hide();
-        }
-        if (res.statuscode === 400) {
-          const toasterObject = { isShown: true, isSuccess: false, toastHeading: "Failed", toastParagrahp: "Inavlid Username or Password!" }
-          // this._toastS.updateToastData(toasterObject)
-          // this._toastS.hide();
-          // this.router.navigateByUrl('/auth/login');
-        }
-
-      }, (error: any) => {
-        console.error("Internal Server Error", error);
-        const toasterObject = { isShown: true, isSuccess: false, toastHeading: "Failed", toastParagrahp: "Internal Server Error!" }
-        // this._toastS.updateToastData(toasterObject)
-        // this._toastS.hide();
-    });
-
+      });
+    }
+    else{
+      this.markFormGroupTouched(this.loginForm)
+    }
   }
+  private markFormGroupTouched(formGroup: FormGroup) {
+    Object.values(formGroup.controls).forEach(control => {
+      control.markAsTouched();
 
+      if (control instanceof FormGroup) {
+        this.markFormGroupTouched(control);
+      }
+    });
+  }
+  
   password() {
     this.show = !this.show;
   }

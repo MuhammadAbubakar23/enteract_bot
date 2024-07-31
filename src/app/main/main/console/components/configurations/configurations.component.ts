@@ -8,7 +8,7 @@ import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 // import { CommonDataService } from 'src/app/shared/services/common/common-data.service';
 import { BotMonitoringService } from '../../../ai-bot/bot-monitoring.service';
 // import { BotMonitoringService } from 'src/app/modules/bot-monitoring/services/bot-monitoring.service';
-
+ 
 @Component({
   selector: 'app-configurations',
   templateUrl: './configurations.component.html',

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ChatVisibilityService } from 'src/app/services/chat-visibility.service';
 import { SidenavService } from 'src/app/services/sidenav.service';
 declare var toggleNavPanel: any;
@@ -11,8 +12,8 @@ declare var toggleNavPanel: any;
 export class ExpandedConsoleComponent {
   public activeTab: any;
   activeParentIndex: number | null = null;
-  activeChildIndex: number | null = null;
-  expandedIndex: number | null = null;
+  activeChildIndex: number | null = 0;
+  expandedIndex: number | null = 0;
 
   activeIndex = 0;
   isActive = false;
@@ -40,7 +41,7 @@ export class ExpandedConsoleComponent {
 
   ];
 
-  constructor(private sidenavService: SidenavService, private chatVisibilityServicee : ChatVisibilityService) {
+  constructor(private sidenavService: SidenavService, private chatVisibilityServicee : ChatVisibilityService, private route: ActivatedRoute, private router: Router) {
   }
 
   ngOnInit(): void {
@@ -58,14 +59,27 @@ export class ExpandedConsoleComponent {
     //   this.activeParentIndex = parnetindex;
     //   this.expandedIndex = 0;
     // }else{
-      this.activeParentIndex = 0;
-      this.activeChildIndex = 0;
-      this.expandedIndex = 0;
+      const segments = this.router.url.split('/').filter(segment => segment);
+      const lastTwoSegments = segments.slice(-2).join('/');
+  
+      this.subMenus.forEach((menu, parentIndex) => {
+        if (menu.RouteName === lastTwoSegments) {
+          this.activeParentIndex = parentIndex;
+          this.activeChildIndex = null;
+        }
+  
+        menu.Children.forEach((child, childIndex) => {
+          if (child.RouteName === lastTwoSegments) {
+            this.activeParentIndex = parentIndex;
+            this.activeChildIndex = childIndex;
+          }
+        });
+      });
     //}
     this.chatVisibilityServicee.refreshHistoryArray = [];
   }
 
-  toggleCollapse(menu: any, index: number) {
+  toggleCollapse(index: number) {
     if (this.expandedIndex !== index) {
       this.expandedIndex = index;
       this.activeChildIndex = null; 
@@ -73,11 +87,10 @@ export class ExpandedConsoleComponent {
       this.expandedIndex = null; 
     }
     this.activeParentIndex = index; 
-    //localStorage.setItem('consoleActiveParentIndex', index.toString());
   }
 
-  activeMenu(parentIndex: number, childIndex: number) {
-    this.activeParentIndex = parentIndex;
+  activeMenu(childIndex: number) {
+    this.activeParentIndex = null;
     this.activeChildIndex = childIndex;
   }
 

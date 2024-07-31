@@ -149,7 +149,7 @@ export class ConversationalBotConfigurationComponent  implements OnInit {
       formData.append('embeddings', String(this.conversationalBotForm.value.Embeddings));
       formData.append('embeddings_api_key', String(this.conversationalBotForm.value.EmbeddingsApiKey));
       formData.append('embeddings_url', String(this.conversationalBotForm.value.embeddings_url));
-      formData.append('prompt', String(this.conversationalBotForm.value.prompt));
+      formData.append('system_prompt', String(this.conversationalBotForm.value.prompt));
       formData.append('vectordb', String(this.conversationalBotForm.value.vectorDB));
       formData.append('vectordb_url', String(this.conversationalBotForm.value.vectordb_url));
       formData.append('vectordb_api_key', String(this.conversationalBotForm.value.vectordb_url));

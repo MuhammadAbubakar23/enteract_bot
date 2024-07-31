@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { SidenavService } from 'src/app/services/sidenav.service';
 import { ChatVisibilityService } from 'src/app/services/chat-visibility.service';
+import { ActivatedRoute, Router } from '@angular/router';
 declare var toggleNavPanel: any;
 @Component({
   selector: 'app-expanded-analytics',
@@ -12,8 +13,8 @@ export class ExpandedAnalyticsComponent {
   activeIndex :any= 0;
   isActive = false;
   activeParentIndex: number | null = null;
-  activeChildIndex: number | null = null;
-  expandedIndex: number | null = null;
+  activeChildIndex: number | null = 0;
+  expandedIndex: number | null = 0;
   public activeTab: any;
   headerTitle = "Ai Bot Analytics"
 
@@ -25,49 +26,38 @@ export class ExpandedAnalyticsComponent {
     { DisplayName: "Tokens", RouteName: "analytics/tokens", expanded: false , isChild: false, class:"fa-light fa-upload pe-2",Children:[]},
   ];
 
-  constructor(private sidenavService: SidenavService, private chatVisibilityService : ChatVisibilityService) {
+  constructor(private sidenavService: SidenavService, private chatVisibilityService : ChatVisibilityService, private route: ActivatedRoute, private router: Router) {
   }
 
 
   ngOnInit(): void {
-    const storedParentValue = localStorage.getItem('analyticActiveParentIndex');
-    const storedChildValue = localStorage.getItem('analyticActiveChildIndex');
-    let parnetindex = 0;
-    let childIndex = 0;
+    const segments = this.router.url.split('/').filter(segment => segment);
+    const lastTwoSegments = segments.slice(-2).join('/');
 
-    if (storedParentValue != null) {parnetindex = parseInt(storedParentValue);}
-    if (storedChildValue != null) {childIndex = parseInt(storedChildValue);}
+    this.subMenus.forEach((menu, parentIndex) => {
+      if (menu.RouteName === lastTwoSegments) {
+        this.activeParentIndex = parentIndex;
+        this.activeChildIndex = null;
+      }
+    });
 
-
-    if(parnetindex > 0 || childIndex > 0)
-    {
-      this.activeParentIndex = parnetindex;
-      this.expandedIndex = 0;
-    }
-    else
-    {
-      this.activeParentIndex = 0;
-      this.expandedIndex = 0;
-    }
     this.chatVisibilityService.refreshHistoryArray = [];
   }
 
-  toggleCollapse(menu: any, index: number) {
+  toggleCollapse(index: number) {
     if (this.expandedIndex !== index) {
       this.expandedIndex = index;
       this.activeChildIndex = null; 
     } else {
       this.expandedIndex = null; 
     }
-    localStorage.setItem('analyticActiveParentIndex', index.toString());
-    //localStorage.setItem('analyticActiveChildIndex', childIndex.toString());
     this.activeParentIndex = index; 
   }
 
-  activeMenu(parentIndex: number, childIndex: number) {
-    this.activeParentIndex = parentIndex;
-    this.activeChildIndex = childIndex;
-  }
+  // activeMenu(childIndex: number) {
+  //   this.activeParentIndex = null;
+  //   this.activeChildIndex = childIndex;
+  // }
   
   toggle() {
     ;
