@@ -38,43 +38,85 @@ export class SentimentsAndTagsComponent {
   sentimentsBOTCsat() {
     var chartDom = document.getElementById('analysisCsat');
     var myChart = echarts.init(chartDom);
-    var option;
+    const sentiments = this.sentimentAnalysis;
+    const totalSentiments = sentiments?.Positive + sentiments?.Negative + sentiments?.Neutral;
+    const data = [
+      {
+        value: sentiments?.Positive,
+        name: 'Positive',
+        itemStyle: {
+          color: '#abedd0'
+        }
+      },
+      {
+        value: sentiments?.Negative,
+        name: 'Negative',
+        itemStyle: {
+          color: '#ffcccf'
+        }
+      },
+      {
+        value: sentiments?.Neutral,
+        name: 'Neutral',
+        itemStyle: {
+          color: '#ffe0b3'
+        }
+      }
+    ];
 
-    option = {
+    var option = {
       tooltip: {
         trigger: 'item'
       },
-
       series: [
         {
-          name: 'Sentiment Form',
+          name: 'Sentiments',
           type: 'pie',
           radius: ['40%', '70%'],
           avoidLabelOverlap: false,
           label: {
-            show: false,
-            position: 'center'
+            show: true,
+            position: 'center',
+            formatter: function() {
+              // Apply the thousandSuff logic directly here
+              const formatValue = (value: number): string => {
+                if (value >= 1000000) {
+                  return (value / 1000000).toFixed(1) + 'M';
+                }
+                if (value >= 1000) {
+                  return (value / 1000).toFixed(1) + 'K';
+                }
+                return value.toString();
+              };
+              return `\n${formatValue(totalSentiments)}\n{interaction|Interactions}`;
+            },
+            rich: {
+              interaction: {
+                fontSize: 12,
+                padding: [10, 0, 0, 0]
+              }
+            },
+            fontSize: 20,
+            fontWeight: 'bold'
           },
           emphasis: {
             label: {
-              show: true,
-              fontSize: 15,
-              fontWeight: 'bold'
+              show: false,
+              fontSize: 24,
+              fontWeight: 'bold',
+              formatter: '{c}'
             }
           },
           labelLine: {
             show: false
           },
-          data: [
-            { value: this.sentimentAnalysis?.Positive, name: 'Positive' },
-            { value: this.sentimentAnalysis?.Negative, name: 'Negative' },
-            { value: this.sentimentAnalysis?.Neutral, name: 'Neutral' }
-          ]
+          data: data
         }
       ]
     };
 
-    option && myChart.setOption(option);
+    //option.series[0].label.formatter = `\n${totalSentiments}\n{interaction|Interactions}`;
+    myChart.setOption(option);
 
   }
   humanCsat() {
@@ -89,7 +131,7 @@ export class SentimentsAndTagsComponent {
 
       series: [
         {
-          name: 'Access From',
+          name: 'Human Agent From',
           type: 'pie',
           radius: ['40%', '70%'],
           avoidLabelOverlap: false,
@@ -108,11 +150,9 @@ export class SentimentsAndTagsComponent {
             show: false
           },
           data: [
-            { value: 1048, name: 'Search Engine' },
-            { value: 735, name: 'Direct' },
-            { value: 580, name: 'Email' },
-            { value: 484, name: 'Union Ads' },
-            { value: 300, name: 'Video Ads' }
+            { value: 1048, name: 'Positive',itemStyle: {color: '#abedd0'}},
+            { value: 735, name: 'Negative',itemStyle: {color: '#ffcccf'}},
+            { value: 580, name: 'Neutral',itemStyle: {color: '#ffe0b3'}}
           ]
         }
       ]
