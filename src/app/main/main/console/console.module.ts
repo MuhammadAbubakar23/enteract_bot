@@ -19,6 +19,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { CreateUserComponent } from './components/user-management/create-user/create-user.component';
 import { ConversationalBotConfigurationComponent } from './components/conversational-bot/conversational-bot-configuration/conversational-bot-configuration.component';
 import { ConversationalBotUploadFilesComponent } from './components/conversational-bot/conversational-bot-upload-files/conversational-bot-upload-files.component';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 
 @NgModule({
@@ -38,13 +39,14 @@ import { ConversationalBotUploadFilesComponent } from './components/conversation
     CreateUserComponent,
     ConversationalBotConfigurationComponent,
     ConversationalBotUploadFilesComponent
-  ],
+    ],
   imports: [
     CommonModule,
     ConsoleRoutingModule,
     NgxSpinnerModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    NgSelectModule
   ]
 })
 export class ConsoleModule { }

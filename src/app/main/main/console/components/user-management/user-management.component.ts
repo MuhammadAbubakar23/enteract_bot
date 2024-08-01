@@ -15,7 +15,7 @@ export class UserManagementComponent {
     sortOptions: string[] = ['All', 'Ascending', 'Descending'];
     selectedSortOption: string = 'All';
     messages: any;
-    searchText: string = '';
+    searchText: any = '';
     perPage: number = 15;
     currentPage: number = 1;
     totalCount: any;
@@ -45,7 +45,10 @@ export class UserManagementComponent {
         this.refreshMessages();
       }
     }
-
+    resetfilters() {
+      this.searchText = '';
+      this.refreshMessages();
+    }
     refreshMessages() {
       const formData = {
         search: this.searchText,
@@ -56,8 +59,8 @@ export class UserManagementComponent {
       this.userService.GetUsers(formData).subscribe(
         (response: any) => {
           this.spinnerServerice.hide()
-          this.messages = response.Users;
-          this.totalCount = response.TotalCount;
+          this.messages = response;
+          this.totalCount = response;
           if(this.messages.length==0 || this.messages==null){
        
             this.endPoint=0
@@ -90,10 +93,9 @@ export class UserManagementComponent {
     // }
   
     editTemplate(template: any) {
-      this.router.navigate(['/console/user/create', template.id], {
-        state: { template }
-      });
+      this.router.navigateByUrl(`bot/console/users/create/${template.id}`);
     }
+
     deleteTemplate(template: any) {
       const confirmation = confirm('Are you sure you want to delete this user?');
       if (confirmation) {

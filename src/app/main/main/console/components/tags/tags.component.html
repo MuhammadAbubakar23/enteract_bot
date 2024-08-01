@@ -1,1 +1,168 @@
-<p>tags works!</p>
+<!-- <div class="content-box-wrapper d-flex w-100">
+    <div class="middle-content d-flex"> -->
+        <ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="square-jelly-box"
+            [fullScreen]="false">
+            <p style="color: white"> Loading... </p>
+        </ngx-spinner>
+        <div class="tags-wrap console-body-wrapper" data-scrollbar="true" tabindex="-1"
+            style="overflow: hidden; outline: none;">
+            <div class="scroll-content">
+                <div class="wider-container pt-3">
+                    <div id="nav-team">
+                        <div class="searchBar-wrapper mb-4">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="d-flex align-items-lg-center">
+                                        <p class="coal m-0">Status:</p>
+                                        <div class="dropdown">
+                                            <button class="btn dropdown-toggle coal" type="button"
+                                                id="dropdownMenuButton1" data-bs-toggle="dropdown"
+                                                aria-expanded="false">
+                                                <span
+                                                    [ngClass]="{'fa-solid fa-arrow-up': selectedSortOption === 'Ascending', 'fa fa-arrow-down': selectedSortOption === 'Descending'}"></span>
+                                            </button>
+                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                                <li>
+                                                    <a class="dropdown-item"
+                                                        (click)="setSortOption('Ascending')">Ascending</a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item"
+                                                        (click)="setSortOption('Descending')">Descending</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-8 d-flex align-items-center justify-content-end">
+                                    <a href="javascript:" class="search-btn">
+                                        <button class="iconButton medium">
+                                            <i class="fal fa-search silver"></i>
+                                        </button>
+                                        <input class="form-control" placeholder="Search User.. "
+                                        [(ngModel)]="searchText"
+                                        (input)="refreshMessages()">
+                                    </a>
+                                    <a href="#0" data-bs-toggle="modal" data-bs-target="#createtags" class="ms-2">
+                                        <button type="button" class="btn btn-success">
+                                            <i class="fal fa-plus me-2"></i>
+                                            Create Tags
+                                        </button>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="table-section">
+                            <table class="table mb-5 align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            Tag Name
+                                        </th>
+                                        <th>
+                                            <a href="javascript:" class="charcoal hover-icon">
+                                                Bots Assigned
+
+                                            </a>
+                                        </th>
+
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let tag of messages">
+                                        <th>
+                                            <a class="night">{{tag.name}}</a>
+                                        </th>
+                                        <td>
+                                            <div class="d-flex align-items-center darkblue">
+                                                <i class="fa-light fa-message-bot me-2"></i>
+                                                3
+                                            </div>
+                                        </td>
+
+                                        <td>
+                                            <div class="d-flex justify-content-end dropstart">
+                                                <button class="btn iconButton medium iconHover btn-group" type="button"
+                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="fa-light fa-ellipsis-v"></i>
+                                                </button>
+                                                <ul class="dropdown-menu fade">
+                                                    <li>
+                                                        <a class="dropdown-item" data-bs-toggle="modal"
+                                                            data-bs-target="#createtags"
+                                                            (click)="getTagById(tag.id)">Edit</a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item"
+                                                            (click)="deleteTemplate(tag)">Delete</a>
+                                                    </li>
+
+
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="scrollbar-track scrollbar-track-x" style="display: none;">
+                <div class="scrollbar-thumb scrollbar-thumb-x"
+                    style="width: 1608px; transform: translate3d(0px, 0px, 0px);"></div>
+            </div>
+            <div class="scrollbar-track scrollbar-track-y" style="display: block;">
+                <div class="scrollbar-thumb scrollbar-thumb-y"
+                    style="height: 278.899px; transform: translate3d(0px, 0px, 0px);"></div>
+            </div> -->
+        </div>
+
+        <div class="modal fade" id="createtags" tabindex="-1" aria-labelledby="createtagsLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="createtagsLabel">Create Tags </h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="floating-wrap form-floating">
+                            <form [formGroup]=" TagForm">
+                                <label for="floatingInputValue">Tag Name</label>
+                                <input [class.is-invalid]="cF['name'].invalid && cF['name'].touched"
+                                    [class.is-valid]="cF['name'].valid && cF['name'].touched" class="form-control"
+                                    id="floatingInputValue" placeholder="Complaint" formControlName="name" />
+                            </form>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="resetForm()">Close</button>
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="submit()">Save
+                            changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <!-- </div>
+
+</div> -->
+
+<div class="modal-content">
+    <div class="modal-header">
+        <h1 class="modal-title fs-5" id="createtagsLabel">Create Tags </h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+        <div class="floating-wrap form-floating">
+            <input type="email" class="form-control" id="floatingInputValue" placeholder="Complaint" value="Complaint">
+            <label for="floatingInputValue">Tag Name</label>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Close</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Save changes</button>
+    </div>
+</div>

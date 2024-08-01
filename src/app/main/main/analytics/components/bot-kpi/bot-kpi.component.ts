@@ -406,7 +406,6 @@ export class BotKpiComponent {
           data: [120, 132, 101, 134, 90, 230, 210],
           lineStyle: {
             color: '#5470C6',
-            type: 'dashed'
           }
         },
         {
@@ -416,7 +415,6 @@ export class BotKpiComponent {
           data: [220, 182, 191, 234, 290, 330, 310],
           lineStyle: {
             color: '#5470C6',
-            type: 'dashed'
           }
         },
         {
@@ -426,7 +424,6 @@ export class BotKpiComponent {
           data: [150, 232, 201, 154, 190, 330, 410],
           lineStyle: {
             color: '#5470C6',
-            type: 'dashed'
           }
         },
 

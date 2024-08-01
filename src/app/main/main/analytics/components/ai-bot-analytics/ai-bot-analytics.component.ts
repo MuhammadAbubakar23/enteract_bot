@@ -285,10 +285,11 @@ export class AiBotAnalyticsComponent {
   }
 
   totalBotConversation() {
+    const dates = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    const counts = [820, 932, 901, 934, 1290, 1330, 1320]
     var chartDom = document.getElementById('main');
     this.totalBot = echarts.init(chartDom);
-    var option;
-    option = {
+    const option = {
       tooltip: {
         trigger: 'axis',
         formatter: function (params: any) {
@@ -300,16 +301,15 @@ export class AiBotAnalyticsComponent {
       xAxis: {
         type: 'category',
         boundaryGap: false,
-        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        data: dates,
       },
       yAxis: {
         type: 'value'
       },
       series: [
         {
-          data: [820, 932, 901, 934, 1290, 1330, 1320],
+          data: counts,
           type: 'line',
-          barWidth: '80%',
           areaStyle: {
             color: 'rgba(0, 123, 255, 0.5)'
           },
@@ -320,6 +320,7 @@ export class AiBotAnalyticsComponent {
           itemStyle: {
             color: '#007bff'
           },
+          barWidth: '80%',
         }
       ]
     };
@@ -328,11 +329,13 @@ export class AiBotAnalyticsComponent {
   }
 
   botEscalationRate() {
+    const formattedDates = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    const values = [10, 52, 200, 334, 390, 330, 220];
     var chartDom = document.getElementById('BotRate');
     var myChart = echarts.init(chartDom);
-    var option;
 
     var option;
+
     option = {
       tooltip: {
         trigger: 'axis',
@@ -346,7 +349,7 @@ export class AiBotAnalyticsComponent {
       xAxis: [
         {
           type: 'category',
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          data: formattedDates,
           axisTick: {
             alignWithLabel: true
           }
@@ -359,10 +362,10 @@ export class AiBotAnalyticsComponent {
       ],
       series: [
         {
-          name: 'Direct',
+          name: 'Escalations',
           type: 'bar',
           barWidth: '40%',
-          data: [10, 52, 200, 334, 390, 330, 220],
+          data: values,
           itemStyle: {
             color: '#007bff'
           },
@@ -496,17 +499,20 @@ export class AiBotAnalyticsComponent {
     option && this.fallRate.setOption(option);
   }
   botSessionTime() {
+
+    const allDates = ['2024-07-01', '2024-07-02', '2024-07-03', '2024-07-04', '2024-07-05', '2024-07-06', '2024-07-07'];
+    const timeoutData = [120, 132, 101, 134, 90, 230, 210];
+    const fallbackData = [220, 182, 191, 234, 290, 330, 310];
+
     var chartDom = document.getElementById('sessionTime');
     this.sessionTime = echarts.init(chartDom);
-    var option;
-    option = {
+    const option = {
       tooltip: {
         trigger: 'axis'
       },
       legend: {
-        data: ['Facebook', 'Whatsapp', 'Website', 'Direct', 'Search Engine'],
+        data: ['Session Timeout', 'Human Transfer rate'],
         icon: 'square',
-        // bottom: 'right',
       },
       grid: {
         left: '3%',
@@ -514,50 +520,33 @@ export class AiBotAnalyticsComponent {
         bottom: '3%',
         containLabel: true
       },
-      toolbox: {
-
-      },
       xAxis: {
         type: 'category',
         boundaryGap: false,
-        data: ['8/1 ', '8/2', '8/3', '8/3', '8/4', '8/5', '8/6']
+        data: allDates
       },
       yAxis: {
         type: 'value'
       },
       series: [
         {
-          name: 'Facebook',
+          name: 'Session Timeout',
           type: 'line',
           stack: 'Total',
-          data: [120, 132, 101, 134, 90, 230, 210],
+          data: timeoutData,
           lineStyle: {
             color: '#91CC75',
-            type: 'dashed'
           }
         },
         {
-          name: 'Whatsapp',
+          name: 'Human Transfer rate',
           type: 'line',
           stack: 'Total',
-          data: [220, 182, 191, 234, 290, 330, 310],
+          data: fallbackData,
           lineStyle: {
             color: '#FAC858',
-            type: 'dashed'
           }
-        },
-        {
-          name: 'Website',
-          type: 'line',
-          stack: 'Total',
-          data: [150, 232, 201, 154, 190, 330, 410],
-          lineStyle: {
-            color: '#5470C6',
-            type: 'dashed'
-          }
-        },
-
-
+        }
       ]
     };
 
@@ -574,21 +563,21 @@ export class AiBotAnalyticsComponent {
         value: sentiments?.Positive,
         name: 'Positive',
         itemStyle: {
-          color: '#abedd0'
+          color: '#90EE90'
         }
       },
       {
         value: sentiments?.Negative,
         name: 'Negative',
         itemStyle: {
-          color: '#ffcccf'
+          color: '#fa7373'
         }
       },
       {
         value: sentiments?.Neutral,
         name: 'Neutral',
         itemStyle: {
-          color: '#ffe0b3'
+          color: '#f7c465'
         }
       }
     ];
