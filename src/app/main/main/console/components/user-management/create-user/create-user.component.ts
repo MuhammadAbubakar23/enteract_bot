@@ -131,7 +131,7 @@ export class CreateUserComponent implements OnInit {
       email: [formVal.email, Validators.required],
       password: [formVal.password, [Validators.required, Validators.minLength(8)]],
       confirmpassword: [formVal.confirmPassword, [Validators.required, Validators.minLength(8)]],
-      roleId: [formVal.roleId.map((id: number) => id.toString())],
+      roleId: [formVal.roleId.map((id: number) => id.toString()), Validators.required],
       teamId: [[]],
       skillId: [[]]
     }
