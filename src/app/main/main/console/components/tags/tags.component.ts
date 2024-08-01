@@ -180,31 +180,45 @@ export class TagsComponent {
     return Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
   }
   submit(){
-    if (this.id == null) {
-      this.tagsService.Save(this.TagForm.value).subscribe(
-        (res: any) => {
-          // _self.onReset();
-          this.refreshMessages();
-          this.TagForm.reset();
-        }), {
-        error: (err: HttpErrorResponse) => {
-          this.TagForm.reset();
+    if(this.TagForm.valid){
+      if (this.id == null) {
+        this.tagsService.Save(this.TagForm.value).subscribe(
+          (res: any) => {
+            // _self.onReset();
+            this.refreshMessages();
+            this.TagForm.reset();
+          }), {
+          error: (err: HttpErrorResponse) => {
+            this.TagForm.reset();
+          }
         }
       }
+      else {
+        this.tagsService.Update(this.TagForm.value).subscribe(
+          (res: any) => {
+            // _self.onReset();
+            this.refreshMessages();
+            this.TagForm.reset();
+            this.id=null
+          }), {
+          error: (err: HttpErrorResponse) => {
+            this.TagForm.reset();
+            this.id=null
+          }
+        };
+      }
     }
-    else {
-      this.tagsService.Update(this.TagForm.value).subscribe(
-        (res: any) => {
-          // _self.onReset();
-          this.refreshMessages();
-          this.TagForm.reset();
-          this.id=null
-        }), {
-        error: (err: HttpErrorResponse) => {
-          this.TagForm.reset();
-          this.id=null
-        }
-      };
+    else{
+      this.markFormGroupTouched(this.TagForm)
     }
+  }
+  private markFormGroupTouched(formGroup: FormGroup) {
+    Object.values(formGroup.controls).forEach(control => {
+      control.markAsTouched();
+
+      if (control instanceof FormGroup) {
+        this.markFormGroupTouched(control);
+      }
+    });
   }
 }

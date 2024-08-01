@@ -12,7 +12,7 @@
 import { CommonModule, Location } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormArray, FormControl, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormControl, FormGroup, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { takeUntil } from 'rxjs';
 import { UsersService } from '../users.service';
@@ -242,15 +242,21 @@ export class CreateUserComponent implements OnInit {
     //   return;
     // }
     if (this.id == null) {
-      this.uservc.Save(this.userForm.value).subscribe(
-        (res: any) => {
-          // _self.onReset();
-          this.router.navigate(['bot/console/users']);
-        }), {
-        error: (err: HttpErrorResponse) => {
+      if(this.userForm.valid){
+        this.uservc.Save(this.userForm.value).subscribe(
+          (res: any) => {
+            // _self.onReset();
+            this.router.navigate(['bot/console/users']);
+          }), {
+          error: (err: HttpErrorResponse) => {
+          }
         }
       }
+      else{
+        this.markFormGroupTouched(this.userForm)
+      }
     }
+    
     else {
       this.uservc.Update(this.userForm.value).subscribe(
         (res: any) => {
@@ -261,6 +267,15 @@ export class CreateUserComponent implements OnInit {
         }
       };
     }
+  }
+  private markFormGroupTouched(formGroup: FormGroup) {
+    Object.values(formGroup.controls).forEach(control => {
+      control.markAsTouched();
+
+      if (control instanceof FormGroup) {
+        this.markFormGroupTouched(control);
+      }
+    });
   }
   isShow = false;
   isActive = false;

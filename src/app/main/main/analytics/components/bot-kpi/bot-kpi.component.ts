@@ -398,7 +398,6 @@ export class BotKpiComponent {
         type: 'value'
       },
       series: [
-
         {
           name: 'Facebook',
           type: 'line',
