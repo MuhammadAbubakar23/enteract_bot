@@ -18,8 +18,9 @@ export class AnalyticsService {
   tagsAnalatics = environment.link.analytics.tagsAnalatics
   peakHours = environment.link.analytics.peakHours
   totalToken = environment.link.analytics.totalToken
+  conversationOverTime = environment.link.analytics.conversationOverTime
   tokenPerDay = environment.link.analytics.tokenPerDay
-
+  baseUrlAI = environment.baseUrlAI
   avgToken = environment.link.analytics.avgToken
   fallBackCount = environment.link.analytics.fallBackCount
   timeoutCount = environment.link.analytics.timeoutCount
@@ -66,6 +67,11 @@ export class AnalyticsService {
 
   FallBackCount() {
     return this.http.get(this.chatBotBaseUrl + this.fallBackCount)
+  }
+
+  ConversationOverTimeData(botId:any){
+    return this.http.get(this.baseUrlAI + this.conversationOverTime + `?bot_id=${environment.bot_id}&filter_days=7`)
+    // return this.http.get('http://52.77.162.250:5005/analytics/conversations_over_time?bot_id=7&filter_days=7')
   }
 
 }

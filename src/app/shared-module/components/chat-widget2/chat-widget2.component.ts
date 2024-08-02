@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { BotMonitoringService } from 'src/app/main/main/ai-bot/bot-monitoring.service';
@@ -13,6 +13,7 @@ export class ChatWidget2Component implements OnInit {
   @ViewChild('chatBody') private chatBody?: ElementRef;
   @Input() hasParent: boolean=false;
   messages: any[] = [];
+  lastServiceErrorTime: number = 0; 
   typing = false;
   currentTimestamp: Date = new Date();
   isOpen = false;
@@ -22,14 +23,14 @@ export class ChatWidget2Component implements OnInit {
   })
   workspace_id = environment.workspace_id;
   bot_id = environment.bot_id;
-  constructor(private _botService: BotMonitoringService,private _toastS:ToastrService) { }
+  constructor(private _botService: BotMonitoringService,private _toastS:ToastrService, private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.session_id = this.generateRandomString(6);
   }
-  ngAfterViewChecked() {
-    this.scrollToBottom();
-  }
+  // ngAfterViewChecked() {
+  //   this.scrollToBottom();
+  // }
 
   generateRandomString(length: number): string {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -57,43 +58,56 @@ export class ChatWidget2Component implements OnInit {
     this.isOpen = false;
     //this.messages = [];
   }
-  submitMessage() {
+  get cf(){
+    return this.chatForm.controls
+  }
+  submitMessage(msg:any) {
+    const mesage= msg;
     const message = this.chatForm.value['message'];
 
     if (!message.trim()) {
-      this._toastS.error('Message is Required', '', {
-        timeOut: 2000,
-      });
+      const now = Date.now();
+      if (now - this.lastServiceErrorTime > 3000) {
+        this._toastS.error('Message is Required', '', {
+          timeOut: 3000,
+        });
+        this.lastServiceErrorTime = now;
+      }
     }
     else{
  if (!this.session_id) {
       this._botService.chatInit().subscribe(
         (res: any) => {
           this.session_id = res.session_id;
-          this.sendMessage();
+          this.sendMessage(mesage);
         },
         (error: any) => {
-          alert('Service unavailable');
+          const now = Date.now();
+      if (now - this.lastServiceErrorTime > 3000) {
+        this._toastS.error('Service Unavailable', 'Failed!' ,{
+          timeOut: 3000,
+        });
+        this.lastServiceErrorTime = now;
+      }
         }
       );
     } else {
-      this.sendMessage();
+      this.sendMessage(mesage);
     }
     }
    
   }
 
 
-  
 
-  sendMessage() {
+  sendMessage(mesage:any) {
     const body = {
-      "text": this.chatForm.value['message'],
+      "text": mesage != '' ? mesage : this.chatForm.value['message'],
       "session_id": this.session_id,
       "workspace_id":this.workspace_id,
       "bot_id":this.bot_id,
+      "token":localStorage.getItem('access_token')
     };
-
     this.messages.push({
       message: this.chatForm.value['message'],
       slug: this.session_id,
@@ -115,7 +129,13 @@ export class ChatWidget2Component implements OnInit {
         });
       },
       (error: any) => {
-        alert('Service unavailable');
+        const now = Date.now();
+        if (now - this.lastServiceErrorTime > 3000) {
+          this._toastS.error('Service Unavailable', 'Failed!' ,{
+            timeOut: 3000,
+          });
+          this.lastServiceErrorTime = now;
+        }
       }
     );
   }

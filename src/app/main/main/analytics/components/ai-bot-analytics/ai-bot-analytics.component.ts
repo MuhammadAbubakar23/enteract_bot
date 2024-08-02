@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import * as echarts from 'echarts';
 import { HeaderService } from 'src/app/services/header.service';
 import { AnalyticsService } from '../../service/analytics.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-ai-bot-analytics',
@@ -27,7 +28,7 @@ export class AiBotAnalyticsComponent {
   tagsAnalatics: any;
   peakHours: any[] = [];
   peakhoursData:any[]=[]
-  constructor(private _hS: HeaderService, private _analytics: AnalyticsService) {
+  constructor(private _hS: HeaderService, private _analytics: AnalyticsService, private spinner:NgxSpinnerService) {
     _hS.updateHeaderData({
       title: 'Ai Bot Analytics',
       tabs: [{ title: '', url: '', isActive: true }],
@@ -52,7 +53,7 @@ export class AiBotAnalyticsComponent {
     // this.FallBackCount();
 
     //Old
-    this.totalBotConversation();
+    this.conversationOverTime();
     this.botEscalationRate();
     this.botSessionTime();
     this.averageToken();
@@ -66,25 +67,29 @@ export class AiBotAnalyticsComponent {
 
   }
   TotalConversation() {
+    this.spinner.show()
     this._analytics.GetTotalBotConversation().subscribe(
       (res: any) => {
         this.botConversation = res.detail;
+        this.spinner.hide()
       },
       (error: any) => {
         console.error("An error occurred while fetching the bot conversation:", error);
-
+        this.spinner.hide()
       }
     );
   }
   TotalAgents(){
+    this.spinner.show()
     this._analytics.GetTotalAgents().subscribe(
       (res: any) => {
         this.agents = res.detail;
         this.fallBackRate();
+        this.spinner.hide()
       },
       (error: any) => {
         console.error("An error occurred while fetching the bot agents:", error);
-
+        this.spinner.hide()
       }
     );
   }
@@ -135,64 +140,75 @@ export class AiBotAnalyticsComponent {
   }
 
   AvgBotConversationTime(){
+    this.spinner.show()
     this._analytics.GetAvgBotConversationTime().subscribe(
       (res: any) => {
         this.avgBotConversationTime = res.detail;
+        this.spinner.hide()
       },
       (error: any) => {
         console.error("An error occurred while fetching the average bot converstion time:", error);
-
+        this.spinner.hide()
       }
     );
   }
   BotEsclationRate(){
+    this.spinner.show()
     this._analytics.GetBotEsclationRate().subscribe(
       (res: any) => {
         this.botEsclationRate = res.detail;
+        this.spinner.hide()
       },
       (error: any) => {
         console.error("An error occurred while fetching the bot esclation rate:", error);
-
+        this.spinner.hide()
       }
     );
   }
   AvgWaitTime(){
+    this.spinner.show()
     this._analytics.GetAvgWaitTime().subscribe(
       (res: any) => {
         this.avgWaitTime = res.detail;
+        this.spinner.hide()
       },
       (error: any) => {
         console.error("An error occurred while fetching the bot avgerage wait time:", error);
-
+        this.spinner.hide()
       }
     );
   }
   SentimentAnalysis(){
+    this.spinner.show()
     this._analytics.GetSentimentAnalysis().subscribe(
       (res: any) => {
         this.sentimentAnalysis = res.detail;
         this.sentimentsBOTCsat();
+        this.spinner.hide()
       },
       (error: any) => {
         console.error("An error occurred while fetching the bot sentiment analysis:", error);
-
+        this.spinner.hide()
       }
     );
   }
   TagsAnalatics(){
+    this.spinner.show()
     this._analytics.GetTagsAnalatics().subscribe(
       (res: any) => {
         this.tagsAnalatics = res.detail;
         this.BotTagst();
+        this.spinner.hide()
       },
       (error: any) => {
         console.error("An error occurred while fetching the tag analytics:", error);
-
+        this.spinner.hide()
       }
     );
   }
 
   PeakHours(){
+    this.spinner.show()
     this._analytics.GetPeakHours().subscribe(
       (res: any) => {
         this.peakHours = res.detail;
@@ -205,25 +221,29 @@ export class AiBotAnalyticsComponent {
        index++;
        }
         this.heatMap();
+        this.spinner.hide()
       },
       (error: any) => {
         console.error("An error occurred while fetching the peak hours:", error);
-
+        this.spinner.hide()
       }
     );
   }
   TotalToken() {
+    this.spinner.show()
     this._analytics.TotalToken().subscribe(
       (res: any) => {
         this.totalTokenCount = res.detail;
+        this.spinner.hide()
       },
       (error: any) => {
         console.error("An error occurred while fetching the total token:", error);
-
+        this.spinner.hide()
       }
     );
   }  
   AvgToken() {
+    this.spinner.show()
     this._analytics.AvgToken().subscribe(
       (res: any) => {
         // const tokenData = res.tokens; 
@@ -233,35 +253,40 @@ export class AiBotAnalyticsComponent {
         // this.avgTokenCount = averageTokens.toFixed(0);
         //res && res['avg tokens'] !== undefined
         this.avgTokenCount = res.detail;
+        this.spinner.hide()
       },
       (error: any) => {
         console.error("An error occurred while fetching the avgerage token:", error);
+        this.spinner.hide()
       }
     );
   }
   TimeoutCount() {
+    this.spinner.show()
     this._analytics.TimeoutCount().subscribe(
       (res: any) => {
         // const countData = res.count
         // const countKey = Object.keys(countData)[0];
         // this.sessiontimeout = countData[countKey];;
         this.sessiontimeout = res.detail;
-
+        this.spinner.hide()
       },
       (error: any) => {
         console.error("An error occurred while fetching the timeout count:", error);
-
+        this.spinner.hide()
       }
     );
   }
   TokenPerDay() {
+    this.spinner.show()
     this._analytics.TokenPerDay().subscribe(
       (res: any) => {
         this.tokenPerDayCount = res.detail;
+        this.spinner.hide()
       },
       (error: any) => {
         console.error("An error occurred while fetching the token per day:", error);
-
+        this.spinner.hide()
       }
     );
   }
@@ -269,24 +294,47 @@ export class AiBotAnalyticsComponent {
 
 
   FallBackCount() {
+    this.spinner.show()
     this._analytics.FallBackCount().subscribe(
       (res: any) => {
         const countData = res.count
         const countKey = Object.keys(countData)[0];
         this.fallbackRateCount = countData[countKey];;
         //this.fullBackRate();
-
+        this.spinner.hide()
       },
       (error: any) => {
         console.error("An error occurred while fetching the bot conversation:", error);
+        this.spinner.hide()
 
       }
     );
   }
 
-  totalBotConversation() {
+  conversationOverTime(){
+    this.spinner.show()
+    this._analytics.ConversationOverTimeData(1).subscribe((response:any)=>{
+      const counts = [
+        response.detail.Monday[0],
+        response.detail.Tuesday[0],
+        response.detail.Wednesday[0],
+        response.detail.Thursday[0],
+        response.detail.Friday[0],
+        response.detail.Saturday[0],
+        response.detail.Sunday[0]
+    ];
+    this.totalBotConversation(counts);
+    this.spinner.hide()
+    },
+    (error:any)=>{
+      console.error(error.error);
+    }
+  )
+  }
+
+  totalBotConversation(count:any) {
     const dates = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-    const counts = [820, 932, 901, 934, 1290, 1330, 1320]
+    const counts = count;
     var chartDom = document.getElementById('main');
     this.totalBot = echarts.init(chartDom);
     const option = {

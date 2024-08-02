@@ -1,4 +1,8 @@
 <div class="p-4 d-grid w-100">
+    <ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="square-jelly-box"
+    [fullScreen]="false">
+    <p style="color: white"> Loading... </p>
+    </ngx-spinner>
     <div class="analytics-dashboard " data-scrollbar="true" >
         <div class="analytics executive-dashboard">
             <div class="filter-toolbar mb-3 border-0 d-flex align-items-center justify-content-between">
@@ -6,7 +10,7 @@
                 <ul class="list-inline">
                     <li class="list-inline-item">
                         <div class="dropdown">
-                            <button class="btn dropdown-toggle fw-bold" type="button"
+                            <!-- <button class="btn dropdown-toggle fw-bold" type="button"
                                 id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fal fa-calendar"></i> Any Time
                             </button>
@@ -33,7 +37,7 @@
                                 <li class="dropdown-item" id="customrange1">
                                     <a>Custom Range</a>
                                 </li>
-                            </ul>
+                            </ul> -->
                             <div class="dropdown-menu end-0 assignSecondDropdownList1"
                                 aria-labelledby="customrange1">
                                 <form class="px-3 py-3">
@@ -172,7 +176,7 @@
                 <div class="col">
                     <div class="card mb-3">
                         <div class="card-body">
-                            <h6 class="mb-3 text-uppercase">Fall Back </h6>
+                            <h6 class="mb-3 text-uppercase">Fall Back  Rate</h6>
                             <div class="d-flex align-items-center justify-content-between">
                                 <div>
                                     <h3 class="m-0 fw-bold">{{fallbackRateCount > 0 ? fallbackRateCount : 0}}</h3>

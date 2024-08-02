@@ -8,6 +8,7 @@ import { BotKpiComponent } from './components/bot-kpi/bot-kpi.component';
 import { SentimentsAndTagsComponent } from './components/sentiments-and-tags/sentiments-and-tags.component';
 import { TokensComponent } from './components/tokens/tokens.component';
 import { ThousandSuffPipe } from './Pipe/thousand-suff.pipe';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { ThousandSuffPipe } from './Pipe/thousand-suff.pipe';
   ],
   imports: [
     CommonModule,
-    AnalyticsRoutingModule
+    AnalyticsRoutingModule,
+    NgxSpinnerModule
   ]
 })
 export class AnalyticsModule { }

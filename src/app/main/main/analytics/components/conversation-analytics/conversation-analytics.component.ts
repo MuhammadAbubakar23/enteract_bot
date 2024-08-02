@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { HeaderService } from 'src/app/services/header.service';
 import * as echarts from 'echarts';
 import { AnalyticsService } from '../../service/analytics.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 @Component({
   selector: 'app-conversation-analytics',
   templateUrl: './conversation-analytics.component.html',
@@ -17,7 +18,7 @@ export class ConversationAnalyticsComponent {
   tagsAnalatics: any;
   totalAgentChart:any;
   botTagsChart:any;
-  constructor(private _hS: HeaderService,private _analytics: AnalyticsService) {
+  constructor(private _hS: HeaderService,private _analytics: AnalyticsService, private spinner: NgxSpinnerService) {
     _hS.updateHeaderData({
       title: 'Conversation Analytics',
       tabs: [{ title: '', url: '', isActive: true }],
@@ -32,7 +33,7 @@ export class ConversationAnalyticsComponent {
     this.TagsAnalatics();
 
     this.botEscalationRate();
-    this.botConversationOverTime();
+    this.conversationOverTime();
   }
   TotalConversation() {
     this._analytics.GetTotalBotConversation().subscribe(
@@ -186,16 +187,16 @@ export class ConversationAnalyticsComponent {
   }
 
   botEscalationRate() {
+    const formattedDates = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    const values = [10, 52, 200, 334, 390, 330, 220];
     var chartDom = document.getElementById('BotRate');
-    this.humanbot = echarts.init(chartDom);
+    var myChart = echarts.init(chartDom);
+
     var option;
 
     option = {
       tooltip: {
         trigger: 'axis',
-        axisPointer: {
-          type: 'shadow'
-        }
       },
       grid: {
         left: '3%',
@@ -206,7 +207,7 @@ export class ConversationAnalyticsComponent {
       xAxis: [
         {
           type: 'category',
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          data: formattedDates,
           axisTick: {
             alignWithLabel: true
           }
@@ -219,35 +220,77 @@ export class ConversationAnalyticsComponent {
       ],
       series: [
         {
-          name: 'Direct',
+          name: 'Escalations',
           type: 'bar',
-          barWidth: '60%',
-          data: [10, 52, 200, 334, 390, 330, 220]
+          barWidth: '40%',
+          data: values,
+          itemStyle: {
+            color: '#007bff'
+          },
         }
       ]
     };
 
-    option && this.humanbot.setOption(option);
+    option && myChart.setOption(option);
   }
-  botConversationOverTime() {
+  conversationOverTime(){
+    this.spinner.show()
+    this._analytics.ConversationOverTimeData(1).subscribe((response:any)=>{
+      const counts = [
+        response.detail.Monday[0],
+        response.detail.Tuesday[0],
+        response.detail.Wednesday[0],
+        response.detail.Thursday[0],
+        response.detail.Friday[0],
+        response.detail.Saturday[0],
+        response.detail.Sunday[0]
+    ];
+    this.botConversationOverTime(counts);
+    this.spinner.hide()
+    },
+    (error:any)=>{
+      console.error(error.error);
+    }
+  )
+  }
+  botConversationOverTime(count:any) {
+    const dates = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    const counts = count;
+
     var chartDom = document.getElementById('main');
     this.totalBot = echarts.init(chartDom);
-    var option;
-
-    option = {
+    const option = {
+      tooltip: {
+        trigger: 'axis',
+        formatter: function (params: any) {
+          const date = params[0].name;
+          const conversationCount = params[0].value;
+          return `${date}<br/>Conversations: ${conversationCount}`;
+        }
+      },
       xAxis: {
         type: 'category',
         boundaryGap: false,
-        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        data: dates,
       },
       yAxis: {
         type: 'value'
       },
       series: [
         {
-          data: [820, 932, 901, 934, 1290, 1330, 1320],
+          data: counts,
           type: 'line',
-          areaStyle: {}
+          areaStyle: {
+            color: 'rgba(0, 123, 255, 0.5)'
+          },
+          lineStyle: {
+            color: '#007bff',
+            width: 3
+          },
+          itemStyle: {
+            color: '#007bff'
+          },
+          barWidth: '80%',
         }
       ]
     };

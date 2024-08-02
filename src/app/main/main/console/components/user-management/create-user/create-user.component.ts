@@ -104,7 +104,9 @@ export class CreateUserComponent implements OnInit {
     }
   }
   getBotMenuList() {
+    this.spinnerServerice.show();
     this.uservc.getMyRoles().subscribe((res: any) => {
+      this.spinnerServerice.hide()
       debugger
       this.botMenuList = res;
     })

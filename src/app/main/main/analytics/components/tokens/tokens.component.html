@@ -12,7 +12,7 @@
                         <ul class="list-inline">
                             <li class="list-inline-item">
                                 <div class="dropdown">
-                                    <button class="btn dropdown-toggle fw-bold" type="button" id="dropdownMenuButton1"
+                                    <!-- <button class="btn dropdown-toggle fw-bold" type="button" id="dropdownMenuButton1"
                                         data-bs-toggle="dropdown" aria-expanded="false">
                                         <i class="fal fa-calendar"></i> Any Time
                                     </button>
@@ -41,7 +41,7 @@
                                         <li class="dropdown-item" id="customrange1">
                                             <a href="#0">Custom Range</a>
                                         </li>
-                                    </ul>
+                                    </ul> -->
                                     <div class="dropdown-menu end-0 assignSecondDropdownList1"
                                         aria-labelledby="customrange1">
                                         <form class="px-3 py-3">
@@ -90,7 +90,7 @@
                             <div class="card mb-3">
                                 <div class="card-body">
                                     <h6>Average Token <small class="coal">per conversation</small></h6>
-                                    <h2>{{ (avgTokenCount > 0 ? avgTokenCount : 0 )  |  number : '1.2-2' }}</h2>
+                                    <h2>{{ (avgTokenCount > 0 ? avgTokenCount : 0) | number: '1.0-0' }}</h2>
                                 </div>
                             </div>
                             <div class="card mb-3">

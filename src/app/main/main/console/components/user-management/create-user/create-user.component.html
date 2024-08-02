@@ -1,4 +1,8 @@
 <div class="agent-page-main-content">
+  <ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="square-jelly-box"
+  [fullScreen]="false">
+  <p style="color: white"> Loading... </p>
+  </ngx-spinner>
     <form class="user-detail-form" [formGroup]="userForm" (ngSubmit)="onSubmit()" (ngReset)="onReset()">
         <div class="create-user console-body-wrapper footerheight" data-scrollbar="true" tabindex="-1"
         style="overflow-y: auto; outline: none;">
@@ -152,21 +156,23 @@
                       <div class="floating-item mb-4">
                         <div>
                           <label for="confirmpassword">Select Menu</label>
-                          <ng-select  class="form-select"
+                          <ng-select 
                             [multiple]="true" 
+                            [closeOnSelect]="false"
                             formControlName="roleId" 
                             [class.is-invalid]="f['roleId'].invalid && f['roleId'].touched" 
                             [class.is-valid]="f['roleId'].valid && f['roleId'].touched"
                           >
-                            <ng-option *ngFor="let bot of botMenuList" [value]="bot.id.toString()">{{ bot.name }}</ng-option> <!-- Ensure values are strings -->
+                            <ng-option *ngFor="let bot of botMenuList" [value]="bot.id.toString()">{{ bot.name }}</ng-option>
                           </ng-select>
                           <div class="invalid-feedback">
                             <div *ngIf="f['roleId'].errors?.['required']">
-                              Bot is required.
+                              Menu is required.
                             </div>
                           </div>
                         </div>
                       </div>
+                      
                       
                       <!-- <div class="floating-item mb-4">
                         <div>

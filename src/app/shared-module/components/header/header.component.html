@@ -177,24 +177,36 @@
             </ul>
           </div> -->
           <div class="dropdown custom-dropdown-list w-auto">
-            <a  class="d-block link-dark text-decoration-none dropdown-toggle " id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="true">
-              <img src="https://github.com/mdo.png" alt="mdo" width="40" height="40" class="rounded-circle">
-              <span class="online-n-offline"></span>
-              <div class="name-n-info">
-                <span class="name">{{username}}</span>
-                <small>1:23:59</small>
-              </div>
-            </a>
+            <a
+            class="link-dark text-decoration-none dropdown-toggle"
+            id="dropdownUser1"
+            data-bs-toggle="dropdown"
+            aria-expanded="true"
+          >
+            <!-- <img src="https://github.com/mdo.png" alt="mdo" width="40" height="40" class="rounded-circle"> -->
+            <div class="iconButton medium night berryTransBg fw-bold">
+              {{ getInitials(username) }}
+            </div>
+
+            <span class="online-n-offline"></span>
+            <div class="name-n-info">
+              <span class="name">{{ username }}</span>
+              <!-- <small>1:23:59</small> -->
+            </div>
+          </a>
             <ul class="dropdown-menu full_dropdown p-0 text-small user-profile-dropdown shadow " aria-labelledby="dropdownUser1" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(-162px, 52px);" data-popper-placement="bottom-start">
               <li class="user-dropdown-header dropdown-header">
                 <ul>
                   <li>
                     <a  class="link-dark text-decoration-none" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                      <img src="https://github.com/mdo.png" class="profile-pic rounded-circle" alt="mdo" width="50" height="50">
+                      <!-- <img src="https://github.com/mdo.png" class="profile-pic rounded-circle" alt="mdo" width="50" height="50"> -->
+                      <div class="iconButton medium night berryTransBg fw-bold">
+                        {{ getInitials(username) }}
+                      </div>
                       <span class="online-n-offline on-off-btn"></span>
                       <div class="name-n-info lh-sm">
                         <h6 class="night m-0">{{username}}</h6>
-                        <small>salmankhan</small>
+                        <!-- <small>{{username}}</small> -->
                       </div>
                     </a>
                   </li>
