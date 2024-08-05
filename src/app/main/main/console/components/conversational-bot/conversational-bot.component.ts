@@ -7,6 +7,7 @@ import { ConversationlBotService } from '../../services/conversationl-bot.servic
 import { HttpParams } from '@angular/common/http';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { ValueSettingServiceService } from '../../services/value-setting-service.service';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-conversational-bot',
@@ -29,6 +30,9 @@ export class ConversationalBotComponent implements OnInit {
   workspaceName: any;
   name: any;
   editButtonClicked: any =false;
+  tokenData: any;
+  currentToken:any;
+  tokenExpiryDate: any;
   constructor(public ValueSettingServiceService:ValueSettingServiceService ,private toaster:ToastrService, private spinner: NgxSpinnerService ,private _hS: HeaderService, private sidenavService: SidenavService, private _toastr: ToastrService, private _cBS: ConversationlBotService) {
     _hS.updateHeaderData({
       title: 'Conversational Bot',
@@ -178,6 +182,62 @@ export class ConversationalBotComponent implements OnInit {
       this.name = res.detail;
       this.ValueSettingServiceService.setName(this.name);
     })
+  }
+
+  getToken(id:any){
+    this.currentToken=null;
+    this.tokenExpiryDate=null;
+    this.workspace_id = id;
+    this.spinner.show()
+    this._cBS.getToken(this.workspace_id).subscribe((res:any)=>{
+      this.spinner.hide()
+      this.currentToken = res.token;
+      this.tokenExpiryDate = this.convertToOriginalFormat(res.expiry);
+      debugger
+      this.tokenData = res;
+    },
+    (error:any)=>{
+      this.spinner.hide();
+      this.currentToken=null;
+      this.tokenExpiryDate=null;
+      console.error(error.error);
+    }
+  )
+  }
+
+  createToken(){
+    const formData = new FormData();
+    debugger
+    const formattedDate = this.convertDate(this.tokenExpiryDate);
+    formData.append('bot_id', "1");
+    // formData.append('workspace_id', String(this.workspace_id));
+    formData.append('workspace_id',this.workspace_id);
+    formData.append('expiry_date', this.tokenExpiryDate!=null ? formattedDate : this.tokenExpiryDate);
+    this.spinner.show()
+    this._cBS.createToken(formData).subscribe((res:any)=>{
+      this.spinner.hide()
+      this.toaster.success(res.detail)
+    },
+    (error:any)=>{
+      this.spinner.hide();
+      this._toastr.error(error.error.detail)
+    }
+  )
+  }
+
+  convertDate(date: string): string {
+    const dateObj = new Date(date);
+    return formatDate(dateObj, 'dd/MM/yyyy HH:mm:ss', 'en-US');
+  }
+
+  convertToOriginalFormat(formattedDate: string): string {
+    debugger
+    const [datePart, timePart] = formattedDate.split(' ');
+    const [year, month, day] = datePart.split('-').map(Number);
+    const [hours, minutes, seconds] = timePart.split(':').map(Number);
+
+    const dateObj = new Date(year, month - 1, day, hours, minutes, seconds);
+    return dateObj.toISOString().slice(0, 16); // 'YYYY-MM-DDTHH:MM'
   }
 
   loadUploadComponent(){

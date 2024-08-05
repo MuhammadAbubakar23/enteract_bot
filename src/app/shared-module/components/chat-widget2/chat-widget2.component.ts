@@ -106,7 +106,7 @@ export class ChatWidget2Component implements OnInit {
       "session_id": this.session_id,
       "workspace_id":this.workspace_id,
       "bot_id":this.bot_id,
-      "token":localStorage.getItem('access_token')
+      "token":"sIVwsLR3RwJvmAAtVyDggDzRRX3tWd76pMQcD9ilCmBzTnbGwJ4iVGTg7NYcFXF3"
     };
     this.messages.push({
       message: this.chatForm.value['message'],

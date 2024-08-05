@@ -54,7 +54,9 @@ export class AiBotAnalyticsComponent {
 
     //Old
     this.conversationOverTime();
+    setTimeout(() => {
     this.botEscalationRate();
+    })
     this.botSessionTime();
     this.averageToken();
     //this.waitTime();

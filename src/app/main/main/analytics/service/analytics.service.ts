@@ -70,7 +70,7 @@ export class AnalyticsService {
   }
 
   ConversationOverTimeData(botId:any){
-    return this.http.get(this.baseUrlAI + this.conversationOverTime + `?bot_id=${environment.bot_id}&filter_days=7`)
+    return this.http.get(this.chatBotBaseUrl + this.conversationOverTime + `?bot_id=${environment.bot_id}&filter_days=7`)
     // return this.http.get('http://52.77.162.250:5005/analytics/conversations_over_time?bot_id=7&filter_days=7')
   }
 

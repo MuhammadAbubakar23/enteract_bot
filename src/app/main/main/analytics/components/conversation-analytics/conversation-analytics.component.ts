@@ -31,8 +31,9 @@ export class ConversationAnalyticsComponent {
     this.TotalAgents();
     this.AvgBotConversationTime();
     this.TagsAnalatics();
-
+    setTimeout(() => {
     this.botEscalationRate();
+    })
     this.conversationOverTime();
   }
   TotalConversation() {

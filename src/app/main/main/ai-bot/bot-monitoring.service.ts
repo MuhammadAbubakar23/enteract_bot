@@ -47,6 +47,6 @@ export class BotMonitoringService {
   }
 
   chatBotHistoryForHumanInteraction() {
-    return this.http.get(this.chatBotBaseUrl + "/escalatecount");
+    return this.http.get(this.chatBotBaseUrl + "escalatecount");
   }
 }

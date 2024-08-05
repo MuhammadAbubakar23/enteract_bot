@@ -46,6 +46,12 @@ export class ConversationlBotService {
   getName(workspace_id:any){
     return this.http.get(baseUrl + `workspaces/get_name?bot_id=1&workspace_id=${workspace_id}`)
   }
+  getToken(workspace_id:any){
+    return this.http.get(baseUrl + `tokens/get?bot_id=1&workspace_id=${workspace_id}`)
+  }
+  createToken(formData:any){
+    return this.http.post(baseUrl + 'tokens/create', formData)
+  }
   updateName(body:any){
     return this.http.post(baseUrl+"workspaces/update_name", body)
   }
