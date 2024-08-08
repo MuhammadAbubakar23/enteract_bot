@@ -15,6 +15,7 @@ export class LoginComponent implements OnInit {
   login: User = new User();
   token: any;
   show = false;
+  loginDisabled = false;
   lastServiceErrorTime: number = 0;
   loginForm = new FormGroup({
     userName: new FormControl(this.login.userName, [Validators.required]),
@@ -37,7 +38,11 @@ export class LoginComponent implements OnInit {
     return this.loginForm.controls;
   }
   onSubmit() {
-    if(this.loginForm.valid){
+    if(this.loginForm.valid)
+    
+    if(!this.loginDisabled){
+      this.loginDisabled = true;
+    {
       const loginData = {
         userName: this.loginForm?.get('userName')?.value,
         password: this.loginForm?.get('password')?.value,
@@ -46,6 +51,7 @@ export class LoginComponent implements OnInit {
       this._aS.doLogout();
       this._aS.signIn(loginData).subscribe(
         (res: any) => {
+          this.loginDisabled = false;
           if (res) {
             console.log("Login response:", res);
             localStorage.setItem('access_token', res?.loginResponse?.loginResponse?.accessToken);
@@ -70,7 +76,8 @@ export class LoginComponent implements OnInit {
 
         }, (error: any) => {
           console.error("Internal Server Error", error);
-            debugger
+          this.loginDisabled = false;
+          this.lastServiceErrorTime = this.lastServiceErrorTime || 0;
             const now = Date.now();
             if (now - this.lastServiceErrorTime > 3000) {
             const toasterObject = { isShown: true, isSuccess: false, toastHeading: "Failed", toastParagrahp: "Internal Server Error!" }
@@ -83,6 +90,7 @@ export class LoginComponent implements OnInit {
           // this._toastS.hide();
       });
     }
+  }
     else{
       this.markFormGroupTouched(this.loginForm)
     }

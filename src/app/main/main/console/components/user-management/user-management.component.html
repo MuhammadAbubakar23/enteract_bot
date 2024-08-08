@@ -1,116 +1,223 @@
 <!-- <div class="team-user-wrap console-body-wrapper inbox-container" data-scrollbar="true" tabindex="-1"
     style="overflow-y:auto; outline: none;"> -->
-    <ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="square-jelly-box"
-    [fullScreen]="false">
-    <p style="color: white"> Loading... </p>
-    </ngx-spinner>
-<div class="scroll-content">
-<div class="row h-auto justify-content-center">
-  <div class="col-md-11">
-    <div class="tab-content" id="nav-tabContent">
-      <div id="members" class="tab-pane fade list-group-section active show" role="tabpanel" aria-labelledby="members-tab">
+<ngx-spinner
+  bdColor="rgba(0, 0, 0, 0.8)"
+  size="medium"
+  color="#fff"
+  type="square-jelly-box"
+  [fullScreen]="false"
+>
+  <p style="color: white">Loading...</p>
+</ngx-spinner>
 
-        <div class="w-100 inbox-container">
+<div class="content-box-wrapper d-flex w-100">
+  <div class="middle-content d-flex">
+    <div
+      class="team-user-wrap console-body-wrapper inbox-container"
+      data-scrollbar="true"
+      tabindex="-1"
+      style="overflow: hidden; outline: none"
+    >
+      <div class="scroll-content">
+        <div class="row h-auto justify-content-center">
+          <div class="col-md-11">
+            <div class="tab-content" id="nav-tabContent">
+              <div
+                id="members"
+                class="tab-pane fade list-group-section active show"
+                role="tabpanel"
+                aria-labelledby="members-tab"
+              >
+                <div class="w-100 inbox-container">
+                  <div class="filter-container">
+                    <div class="row">
+                      <div class="col-md-5">
+                        <ul class="list-group list-group-horizontal border-0">
+                          <li class="list-group-item border-0 p-0">
+                            <div class="icon-input">
+                              <i class="fa-light fa-magnifying-glass"></i>
+                              <input
+                                class="form-control"
+                                placeholder="Search users.. "
+                                
+                                [(ngModel)]="searchText"
+                                (input)="refreshMessages()"
 
-          <div class="filter-container">
-            <div class="row">
-              <div class="col-md-5">
-              </div>
-              <div class="col-md-7">
-                <div class="d-flex align-items-center justify-content-end">
-
-                  <a [routerLink]="['/bot/console/users/create']" class="me-2">
-                    <button type="button" class="btn btn-success">
-                      <i class="fal fa-plus me-2"></i>
-                      Create User
-                    </button>
-                  </a>
-
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-5">
-                <ul class="list-group list-group-horizontal border-0">
-                  <li class="list-group-item border-0 p-0">
-                    <div class="icon-input">
-                      <i class="fa-light fa-magnifying-glass"></i>
-                      <input class="form-control" placeholder="Search User.. "
-                      [(ngModel)]="searchText"
-                      (input)="refreshMessages()">
-                    </div>
-                  </li>
-                  <li (click)="resetfilters()" class="list-group-item border-0 refreshicon iconHover iconButton medium rounded-circle" aria-label="..." data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="Refresh">
-                    <i class="fal fa-redo" ></i>
-                  </li>
-                </ul>
-              </div>
-              <div class="col-md-7">
-                <div *ngIf="totalCount > 0" class="d-flex align-items-center justify-content-end">
-                   {{startPoint}} - {{endPoint}} of {{totalCount}}
-                 <span class="iconButton medium iconHover" (click)="previousPage()">
-                   <i class="fal fa-chevron-left"></i>
-                 </span>
-                 <span class="iconButton medium iconHover" (click)="nextPage()">
-                   <i class="fal fa-chevron-right"></i>
-                 </span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="query-container perfect-scrollbar" data-scrollbar="data-scrollbar">
-            <div class="table-section">
-              <table class="table table-sm table-nowrap table-reset" id="table">
-                <thead>
-                  <tr>
-                    <th>User</th>
-                    <th>Email </th>
-                    <th>Role </th>
-                    <th> </th>
-                  </tr>
-                </thead>
-                <tbody >
-                  <tr *ngFor="let user of messages">
-                    <td>
-                        {{user.firstName}}&nbsp;{{user.lastName}}
-                    </td>
-                    <td>
-                      {{user.email}}
-                    </td>
-                    <td>{{user.teamId[0]}}</td>
-                    <td>
-                      <div class="icons-list d-flex justify-content-end dropstart">
-                        <button class="btn iconButton small iconHover btn-group" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                          <i class="far fa-ellipsis-v"></i>
-                        </button>
-                        <ul class="dropdown-menu fade">
-                          <li>
-                            <a class="dropdown-item" (click)="editTemplate(user)"><i class="fal fa-edit me-2"></i> Edit</a>
+                              />
+                            </div>
                           </li>
-                          <li>
-                            <a class="dropdown-item delete-dd" (click)="deleteTemplate(user)"><i class="fal fa-trash me-2"></i> Delete</a>
+                          <li
+                            class="list-group-item border-0 refreshicon iconHover iconButton medium rounded-circle"
+                            aria-label="..."
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="bottom"
+                            data-bs-original-title="Refresh"
+                            (click)="resetfilters()"
+                          >
+                            <i class="fal fa-redo"></i>
                           </li>
-
+                          <li
+                            class="list-group-item after-select-fun iconHover iconButton medium rounded-circle"
+                            aria-label="..."
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="bottom"
+                            data-bs-original-title="Delete"
+                            style="display: none"
+                          >
+                            <i class="fal fa-trash"></i>
+                          </li>
                         </ul>
                       </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+                      <div class="col-md-7">
+                        <div
+                          class="d-flex align-items-center justify-content-end"
+                        >
+                          <a  [routerLink]="['/bot/console/users/create']"
+                          class="me-2">
+                            <button type="button" class="btn btn-success">
+                              <i class="fal fa-plus me-2"></i>
+                              Create User
+                            </button>
+                          </a>
+                       
+                          <!-- <a
+                            class="btn btn-success ice me-2"
+                            data-bs-toggle="offcanvas"
+                            href="#invitemembers"
+                            role="button"
+                            aria-controls="invitemembers"
+                          >
+                            <i class="fa-light fa-plus"></i> Invite Members
+                          </a> -->
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                     <div class="col-5"></div>
+                      <div class="col-md-7" *ngIf="totalCount>10">
+                        <div  class="d-flex align-items-center justify-content-end">
+                           {{startPoint}} - {{endPoint}} of {{totalCount}}
+                         <span class="iconButton medium iconHover" (click)="previousPage()">
+                           <i class="fal fa-chevron-left"></i>
+                         </span>
+                         <span class="iconButton medium iconHover" (click)="nextPage()">
+                           <i class="fal fa-chevron-right"></i>
+                         </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div
+                    class="query-container perfect-scrollbar"
+                    data-scrollbar="true"
+                    tabindex="-1"
+                    style="overflow: hidden; outline: none"
+                  >
+                    <div class="scroll-content">
+                      <div
+                        class="alert alert-secondary text-center email-info-alert p-2"
+                        role="alert"
+                      >
+                        All <strong>09</strong> candidates on this page are
+                        selected.
+                        <a
+                          href="javascript:void(0);"
+                          class="all-conversation fw-bold sky btn"
+                          >Select all 09 Candidates</a
+                        >
+                        <a
+                          href="javascript:void(0);"
+                          class="clear-selection"
+                          style="display: none"
+                          >Clear selection</a
+                        >
+                      </div>
+
+                      <div class="table-section">
+                        <table class="table table-sm table-nowrap table-reset" id="table">
+                          <thead>
+                            <tr>
+                              <th>User</th>
+                              <th>Email </th>
+                              <th>Role </th>
+                              <th> </th>
+                            </tr>
+                          </thead>
+                          <tbody >
+                            <tr *ngFor="let user of messages">
+                              <td>
+                                  {{user.firstName}}&nbsp;{{user.lastName}}
+                              </td>
+                              <td>
+                                {{user.email}}
+                              </td>
+                              <td>{{user.teamId[0]}}</td>
+                              <td>
+                                <div class="icons-list d-flex justify-content-end dropstart">
+                                  <button class="btn iconButton small iconHover btn-group" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="far fa-ellipsis-v"></i>
+                                  </button>
+                                  <ul class="dropdown-menu fade">
+                                    <li>
+                                      <a class="dropdown-item" (click)="editTemplate(user)"><i class="fal fa-edit me-2"></i> Edit</a>
+                                    </li>
+                                    <li>
+                                      <a class="dropdown-item delete-dd" (click)="deleteTemplate(user)"><i class="fal fa-trash me-2"></i> Delete</a>
+                                    </li>
+          
+                                  </ul>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                    <div
+                      class="scrollbar-track scrollbar-track-x"
+                      style="display: none"
+                    >
+                      <div
+                        class="scrollbar-thumb scrollbar-thumb-x"
+                        style="
+                          width: 1472px;
+                          transform: translate3d(0px, 0px, 0px);
+                        "
+                      ></div>
+                    </div>
+                    <div
+                      class="scrollbar-track scrollbar-track-y"
+                      style="display: none"
+                    >
+                      <div
+                        class="scrollbar-thumb scrollbar-thumb-y"
+                        style="
+                          height: 118.336px;
+                          transform: translate3d(0px, 0px, 0px);
+                        "
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+             
             </div>
           </div>
         </div>
       </div>
-
-
+      <div class="scrollbar-track scrollbar-track-x" style="display: none">
+        <div
+          class="scrollbar-thumb scrollbar-thumb-x"
+          style="width: 1596.09px; transform: translate3d(0px, 0px, 0px)"
+        ></div>
+      </div>
+      <div class="scrollbar-track scrollbar-track-y" style="display: none">
+        <div
+          class="scrollbar-thumb scrollbar-thumb-y"
+          style="height: 302px; transform: translate3d(0px, 0px, 0px)"
+        ></div>
+      </div>
     </div>
   </div>
 </div>
-</div>
-<!-- </div> -->
-
-
-
-
-
-

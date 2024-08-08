@@ -24,4 +24,4 @@
     </div>
   </div>
 </main>
-<app-chat-widget2 *ngIf="showWidget" [hasParent]="true"></app-chat-widget2>
+<app-chat-widget2 [hasParent]="true" [ngClass]="{ 'hidden': !showWidget }"></app-chat-widget2>

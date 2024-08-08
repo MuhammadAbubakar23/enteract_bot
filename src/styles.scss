@@ -1,11 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
-// @import "./assets/CSS/bot-monitoring.scss";
+// @import "./assets/CSS/bot-monitoring.scss";\
+@import "~@ng-select/ng-select/themes/default.theme.css";
+// ... or 
+@import "~@ng-select/ng-select/themes/material.theme.css";
 @import "./assets/CSS/toast.css";
 @import "./assets/CSS/chat-widget.css";
 @import "./assets/CSS/toast.css";
-@import "./assets/CSS/main-355b0db1f7.css";
-@import "~@ng-select/ng-select/themes/default.theme.css";
-@import "~@ng-select/ng-select/themes/material.theme.css";
+// @import "./assets/CSS/main-355b0db1f7.css";
+@import "./assets/CSS/main-6cc24a76ec.css";
+// @import "./assets/CSS/bot-monitoring.css";
 .analytics-dashboard {
     overflow-y: auto;
     overflow-x: hidden;
@@ -22,4 +25,7 @@
    
   .analytics-dashboard::-webkit-scrollbar-thumb {
     background-color: darkgrey;
+  }
+  .chatbot-main .chat-message-component{
+    height: 100%;
   }

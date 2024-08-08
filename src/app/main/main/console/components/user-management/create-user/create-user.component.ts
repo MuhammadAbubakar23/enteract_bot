@@ -129,20 +129,20 @@ export class CreateUserComponent implements OnInit {
       id: [formVal.id],
       firstname: [formVal.firstName, Validators.required],
       lastname: [formVal.lastName, Validators.required],
-      phone: [formVal.phone, [Validators.required, Validators.minLength(11), Validators.maxLength(14)]],
-      email: [formVal.email, Validators.required],
+      phone: [formVal.phone, [Validators.required, Validators.minLength(11), Validators.maxLength(14), Validators.pattern(/^\d+$/)]],
+      email: [formVal.email, [Validators.required, Validators.email]],
       password: [formVal.password, [Validators.required, Validators.minLength(8)]],
       confirmpassword: [formVal.confirmPassword, [Validators.required, Validators.minLength(8)]],
       roleId: [formVal.roleId.map((id: number) => id.toString()), Validators.required],
       teamId: [[]],
       skillId: [[]]
-    }
+    });
       // ,
       // {
       //   validators: [Validation.match('password', 'confirmPassword')]
       // }
 
-    );
+    
 
     let roleForm: any = [];
     let skillForm: any = [];

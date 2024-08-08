@@ -205,7 +205,9 @@ export class ChatWidget2Component implements OnInit {
     const parsedDate = new Date(+year, +month - 1, +day, +hours, +minutes, +seconds);
     return this.datePipe.transform(parsedDate, 'h:mm a');
   }
-
+  ngOnDestroy(){
+    clearInterval(this.interval);
+  }
 }
 
 

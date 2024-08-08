@@ -12,8 +12,21 @@
                         <div class="searchBar-wrapper mb-4">
                             <div class="row">
                                 <div class="col-lg-4">
-                                    <div class="d-flex align-items-lg-center">
-                                        <p class="coal m-0">Status:</p>
+                                     <ul class="list-group list-group-horizontal border-0">
+                  <li class="list-group-item border-0 p-0">
+                    <div class="icon-input">
+                      <i class="fa-light fa-magnifying-glass"></i>
+                      <input class="form-control" placeholder="Search Tags.. "
+                      [(ngModel)]="searchText"
+                      (input)="refreshMessages()">
+                    </div>
+                  </li>
+                  <li (click)="resetfilters()" class="list-group-item border-0 refreshicon iconHover iconButton medium rounded-circle" aria-label="..." data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="Refresh">
+                    <i class="fal fa-redo" ></i>
+                  </li>
+                </ul>
+                                    <!-- <div class="d-flex align-items-lg-center">
+                                        <p class="coal m-0">Order By:</p>
                                         <div class="dropdown">
                                             <button class="btn dropdown-toggle coal" type="button"
                                                 id="dropdownMenuButton1" data-bs-toggle="dropdown"
@@ -32,17 +45,10 @@
                                                 </li>
                                             </ul>
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div>
                                 <div class="col-lg-8 d-flex align-items-center justify-content-end">
-                                    <a href="javascript:" class="search-btn">
-                                        <button class="iconButton medium">
-                                            <i class="fal fa-search silver"></i>
-                                        </button>
-                                        <input class="form-control" placeholder="Search User.. "
-                                        [(ngModel)]="searchText"
-                                        (input)="refreshMessages()">
-                                    </a>
+                                  
                                     <a href="#0" data-bs-toggle="modal" data-bs-target="#createtags" class="ms-2">
                                         <button type="button" class="btn btn-success">
                                             <i class="fal fa-plus me-2"></i>

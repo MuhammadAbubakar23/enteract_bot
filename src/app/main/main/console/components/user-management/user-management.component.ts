@@ -60,7 +60,7 @@ export class UserManagementComponent {
         (response: any) => {
           this.spinnerServerice.hide()
           this.messages = response;
-          this.totalCount = response;
+          this.totalCount = response.length;
           if(this.messages.length==0 || this.messages==null){
        
             this.endPoint=0

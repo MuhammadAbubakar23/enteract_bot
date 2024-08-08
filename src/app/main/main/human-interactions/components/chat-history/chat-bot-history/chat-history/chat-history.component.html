@@ -31,7 +31,7 @@
         </ul>
       </div>
     </div> -->
-        <div class="chatsection">
+        <div class="chatsection" style="overflow: auto" #scrollMe [scrollTop]="scrollMe.scrollHeight">
             <div class="main-chat">
                 <div class="chat-box-wrap">
                     <ng-container *ngFor="let msg of chat; let i = index">
