@@ -47,7 +47,7 @@
               class="message-wrap agent-message-wrap"
               [ngClass]="{
                 right: msg.type === 'human',
-                left: msg.type === 'ai'
+                left: msg.type === 'ai-agent'
               }"
             >
             <div class="d-flex align-items-center agent-container" [ngClass]="{'mb-5': i === chat.length - 1}">
@@ -57,7 +57,7 @@
                     <div class="d-flex align-items-center w-100">
                       <h6 class="card-title navy m-0 me-2">
                         {{
-                          msg.type === "ai" ? "enteract.bot" : chat.session_id
+                          msg.type === "ai-agent" ? "enteract.bot" : chat.session_id
                         }}
                       </h6>
                       <small class="silver ms-auto">{{

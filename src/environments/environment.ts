@@ -24,7 +24,9 @@ export const environment = {
         avgToken:'analytics/average_tokens_per_conversation?bot_id=1&filter_days=7',
         timeoutCount:'analytics/session_time_out?bot_id=1&filter_days=7',
         tokenPerDay:'analytics/tokens_per_day?bot_id=1',
-
+        humanTransferRate:"analytics/human_transfer_rate",
+        averageTokenPerChat:"analytics/average_token_per_chat",
+        totalBotSessionsOvertime:"analytics/total_bot_sessions_over_time",
 
         fallBackCount:'escalatecount',
       }

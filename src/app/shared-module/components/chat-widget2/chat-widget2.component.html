@@ -35,7 +35,7 @@
                   </div>
                 </header>
                 <section class="chatbody" #chatBody  style="overflow: auto;" #scrollMe [scrollTop]="scrollMe.scrollHeight">
-                  <div class="messagewrap suggestions">
+                  <!-- <div class="messagewrap suggestions">
                     <div class="messagebody">
                       <ul class="list-inline text-center m-0">
                         <form [formGroup]="chatForm">
@@ -48,7 +48,7 @@
                         </form>
                       </ul>
                     </div>
-                  </div>
+                  </div> -->
                   <div class="messagewrap e-left" data-first="true">
                     <div class="messagebody">
                       <div class="caption">
@@ -66,34 +66,88 @@
                     </div>
                   </div>
 
-                  <ng-container *ngFor="let msg of messages; let i = index">
+                  <ng-container *ngFor="let msg of chatMessages; let i = index">
                     <div
                       class="messagewrap"
                       [ngClass]="{
-                        'e-right': msg.type === 'user',
-                        'e-left': msg.type === 'bot'
+                        'e-right': msg.type === 'human',
+                        'e-left': (msg.type === 'ai-agent' || msg.type == 'human-agent')
                       }"
-                      [attr.data-first]="msg.type === 'user' ? true : null"
-                      [attr.data-last]="msg.type === 'bot' ? true : null"
+                      [attr.data-first]="msg.type === 'human' ? true : null"
+                      [attr.data-last]="(msg.type === 'ai-agent' || msg.type === 'human-agent') ? true : null"
                     >
                       <div class="messagebody">
                         <div class="caption">
                           <div class="name">
-                            <div *ngIf="msg.type === 'bot'" class="e_chat-icon">
+                            <div *ngIf="msg.type === 'ai-agent' || msg.type == 'human-agent'" class="e_chat-icon">
                               <img src="../../../../assets/Images/ebot.svg" />
                             </div>
-                            {{ msg.type === "user" ? "You" : "enteract.bot" }}
+                            {{ msg.type === "human" ? "You" : msg.type=== "ai-agent" ? "enteract.bot" : "Human Agent"}}
                           </div>
                           <div class="time">
-                            {{ msg.timestamp | date : "shortTime" }}
+                            {{ msg.timestamp }}
+
                           </div>
                         </div>
                         <div class="messagebubble">
-                          {{ msg.message }}
+                          {{ msg.text }}
+                        </div>
+                      </div>
+                    </div>
+
+                  </ng-container>
+                  <ng-container>
+                    <div *ngIf="typing" class="messagewrap e-left">
+                      <div class="messagebody">
+                        <div class="caption">
+                          <div class="name">
+                            <div class="e_chat-icon">
+                              <img src="../../../../assets/Images/ebot.svg" />
+                            </div>
+                            enteract.bot
+                          </div>
+                          <div class="time">{{ currentTimestamp | date : "shortTime" }}</div>
+                        </div>
+                        <div class="messagebubble">
+                          <div class="typing">
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </ng-container>
+
+                <!-- <ng-container *ngFor="let msg of messages; let i = index">
+                  <div *ngIf="apiGaveResponse == false"
+                  class="messagewrap"
+                  [ngClass]="{
+                    'e-right': msg.type === 'user',
+                    'e-left': (msg.type === 'bot' || msg.type == 'human-agent')
+                  }"
+                  [attr.data-first]="msg.type === 'user' ? true : null"
+                  [attr.data-last]="(msg.type === 'bot' || msg.type === 'human-agent') ? true : null"
+                >
+                  <div class="messagebody">
+                    <div class="caption">
+                      <div class="name">
+                        <div *ngIf="msg.type === 'bor' || msg.type == 'human-agent'" class="e_chat-icon">
+                          <img src="../../../../assets/Images/ebot.svg" />
+                        </div>
+                        {{ msg.type === "user" ? "You" : "enteract.bot" }}
+                      </div>
+                      <div class="time">
+                        {{ msg.timestamp }}
+
+                      </div>
+                    </div>
+                    <div class="messagebubble">
+                      {{ msg.text }}
+                    </div>
+                  </div>
+                </div>
+
                   <div *ngIf="typing" class="messagewrap e-left">
                     <div class="messagebody">
                       <div class="caption">
@@ -114,6 +168,21 @@
                       </div>
                     </div>
                   </div>
+                </ng-container> -->
+
+                  <form [formGroup]="chatForm">
+                    <ul class="list-inline d-flex align-items-center justify-content-center listbtns">
+                      
+                        <li class="list-inline-item">
+                          <button class="btn btn-white px-3 rounded-pill bg-white " (click)="chatForm.controls['message'].setValue('Good Bye'); submitMessage('/bye')"><i class="fa-solid fa-heart me-2 radical"></i> Good Bye</button>
+                        </li>
+                        <li class="list-inline-item">
+                          <button class="btn btn-white px-3 rounded-pill bg-white "  (click)="chatForm.controls['message'].setValue('Talk To Human'); submitMessage('/transfer')"><i class="fa-regular fa-user me-2 "></i> Talk To Human</button>
+                        </li>
+                   
+                    </ul>
+                    
+                  </form>
                 </section>
                 <footer>
                   <form [formGroup]="chatForm">

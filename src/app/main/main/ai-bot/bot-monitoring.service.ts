@@ -19,7 +19,7 @@ export class BotMonitoringService {
     const formData = new FormData();
     formData.append('bot_id', obj.bot_id);
     formData.append('workspace_id', obj.workspace_id);
-    return this.http.post(this.chatBotBaseUrl + "chats/active/get_all",formData);
+    return this.http.post(this.chatBotBaseUrl + "chats/active/get_all/bot",formData);
   }
 
   ChatBotWdidget(form: any) {
@@ -30,6 +30,16 @@ export class BotMonitoringService {
     formData.append('session_id', form.session_id);
     formData.append('token',form.token)
     return this.http.post(this.chatBotBaseUrl + "chats/batch", formData).pipe(timeout(120 * 1000));
+  }
+  
+  ChatHumanWdidget(form: any) {
+    const formData = new FormData();
+    formData.append('bot_id', form.bot_id);
+    formData.append('workspace_id', form.workspace_id);
+    formData.append('text', form.text);
+    formData.append('session_id', form.session_id);
+    formData.append('token',form.token)
+    return this.http.post(this.chatBotBaseUrl + "chats/human_agent", formData).pipe(timeout(120 * 1000));
   }
   ChatHistory(form: any) {
     const formData = new FormData();
@@ -46,7 +56,10 @@ export class BotMonitoringService {
     return this.http.post(this.chatBotBaseUrl + "chats/inactive/get_all",formData);
   }
 
-  chatBotHistoryForHumanInteraction() {
-    return this.http.get(this.chatBotBaseUrl + "escalatecount");
+  chatBotHistoryForHumanInteraction(obj:any) {
+    const formData = new FormData();
+    formData.append('bot_id', obj.bot_id);
+    formData.append('workspace_id', obj.workspace_id);
+    return this.http.post(this.chatBotBaseUrl + "chats/active/get_all/human", formData);
   }
 }

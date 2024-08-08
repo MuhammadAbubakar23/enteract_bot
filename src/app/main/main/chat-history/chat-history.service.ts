@@ -22,6 +22,6 @@ export class ChatHistoryService {
     return this.http.post(this.chatBotBaseUrl + "/chatbot", form).pipe(timeout(120 * 1000));
   }
   ChatHistory(form: any) {
-    return this.http.post(this.chatBotBaseUrl + "/history", form);
+    return this.http.post(this.chatBotBaseUrl + "history", form);
   }
 }

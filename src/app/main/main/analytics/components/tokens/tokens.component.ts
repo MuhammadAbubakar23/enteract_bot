@@ -8,10 +8,11 @@ import { AnalyticsService } from '../../service/analytics.service';
   styleUrls: ['./tokens.component.scss']
 })
 export class TokensComponent {
-  avgTokenCount:any
-  totalTokenCount:any
+  avgTokenCount: any
+  totalTokenCount: any
   tokenPerDayCount: any;
-  constructor(private _hS: HeaderService,private _analytics: AnalyticsService) {
+  averageTokenPerChat: any;
+  constructor(private _hS: HeaderService, private _analytics: AnalyticsService) {
     _hS.updateHeaderData({
       title: 'Tokens',
       tabs: [{ title: '', url: '', isActive: true }],
@@ -20,7 +21,7 @@ export class TokensComponent {
     })
   }
   ngOnInit(): void {
-    this.averageToken();
+    this.AverageTokenPerChat();
     this.TotalToken();
     this.AvgToken();
     this.TokenPerDay();
@@ -35,7 +36,7 @@ export class TokensComponent {
 
       }
     );
-  }  
+  }
   AvgToken() {
     this._analytics.AvgToken().subscribe(
       (res: any) => {
@@ -58,8 +59,27 @@ export class TokensComponent {
     );
   }
 
-
-  averageToken() {
+  AverageTokenPerChat() {
+    this._analytics.GetAverageTokenPerChat().subscribe((response: any) => {
+      this.averageTokenPerChat = response.detail
+      const counts = [
+        response.detail.Monday[0],
+        response.detail.Tuesday[0],
+        response.detail.Wednesday[0],
+        response.detail.Thursday[0],
+        response.detail.Friday[0],
+        response.detail.Saturday[0],
+        response.detail.Sunday[0]
+      ];
+      // this.botEscalationRate(counts);
+      setTimeout(() => {
+        this.averageToken(counts);
+      })
+    })
+  }
+  averageToken(counts: any) {
+    var count = counts
+    const formattedDates = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     var chartDom = document.getElementById('average');
     var myChart = echarts.init(chartDom);
     var option;
@@ -80,7 +100,7 @@ export class TokensComponent {
       xAxis: [
         {
           type: 'category',
-          data: ['8/1', '8/2', '8/3', '8/4', '8/5', '8/6', '8/7'],
+          data: formattedDates,
           axisTick: {
             alignWithLabel: true
           }
@@ -97,7 +117,7 @@ export class TokensComponent {
           name: 'Direct',
           type: 'bar',
           barWidth: '60%',
-          data: [10, 52, 200, 334, 390, 330, 220]
+          data: count
         }
       ]
     };

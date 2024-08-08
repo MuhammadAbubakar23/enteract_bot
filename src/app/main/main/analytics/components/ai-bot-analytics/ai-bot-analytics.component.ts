@@ -27,8 +27,11 @@ export class AiBotAnalyticsComponent {
   sentimentAnalysis: any;
   tagsAnalatics: any;
   peakHours: any[] = [];
-  peakhoursData:any[]=[]
-  constructor(private _hS: HeaderService, private _analytics: AnalyticsService, private spinner:NgxSpinnerService) {
+  peakhoursData: any[] = []
+  humanTransferRateData: any;
+  averageTokenPerChat: any;
+  totalBotSessionsOvertimeData: any;
+  constructor(private _hS: HeaderService, private _analytics: AnalyticsService, private spinner: NgxSpinnerService) {
     _hS.updateHeaderData({
       title: 'Ai Bot Analytics',
       tabs: [{ title: '', url: '', isActive: true }],
@@ -38,6 +41,8 @@ export class AiBotAnalyticsComponent {
   }
   ngOnInit(): void {
     //New
+    this.HumanTransferRate();
+    this.AverageTokenPerChat();
     this.TotalConversation();
     this.TotalAgents();
     this.AvgBotConversationTime();
@@ -54,11 +59,12 @@ export class AiBotAnalyticsComponent {
 
     //Old
     this.conversationOverTime();
-    setTimeout(() => {
-    this.botEscalationRate();
-    })
-    this.botSessionTime();
-    this.averageToken();
+    // setTimeout(() => {
+    // this.botEscalationRate();
+    // })
+    // this.botSessionTime();
+    this.totalBotSessionOvertime();
+    // this.averageToken();
     //this.waitTime();
     //this.abadonRate();
     //this.fullBackRate();
@@ -81,7 +87,7 @@ export class AiBotAnalyticsComponent {
       }
     );
   }
-  TotalAgents(){
+  TotalAgents() {
     this.spinner.show()
     this._analytics.GetTotalAgents().subscribe(
       (res: any) => {
@@ -137,11 +143,11 @@ export class AiBotAnalyticsComponent {
       ]
     };
 
-    
+
     option && myChart.setOption(option);
   }
 
-  AvgBotConversationTime(){
+  AvgBotConversationTime() {
     this.spinner.show()
     this._analytics.GetAvgBotConversationTime().subscribe(
       (res: any) => {
@@ -154,7 +160,7 @@ export class AiBotAnalyticsComponent {
       }
     );
   }
-  BotEsclationRate(){
+  BotEsclationRate() {
     this.spinner.show()
     this._analytics.GetBotEsclationRate().subscribe(
       (res: any) => {
@@ -167,7 +173,10 @@ export class AiBotAnalyticsComponent {
       }
     );
   }
-  AvgWaitTime(){
+  getIntegerPart(rate: number): number {
+    return Math.floor(rate > 0 ? rate : 0);
+  }
+  AvgWaitTime() {
     this.spinner.show()
     this._analytics.GetAvgWaitTime().subscribe(
       (res: any) => {
@@ -180,7 +189,7 @@ export class AiBotAnalyticsComponent {
       }
     );
   }
-  SentimentAnalysis(){
+  SentimentAnalysis() {
     this.spinner.show()
     this._analytics.GetSentimentAnalysis().subscribe(
       (res: any) => {
@@ -194,7 +203,7 @@ export class AiBotAnalyticsComponent {
       }
     );
   }
-  TagsAnalatics(){
+  TagsAnalatics() {
     this.spinner.show()
     this._analytics.GetTagsAnalatics().subscribe(
       (res: any) => {
@@ -209,19 +218,19 @@ export class AiBotAnalyticsComponent {
     );
   }
 
-  PeakHours(){
+  PeakHours() {
     this.spinner.show()
     this._analytics.GetPeakHours().subscribe(
       (res: any) => {
         this.peakHours = res.detail;
-        let index=0;
-        let hours=0;
-       for (const [day, values] of Object.entries(this.peakHours)) {
-       values.forEach((value: number, hour: number) => {
-        this.peakhoursData.push([index, hour, value]);
-       });
-       index++;
-       }
+        let index = 0;
+        let hours = 0;
+        for (const [day, values] of Object.entries(this.peakHours)) {
+          values.forEach((value: number, hour: number) => {
+            this.peakhoursData.push([index, hour, value]);
+          });
+          index++;
+        }
         this.heatMap();
         this.spinner.hide()
       },
@@ -243,7 +252,7 @@ export class AiBotAnalyticsComponent {
         this.spinner.hide()
       }
     );
-  }  
+  }
   AvgToken() {
     this.spinner.show()
     this._analytics.AvgToken().subscribe(
@@ -313,9 +322,9 @@ export class AiBotAnalyticsComponent {
     );
   }
 
-  conversationOverTime(){
+  conversationOverTime() {
     this.spinner.show()
-    this._analytics.ConversationOverTimeData(1).subscribe((response:any)=>{
+    this._analytics.ConversationOverTimeData(1).subscribe((response: any) => {
       const counts = [
         response.detail.Monday[0],
         response.detail.Tuesday[0],
@@ -324,17 +333,17 @@ export class AiBotAnalyticsComponent {
         response.detail.Friday[0],
         response.detail.Saturday[0],
         response.detail.Sunday[0]
-    ];
-    this.totalBotConversation(counts);
-    this.spinner.hide()
+      ];
+      this.totalBotConversation(counts);
+      this.spinner.hide()
     },
-    (error:any)=>{
-      console.error(error.error);
-    }
-  )
+      (error: any) => {
+        console.error(error.error);
+      }
+    )
   }
 
-  totalBotConversation(count:any) {
+  totalBotConversation(count: any) {
     const dates = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     const counts = count;
     var chartDom = document.getElementById('main');
@@ -378,9 +387,28 @@ export class AiBotAnalyticsComponent {
 
   }
 
-  botEscalationRate() {
+  HumanTransferRate() {
+    this.spinner.show()
+    this._analytics.GethumanTransferRate().subscribe((response: any) => {
+      this.spinner.hide()
+      this.humanTransferRateData = response.detail;
+      const counts = [
+        response.detail.Monday[0],
+        response.detail.Tuesday[0],
+        response.detail.Wednesday[0],
+        response.detail.Thursday[0],
+        response.detail.Friday[0],
+        response.detail.Saturday[0],
+        response.detail.Sunday[0]
+      ];
+      setTimeout(() => {
+        this.botEscalationRate(counts);
+      })
+    })
+  }
+  botEscalationRate(counts: any) {
     const formattedDates = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-    const values = [10, 52, 200, 334, 390, 330, 220];
+    const values = counts;
     var chartDom = document.getElementById('BotRate');
     var myChart = echarts.init(chartDom);
 
@@ -548,12 +576,49 @@ export class AiBotAnalyticsComponent {
 
     option && this.fallRate.setOption(option);
   }
-  botSessionTime() {
+  totalBotSessionOvertime() {
+    this._analytics.GetTotalBotSessionsOvertime().subscribe((response: any) => {
+      this.totalBotSessionsOvertimeData = response.detail;
+      const avg_handle_time = [
+        response.detail.Monday.avg_handle_time,
+        response.detail.Tuesday.avg_handle_time,
+        response.detail.Wednesday.avg_handle_time,
+        response.detail.Thursday.avg_handle_time,
+        response.detail.Friday.avg_handle_time,
+        response.detail.Saturday.avg_handle_time,
+        response.detail.Sunday.avg_handle_time
+      ];
+      const human_transfer_rate = [
+        response.detail.Monday.human_transfer_rate,
+        response.detail.Tuesday.human_transfer_rate,
+        response.detail.Wednesday.human_transfer_rate,
+        response.detail.Thursday.human_transfer_rate,
+        response.detail.Friday.human_transfer_rate,
+        response.detail.Saturday.human_transfer_rate,
+        response.detail.Sunday.human_transfer_rate
+      ];
+      const session_timeout = [
+        response.detail.Monday.session_timeout,
+        response.detail.Tuesday.session_timeout,
+        response.detail.Wednesday.session_timeout,
+        response.detail.Thursday.session_timeout,
+        response.detail.Friday.session_timeout,
+        response.detail.Saturday.session_timeout,
+        response.detail.Sunday.session_timeout
+      ];
+      setTimeout(() => {
+        this.botSessionTime(avg_handle_time, human_transfer_rate, session_timeout)
+      })
+    })
+  }
+  botSessionTime(avg_handle_time: any, human_transfer_rate: any, session_timeout: any) {
 
-    const allDates = ['2024-07-01', '2024-07-02', '2024-07-03', '2024-07-04', '2024-07-05', '2024-07-06', '2024-07-07'];
-    const timeoutData = [120, 132, 101, 134, 90, 230, 210];
-    const fallbackData = [220, 182, 191, 234, 290, 330, 310];
-
+    // const allDates = ['2024-07-01', '2024-07-02', '2024-07-03', '2024-07-04', '2024-07-05', '2024-07-06', '2024-07-07'];
+    const formattedDates = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    const timeoutData = session_timeout;
+    const fallbackData = human_transfer_rate;
+    const averageHandleTime = avg_handle_time
+    debugger
     var chartDom = document.getElementById('sessionTime');
     this.sessionTime = echarts.init(chartDom);
     const option = {
@@ -561,7 +626,7 @@ export class AiBotAnalyticsComponent {
         trigger: 'axis'
       },
       legend: {
-        data: ['Session Timeout', 'Human Transfer rate'],
+        data: ['Average Handle Time', 'Session Timeout', 'Human Transfer rate'],
         icon: 'square',
       },
       grid: {
@@ -573,12 +638,21 @@ export class AiBotAnalyticsComponent {
       xAxis: {
         type: 'category',
         boundaryGap: false,
-        data: allDates
+        data: formattedDates
       },
       yAxis: {
         type: 'value'
       },
       series: [
+        {
+          name: 'Average Handle Time',
+          type: 'line',
+          stack: 'Total',
+          data: averageHandleTime,
+          lineStyle: {
+            color: '#FAC858',
+          }
+        },
         {
           name: 'Session Timeout',
           type: 'line',
@@ -594,7 +668,7 @@ export class AiBotAnalyticsComponent {
           stack: 'Total',
           data: fallbackData,
           lineStyle: {
-            color: '#FAC858',
+            color: '#6a4fe3',
           }
         }
       ]
@@ -645,7 +719,7 @@ export class AiBotAnalyticsComponent {
           label: {
             show: true,
             position: 'center',
-            formatter: function() {
+            formatter: function () {
               // Apply the thousandSuff logic directly here
               const formatValue = (value: number): string => {
                 if (value >= 1000000) {
@@ -719,26 +793,36 @@ export class AiBotAnalyticsComponent {
             show: false
           },
           data: [
-            { value: this.tagsAnalatics?.Information, name: 'Information', 
+            {
+              value: this.tagsAnalatics?.Information, name: 'Information',
               itemStyle: {
-              color: '#2f9df2'
-            }},
-            { value: this.tagsAnalatics?.Sell, name: 'Sell',
+                color: '#2f9df2'
+              }
+            },
+            {
+              value: this.tagsAnalatics?.Sell, name: 'Sell',
               itemStyle: {
-              color: '#cf61ea'
-            }},
-            { value: this.tagsAnalatics?.Analysis, name: 'Analysis',
-            itemStyle: {
-              color: '#9c87ee'
-            }},
-            { value: this.tagsAnalatics?.Reservation, name: 'Reservation',
-            itemStyle: {
-              color: '#ff505c'
-            }},
-            { value: this.tagsAnalatics?.Complaint, name: 'Complaint',
-            itemStyle: {
-              color: '#3cc2cc'
-            }}
+                color: '#cf61ea'
+              }
+            },
+            {
+              value: this.tagsAnalatics?.Analysis, name: 'Analysis',
+              itemStyle: {
+                color: '#9c87ee'
+              }
+            },
+            {
+              value: this.tagsAnalatics?.Reservation, name: 'Reservation',
+              itemStyle: {
+                color: '#ff505c'
+              }
+            },
+            {
+              value: this.tagsAnalatics?.Complaint, name: 'Complaint',
+              itemStyle: {
+                color: '#3cc2cc'
+              }
+            }
           ]
         }
       ]
@@ -747,7 +831,29 @@ export class AiBotAnalyticsComponent {
     option && myChart.setOption(option);
 
   }
-  averageToken() {
+
+  AverageTokenPerChat() {
+    this._analytics.GetAverageTokenPerChat().subscribe((response: any) => {
+      this.averageTokenPerChat = response.detail
+      const counts = [
+        response.detail.Monday[0],
+        response.detail.Tuesday[0],
+        response.detail.Wednesday[0],
+        response.detail.Thursday[0],
+        response.detail.Friday[0],
+        response.detail.Saturday[0],
+        response.detail.Sunday[0]
+      ];
+      // this.botEscalationRate(counts);
+      setTimeout(() => {
+        this.averageToken(counts);
+      })
+    })
+  }
+
+  averageToken(counts: any) {
+    var count = counts
+    const formattedDates = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     var chartDom = document.getElementById('average');
     var myChart = echarts.init(chartDom);
     var option;
@@ -768,7 +874,7 @@ export class AiBotAnalyticsComponent {
       xAxis: [
         {
           type: 'category',
-          data: ['8/1', '8/2', '8/3', '8/4', '8/5', '8/6', '8/7'],
+          data: formattedDates,
           axisTick: {
             alignWithLabel: true
           }
@@ -785,7 +891,7 @@ export class AiBotAnalyticsComponent {
           name: 'Direct',
           type: 'bar',
           barWidth: '60%',
-          data: [10, 52, 200, 334, 390, 330, 220]
+          data: count
         }
       ]
     };

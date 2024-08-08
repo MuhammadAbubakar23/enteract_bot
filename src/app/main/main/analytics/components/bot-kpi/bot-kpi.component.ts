@@ -16,6 +16,7 @@ export class BotKpiComponent {
   botEsclationRate: any;
   avgWaitTime: any;
   peakHours: any[] = [];
+  totalBotSessionsOvertimeData: any;
   constructor(private _hS: HeaderService, private _analytics: AnalyticsService) {
     _hS.updateHeaderData({
       title: 'Bot Kpi',
@@ -34,13 +35,14 @@ export class BotKpiComponent {
     //this.fallback();
     //this.abadonRate();
     //this.waitTime();
-    this.botSessionTime();
+    // this.botSessionTime();
+    this.totalBotSessionOvertime();
     //this.FallBackCount()
     this.heatMap();
     this.TimeoutCount()
   }
 
-  BotEsclationRate(){
+  BotEsclationRate() {
     this._analytics.GetBotEsclationRate().subscribe(
       (res: any) => {
         this.botEsclationRate = res.detail;
@@ -51,7 +53,7 @@ export class BotKpiComponent {
       }
     );
   }
-  AvgWaitTime(){
+  AvgWaitTime() {
     this._analytics.GetAvgWaitTime().subscribe(
       (res: any) => {
         this.avgWaitTime = res.detail;
@@ -77,19 +79,19 @@ export class BotKpiComponent {
       }
     );
   }
-  peakhoursData:any[]=[]
-  PeakHours(){
+  peakhoursData: any[] = []
+  PeakHours() {
     this._analytics.GetPeakHours().subscribe(
       (res: any) => {
         this.peakHours = res.detail;
-        let index=0;
-        let hours=0;
-       for (const [day, values] of Object.entries(this.peakHours)) {
-       values.forEach((value: number, hour: number) => {
-        this.peakhoursData.push([index, hour, value]);
-       });
-       index++;
-       }
+        let index = 0;
+        let hours = 0;
+        for (const [day, values] of Object.entries(this.peakHours)) {
+          values.forEach((value: number, hour: number) => {
+            this.peakhoursData.push([index, hour, value]);
+          });
+          index++;
+        }
         this.heatMap();
       },
       (error: any) => {
@@ -241,6 +243,9 @@ export class BotKpiComponent {
     option && myChart.setOption(option);
 
   }
+  getIntegerPart(rate: number): number {
+    return Math.floor(rate > 0 ? rate : 0);
+  }
   fallback() {
     var chartDom = document.getElementById('fallbackrate');
     const myChart = echarts.init(chartDom);
@@ -364,21 +369,57 @@ export class BotKpiComponent {
 
     option && this.fallRate.setOption(option);
   }
-  botSessionTime() {
+  totalBotSessionOvertime() {
+    this._analytics.GetTotalBotSessionsOvertime().subscribe((response: any) => {
+      this.totalBotSessionsOvertimeData = response.detail;
+      const avg_handle_time = [
+        response.detail.Monday.avg_handle_time,
+        response.detail.Tuesday.avg_handle_time,
+        response.detail.Wednesday.avg_handle_time,
+        response.detail.Thursday.avg_handle_time,
+        response.detail.Friday.avg_handle_time,
+        response.detail.Saturday.avg_handle_time,
+        response.detail.Sunday.avg_handle_time
+      ];
+      const human_transfer_rate = [
+        response.detail.Monday.human_transfer_rate,
+        response.detail.Tuesday.human_transfer_rate,
+        response.detail.Wednesday.human_transfer_rate,
+        response.detail.Thursday.human_transfer_rate,
+        response.detail.Friday.human_transfer_rate,
+        response.detail.Saturday.human_transfer_rate,
+        response.detail.Sunday.human_transfer_rate
+      ];
+      const session_timeout = [
+        response.detail.Monday.session_timeout,
+        response.detail.Tuesday.session_timeout,
+        response.detail.Wednesday.session_timeout,
+        response.detail.Thursday.session_timeout,
+        response.detail.Friday.session_timeout,
+        response.detail.Saturday.session_timeout,
+        response.detail.Sunday.session_timeout
+      ]; setTimeout(() => {
+        this.botSessionTime(avg_handle_time, human_transfer_rate, session_timeout)
+      })
+    })
+  }
+  botSessionTime(avg_handle_time: any, human_transfer_rate: any, session_timeout: any) {
+
+    // const allDates = ['2024-07-01', '2024-07-02', '2024-07-03', '2024-07-04', '2024-07-05', '2024-07-06', '2024-07-07'];
+    const formattedDates = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    const timeoutData = session_timeout;
+    const fallbackData = human_transfer_rate;
+    const averageHandleTime = avg_handle_time
+    debugger
     var chartDom = document.getElementById('sessionTime');
     this.sessionTime = echarts.init(chartDom);
-    var option;
-
-    option = {
-
-
+    const option = {
       tooltip: {
         trigger: 'axis'
       },
       legend: {
-        data: ['Facebook', 'Whatsapp', 'Website'],
+        data: ['Average Handle Time', 'Session Timeout', 'Human Transfer rate'],
         icon: 'square',
-        // bottom: 'right',
       },
       grid: {
         left: '3%',
@@ -386,47 +427,42 @@ export class BotKpiComponent {
         bottom: '3%',
         containLabel: true
       },
-      toolbox: {
-
-      },
       xAxis: {
         type: 'category',
         boundaryGap: false,
-        data: ['8/1 ', '8/2', '8/3', '8/3', '8/4', '8/5', '8/6']
+        data: formattedDates
       },
       yAxis: {
         type: 'value'
       },
       series: [
         {
-          name: 'Facebook',
+          name: 'Average Handle Time',
           type: 'line',
           stack: 'Total',
-          data: [120, 132, 101, 134, 90, 230, 210],
+          data: averageHandleTime,
           lineStyle: {
-            color: '#5470C6',
+            color: '#FAC858',
           }
         },
         {
-          name: 'Whatsapp',
+          name: 'Session Timeout',
           type: 'line',
           stack: 'Total',
-          data: [220, 182, 191, 234, 290, 330, 310],
+          data: timeoutData,
           lineStyle: {
-            color: '#5470C6',
+            color: '#91CC75',
           }
         },
         {
-          name: 'Website',
+          name: 'Human Transfer rate',
           type: 'line',
           stack: 'Total',
-          data: [150, 232, 201, 154, 190, 330, 410],
+          data: fallbackData,
           lineStyle: {
-            color: '#5470C6',
+            color: '#6a4fe3',
           }
-        },
-
-
+        }
       ]
     };
 

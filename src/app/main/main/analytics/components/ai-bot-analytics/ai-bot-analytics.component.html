@@ -146,7 +146,7 @@
                                     <h6 class="mb-4 text-uppercase">AVG BOT CONVERSATION TIME </h6>
                                     <div class="d-flex align-items-center justify-content-between">
                                         <div class="d-flex align-items-center">
-                                            <h3 class="m-0 fw-bold">{{avgBotConversationTime > 0 ? avgBotConversationTime : 0}} <small class="fs-12 coal" style="font-size: 12px !important;">min</small></h3> 
+                                            <h3 class="m-0 fw-bold">{{getIntegerPart(avgBotConversationTime > 0 ? avgBotConversationTime : 0)}} <small class="fs-12 coal" style="font-size: 12px !important;">min</small></h3> 
                                             
                                             <small class="ms-2"><i class="fa-light fa-arrow-up mint"></i>
                                                 <span class="mint">13.8%</span> than last
@@ -162,7 +162,7 @@
                                     <h6 class="mb-4 text-uppercase">Bot Escalation Rate </h6>
                                     <div class="d-flex align-items-center justify-content-between">
                                         <div class="d-flex align-items-center">
-                                            <h3 class="m-0 fw-bold">{{botEsclationRate > 0 ? botEsclationRate : 0}} <small>%</small></h3>
+                                            <h3 class="m-0 fw-bold">{{getIntegerPart(botEsclationRate > 0 ? botEsclationRate : 0)}} <small>%</small></h3>
                                             <small class="ms-2"><i class="fa-light fa-arrow-up mint"></i>
                                                 <span class="mint">13.8%</span> than last
                                                 week</small>
@@ -212,7 +212,7 @@
                             <h6 class="mb-3 text-uppercase">Average Wait Time </h6>
                             <div class="d-flex align-items-center justify-content-between">
                                 <div>
-                                    <h3 class="m-0 fw-bold">{{avgWaitTime > 0 ? avgWaitTime : 0}} <small class="fs-12 coal" style="font-size: 12px !important;">min</small></h3>
+                                    <h3 class="m-0 fw-bold">{{getIntegerPart(avgWaitTime > 0 ? avgWaitTime : 0)}} <small class="fs-12 coal" style="font-size: 12px !important;">min</small></h3>
                                     <small><i class="fa-light fa-arrow-up mint"></i> <span
                                             class="mint">13.8%</span> than last
                                         week</small>
@@ -395,7 +395,7 @@
                     <div class="card mb-3">
                         <div class="card-body">
                             <h6>Average Token <small class="coal">per conversation</small></h6>
-                            <h2>{{(avgTokenCount > 0 ? avgTokenCount : 0) | number : '1.2-2'}}</h2>
+                            <h2>{{getIntegerPart(avgTokenCount > 0 ? avgTokenCount : 0)}}</h2>
                         </div>
                     </div>
                     <div class="card mb-3">

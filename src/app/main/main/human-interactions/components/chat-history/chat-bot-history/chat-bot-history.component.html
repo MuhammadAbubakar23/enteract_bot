@@ -1,5 +1,5 @@
 <ngx-spinner bdColor="rgba(0, 0, 0, 0.5)" size="small" color="#fff" type="square-jelly-box" [fullScreen]="false"
-    [name]="'chat-history3'">
+    [name]="'chat-history1'">
     <p style="color: white"> Loading... </p>
 </ngx-spinner>
 
@@ -18,9 +18,10 @@
             <div *ngFor="let chat of chats" class="chatitem col">
 
                 <app-chat-history [chat]="chat"></app-chat-history>
-
+                <!-- ye nihcy commeny hy line 20
+      (minimizeToggle)="onMinimizeToggle(chat)" -->
             </div>
         </div>
     </div>
 </main>
-<app-chat-widget2 [hasParent]="true"></app-chat-widget2>
+<app-chat-widget2 *ngIf="showWidget" [hasParent]="true"></app-chat-widget2>

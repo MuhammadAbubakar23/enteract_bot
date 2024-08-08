@@ -16,9 +16,10 @@ export class ConversationAnalyticsComponent {
   agents: any;
   avgBotConversationTime: any;
   tagsAnalatics: any;
-  totalAgentChart:any;
-  botTagsChart:any;
-  constructor(private _hS: HeaderService,private _analytics: AnalyticsService, private spinner: NgxSpinnerService) {
+  totalAgentChart: any;
+  botTagsChart: any;
+  humanTransferRateData: any;
+  constructor(private _hS: HeaderService, private _analytics: AnalyticsService, private spinner: NgxSpinnerService) {
     _hS.updateHeaderData({
       title: 'Conversation Analytics',
       tabs: [{ title: '', url: '', isActive: true }],
@@ -31,9 +32,8 @@ export class ConversationAnalyticsComponent {
     this.TotalAgents();
     this.AvgBotConversationTime();
     this.TagsAnalatics();
-    setTimeout(() => {
-    this.botEscalationRate();
-    })
+    // this.botEscalationRate();
+    this.HumanTransferRate();
     this.conversationOverTime();
   }
   TotalConversation() {
@@ -47,7 +47,7 @@ export class ConversationAnalyticsComponent {
       }
     );
   }
-  TotalAgents(){
+  TotalAgents() {
     this._analytics.GetTotalAgents().subscribe(
       (res: any) => {
         this.agents = res?.detail;
@@ -61,7 +61,7 @@ export class ConversationAnalyticsComponent {
   }
   fallBackRate() {
     var chartDom = document.getElementById('fallbackrate');
-   this.totalAgentChart = echarts.init(chartDom);
+    this.totalAgentChart = echarts.init(chartDom);
     var option;
 
     option = {
@@ -101,11 +101,11 @@ export class ConversationAnalyticsComponent {
       ]
     };
 
-    
+
     option && this.totalAgentChart.setOption(option);
   }
 
-  AvgBotConversationTime(){
+  AvgBotConversationTime() {
     this._analytics.GetAvgBotConversationTime().subscribe(
       (res: any) => {
         this.avgBotConversationTime = res?.detail;
@@ -116,7 +116,7 @@ export class ConversationAnalyticsComponent {
       }
     );
   }
-  TagsAnalatics(){
+  TagsAnalatics() {
     this._analytics.GetTagsAnalatics().subscribe(
       (res: any) => {
         this.tagsAnalatics = res?.detail;
@@ -158,38 +158,69 @@ export class ConversationAnalyticsComponent {
             show: false
           },
           data: [
-            { value: this.tagsAnalatics?.Information, name: 'Information', 
+            {
+              value: this.tagsAnalatics?.Information, name: 'Information',
               itemStyle: {
-              color: '#2f9df2'
-            }},
-            { value: this.tagsAnalatics?.Sell, name: 'Sell',
+                color: '#2f9df2'
+              }
+            },
+            {
+              value: this.tagsAnalatics?.Sell, name: 'Sell',
               itemStyle: {
-              color: '#cf61ea'
-            }},
-            { value: this.tagsAnalatics?.Analysis, name: 'Analysis',
-            itemStyle: {
-              color: '#9c87ee'
-            }},
-            { value: this.tagsAnalatics?.Reservation, name: 'Reservation',
-            itemStyle: {
-              color: '#ff505c'
-            }},
-            { value: this.tagsAnalatics?.Complaint, name: 'Complaint',
-            itemStyle: {
-              color: '#3cc2cc'
-            }}
+                color: '#cf61ea'
+              }
+            },
+            {
+              value: this.tagsAnalatics?.Analysis, name: 'Analysis',
+              itemStyle: {
+                color: '#9c87ee'
+              }
+            },
+            {
+              value: this.tagsAnalatics?.Reservation, name: 'Reservation',
+              itemStyle: {
+                color: '#ff505c'
+              }
+            },
+            {
+              value: this.tagsAnalatics?.Complaint, name: 'Complaint',
+              itemStyle: {
+                color: '#3cc2cc'
+              }
+            }
           ]
         }
       ]
     };
 
-    option &&  this.botTagsChart.setOption(option);
+    option && this.botTagsChart.setOption(option);
 
   }
-
-  botEscalationRate() {
+  HumanTransferRate() {
+    this.spinner.show()
+    this._analytics.GethumanTransferRate().subscribe((response: any) => {
+      this.spinner.hide()
+      this.humanTransferRateData = response.detail;
+      const counts = [
+        response.detail.Monday[0],
+        response.detail.Tuesday[0],
+        response.detail.Wednesday[0],
+        response.detail.Thursday[0],
+        response.detail.Friday[0],
+        response.detail.Saturday[0],
+        response.detail.Sunday[0]
+      ];
+      setTimeout(() => {
+        this.botEscalationRate(counts);
+      })
+    })
+  }
+  getIntegerPart(rate: number): number {
+    return Math.floor(rate > 0 ? rate : 0);
+  }
+  botEscalationRate(counts: any) {
     const formattedDates = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-    const values = [10, 52, 200, 334, 390, 330, 220];
+    const values = counts;
     var chartDom = document.getElementById('BotRate');
     var myChart = echarts.init(chartDom);
 
@@ -234,9 +265,9 @@ export class ConversationAnalyticsComponent {
 
     option && myChart.setOption(option);
   }
-  conversationOverTime(){
+  conversationOverTime() {
     this.spinner.show()
-    this._analytics.ConversationOverTimeData(1).subscribe((response:any)=>{
+    this._analytics.ConversationOverTimeData(1).subscribe((response: any) => {
       const counts = [
         response.detail.Monday[0],
         response.detail.Tuesday[0],
@@ -245,16 +276,16 @@ export class ConversationAnalyticsComponent {
         response.detail.Friday[0],
         response.detail.Saturday[0],
         response.detail.Sunday[0]
-    ];
-    this.botConversationOverTime(counts);
-    this.spinner.hide()
+      ];
+      this.botConversationOverTime(counts);
+      this.spinner.hide()
     },
-    (error:any)=>{
-      console.error(error.error);
-    }
-  )
+      (error: any) => {
+        console.error(error.error);
+      }
+    )
   }
-  botConversationOverTime(count:any) {
+  botConversationOverTime(count: any) {
     const dates = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     const counts = count;
 
