@@ -4,6 +4,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { BotMonitoringService } from 'src/app/main/main/ai-bot/bot-monitoring.service';
+import { ChatVisibilityService } from 'src/app/services/chat-visibility.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -13,10 +14,10 @@ import { environment } from 'src/environments/environment';
 })
 export class ChatWidget2Component implements OnInit {
   @ViewChild('chatBody') private chatBody?: ElementRef;
-  @Input() hasParent: boolean=false;
+  @Input() hasParent: boolean = false;
   messages: any[] = [];
   chatMessages: any[] = [];
-  lastServiceErrorTime: number = 0; 
+  lastServiceErrorTime: number = 0;
   typing = false;
   currentTimestamp: Date = new Date();
   isOpen = false;
@@ -29,7 +30,9 @@ export class ChatWidget2Component implements OnInit {
   interval: any;
   apiGaveResponse: any = false;
   tempCount: any = 0;
-  constructor(private _spinner:NgxSpinnerService,private _botService: BotMonitoringService,private _toastS:ToastrService, private cdr: ChangeDetectorRef, private datePipe: DatePipe) { }
+  buttonAlreadyClicked: any = false;
+  conversation_end: any = 0;
+  constructor(private chatVisibilityService: ChatVisibilityService, private _spinner: NgxSpinnerService, private _botService: BotMonitoringService, private _toastS: ToastrService, private cdr: ChangeDetectorRef, private datePipe: DatePipe) { }
 
   ngOnInit(): void {
     this.session_id = this.generateRandomString(6);
@@ -64,12 +67,12 @@ export class ChatWidget2Component implements OnInit {
     this.isOpen = false;
     //this.messages = [];
   }
-  get cf(){
+  get cf() {
     return this.chatForm.controls
   }
-  submitMessage(msg:any) {
+  submitMessage(msg: any) {
     // this.apiGaveResponse = false
-    const mesage= msg;
+    const mesage = msg;
     const message = this.chatForm.value['message'];
 
     if (!message.trim()) {
@@ -81,39 +84,27 @@ export class ChatWidget2Component implements OnInit {
         this.lastServiceErrorTime = now;
       }
     }
-    else{
- if (!this.session_id) {
-      this._botService.chatInit().subscribe(
-        (res: any) => {
-          this.session_id = res.session_id;
-          this.sendMessage(mesage);
-        },
-        (error: any) => {
-          const now = Date.now();
-      if (now - this.lastServiceErrorTime > 3000) {
-        this._toastS.error('Service Unavailable', 'Failed!' ,{
-          timeOut: 3000,
-        });
-        this.lastServiceErrorTime = now;
+    else {
+      if (!this.session_id) {
+        this.session_id = this.generateRandomString(6);
+        this.sendMessage(mesage);
+      } else {
+        this.sendMessage(mesage);
       }
-        }
-      );
-    } else {
-      this.sendMessage(mesage);
     }
-    }
-   
+
   }
 
 
 
-  sendMessage(mesage:any) {
+  sendMessage(mesage: any) {
     const body = {
       "text": mesage != '' ? mesage : this.chatForm.value['message'],
       "session_id": this.session_id,
-      "workspace_id":this.workspace_id,
-      "bot_id":this.bot_id,
-      "token":"7dIxWgeDrvMY3cFAS3UsZuZCoZWto4lzcurzJn0QL7Myw7KHe7LdWlOnEtAeSoe1"
+      "workspace_id": this.workspace_id,
+      "bot_id": this.bot_id,
+      // "token":"7dIxWgeDrvMY3cFAS3UsZuZCoZWto4lzcurzJn0QL7Myw7KHe7LdWlOnEtAeSoe1"
+      "token": "aBeTgzi8YWT80GGApYGVenqbqRlhoTvSka63OSWQPKYGGSX1LS7X2tJHIplzZv4w"
     };
     this.tempCount++;
     this.chatMessages.push({
@@ -135,10 +126,45 @@ export class ChatWidget2Component implements OnInit {
 
     this._botService.ChatBotWdidget(body).subscribe(
       (res: any) => {
-        this.interval = setInterval(() => {
-          this.refreshHistory();
-        }, 5000)
-        this.refreshHistory()
+        if(mesage == '/bye'){
+          const clickedItem = {
+            active:false,
+            session_id: this.session_id
+          }
+          const refreshIndex = this.chatVisibilityService.refreshHistoryArray.findIndex(session_id => session_id == this.session_id);
+          this.session_id = ""
+          this.chatMessages=[];
+          clearInterval(this.interval);
+          debugger
+          if(refreshIndex!=-1){
+          this.chatVisibilityService.refreshHistoryArray.splice(refreshIndex, 1);
+          this.chatVisibilityService.notifyNewChatIdHistory(clickedItem);
+          }
+        }
+        else if(mesage == '/transfer'){
+          debugger
+          this.buttonAlreadyClicked = true;
+          const clickedItem = {
+            active:false,
+            session_id: this.session_id
+          }
+          const refreshIndex = this.chatVisibilityService.refreshHistoryArray.findIndex(session_id => session_id == this.session_id);
+          if(refreshIndex!=-1){
+          this.chatVisibilityService.refreshHistoryArray.splice(refreshIndex, 1);
+          this.chatVisibilityService.notifyNewChatIdHistory(clickedItem);
+          }
+          this.interval = setInterval(() => {
+            this.refreshHistory();
+          }, 5000)
+          this.refreshHistory()
+        }
+        else{
+          this.interval = setInterval(() => {
+            this.refreshHistory();
+          }, 5000)
+          this.refreshHistory()
+        }
+       
         this.typing = false;
         // this.messages.push({
         //   message: res.detail,
@@ -151,7 +177,7 @@ export class ChatWidget2Component implements OnInit {
         this.typing = false;
         // this.messages.splice(this.messages.length - 1,1)
         if (now - this.lastServiceErrorTime > 3000) {
-          this._toastS.error('Service Unavailable', 'Failed!' ,{
+          this._toastS.error('Service Unavailable', 'Failed!', {
             timeOut: 3000,
           });
           this.lastServiceErrorTime = now;
@@ -176,9 +202,9 @@ export class ChatWidget2Component implements OnInit {
   }
 
   refreshHistory() {
-    const formData = {bot_id:this.bot_id,workspace_id:this.workspace_id,session_id:this.session_id}
+    const formData = { bot_id: this.bot_id, workspace_id: this.workspace_id, session_id: this.session_id }
     this._botService.ChatHistory(formData).subscribe((res: any) => {
-      if(this.tempCount>0){
+      if (this.tempCount > 0) {
         this.tempCount--;
         this.chatMessages.splice(this.chatMessages.length - 1, 1)
       }
@@ -186,10 +212,11 @@ export class ChatWidget2Component implements OnInit {
       if (res.detail.length > 0) {
         // res.detail['session_id'] = this.session_id;
         // res.detail['last_message'] = this.chat.last_message;
-        res.detail.map((item:any) => {
+        res.detail.map((item: any) => {
           item.timestamp = this.formatDate(item.timestamp);
         })
         this.chatMessages = res.detail;
+        this.conversation_end = res.conversation_end;
         //this.chats.push(res[0].history);
       } else {
         this._spinner.hide('chat-history')
@@ -205,7 +232,7 @@ export class ChatWidget2Component implements OnInit {
     const parsedDate = new Date(+year, +month - 1, +day, +hours, +minutes, +seconds);
     return this.datePipe.transform(parsedDate, 'h:mm a');
   }
-  ngOnDestroy(){
+  ngOnDestroy() {
     clearInterval(this.interval);
   }
 }

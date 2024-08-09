@@ -10,6 +10,9 @@ import { AnalyticsService } from '../../service/analytics.service';
 })
 export class SentimentsAndTagsComponent {
   sentimentAnalysis: any;
+  filterDays:any = 7;
+  timeSpan: any = "week";
+selectedTimeLabel: any ="Last 7 days";
   constructor(private _hS: HeaderService, private _analytics: AnalyticsService) {
     _hS.updateHeaderData({
       title: 'Sentiments and Tags',
@@ -19,13 +22,31 @@ export class SentimentsAndTagsComponent {
     })
   }
   ngOnInit(): void {
+    this.refreshCharts()
+    localStorage.setItem("filterDays", this.filterDays);
+    localStorage.setItem("timeSpan", this.timeSpan);
+
+  }
+  get getTimeSpan(){
+    return localStorage.getItem("timeSpan")
+  }
+  refreshFilters(NumberOfDays:any, timeSpan:any, selectedTimeLabel:any){
+    this.filterDays = NumberOfDays;
+    this.timeSpan = timeSpan;
+    this.selectedTimeLabel = selectedTimeLabel;
+    // const filterDays = { filterDays: this.filterDays, timeSpan: this.timeSpan };
+    localStorage.setItem("filterDays", this.filterDays);
+    localStorage.setItem("timeSpan", this.timeSpan);
+    this.refreshCharts();
+  }
+  refreshCharts(){
     this.SentimentAnalysis()
     this.humanCsat()
   }
   SentimentAnalysis(){
     this._analytics.GetSentimentAnalysis().subscribe(
       (res: any) => {
-        this.sentimentAnalysis = res.detail;
+        this.sentimentAnalysis = res;
         this.sentimentsBOTCsat();
       },
       (error: any) => {
@@ -39,24 +60,24 @@ export class SentimentsAndTagsComponent {
     var chartDom = document.getElementById('analysisCsat');
     var myChart = echarts.init(chartDom);
     const sentiments = this.sentimentAnalysis;
-    const totalSentiments = sentiments?.Positive + sentiments?.Negative + sentiments?.Neutral;
+    const totalSentiments = sentiments?.positive + sentiments?.negative + sentiments?.neutral;
     const data = [
       {
-        value: sentiments?.Positive,
+        value: sentiments?.positive,
         name: 'Positive',
         itemStyle: {
           color: '#abedd0'
         }
       },
       {
-        value: sentiments?.Negative,
+        value: sentiments?.negative,
         name: 'Negative',
         itemStyle: {
           color: '#ffcccf'
         }
       },
       {
-        value: sentiments?.Neutral,
+        value: sentiments?.neutral,
         name: 'Neutral',
         itemStyle: {
           color: '#ffe0b3'

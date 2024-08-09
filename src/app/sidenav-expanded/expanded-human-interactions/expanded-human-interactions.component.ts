@@ -63,7 +63,7 @@ constructor(private chatVisibilityService: ChatVisibiltyHumanInteractionService,
 }
 
 ngOnInit(): void {
-  // debugger
+  // 
   // this.chatVisibilityService.refreshHistoryArray
   this.getChatBotHistory();
   this.chatVisibilityService.thirdActiveHistory$.subscribe((obj: any) => {
@@ -77,7 +77,7 @@ ngOnInit(): void {
 
   this.interval = setInterval(() => {
     this.getChatBotHistoryonRefresh();
-  }, 15000)
+  }, 5000)
 }
 // updatevalue(string: any) {
 

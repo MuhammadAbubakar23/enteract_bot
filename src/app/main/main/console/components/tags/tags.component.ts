@@ -130,7 +130,7 @@ export class TagsComponent {
 
   getTagById(id:any) {
     this.spinnerServerice.show();
-    debugger
+    
     this.id = id;
     this.tagsService.GetTagsById(this.id).subscribe(
       (res: any) => {

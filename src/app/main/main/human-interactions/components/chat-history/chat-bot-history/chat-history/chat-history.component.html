@@ -15,7 +15,9 @@
                 </div>
 
                 <span class="iconButton medium ms-auto" id="minbutton">
-                    <!-- <i class="fa-light fa-refresh"></i> -->
+                </span>
+                <span (click)="chatForm.controls['message'].setValue('Chat Ended'); killChat('/kill')" class="iconButton medium ms-auto" id="minbutton">
+                    <i class="fal fa-sign-out-alt"></i>
                 </span>
                 <span (click)="removeScreen()">
                     <i class="fa-light fa-times"></i>
@@ -50,7 +52,7 @@
                                                     msg.type === "ai-agent"
                                                     ? "enteract.bot"
                                                     : msg.type === "human-agent"
-                                                    ? "enteract.human"
+                                                    ? msg.agent_name || "enteract.human"
                                                     : chat.session_id
                                                     }}
                                                 </h6>

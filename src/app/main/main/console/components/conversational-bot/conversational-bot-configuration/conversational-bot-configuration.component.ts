@@ -74,7 +74,7 @@ export class ConversationalBotConfigurationComponent  implements OnInit {
     this.workspace_id = this.ValueSettingServiceService.workspace_Id$;
     this.editButtonClicked = true
     // const currentBot = this.ValueSettingServiceService.editFormValues$;
-    debugger
+    
     this.conversationalBotForm.get('botName')?.setValue(currentBot.workspace_name);
     this.conversationalBotForm.get('LLM')?.setValue(currentBot.llm);
     this.conversationalBotForm.get('llmApiKey')?.setValue(currentBot.llm_api_key);
@@ -177,7 +177,7 @@ export class ConversationalBotConfigurationComponent  implements OnInit {
   }
 
   updateWorkspace(){
-    debugger
+    
     if(this.conversationalBotForm.valid){
       // const formData = new FormData;
       // formData.append('bot_id', "1");
@@ -208,7 +208,7 @@ export class ConversationalBotConfigurationComponent  implements OnInit {
     this.documents = null;
   }
   updatellm(){
-    debugger
+    
     const formData = new FormData();
     formData.append('bot_id', "1");
     formData.append('workspace_id', String(this.workspace_id));
@@ -220,7 +220,7 @@ export class ConversationalBotConfigurationComponent  implements OnInit {
     })
   }
   updateEmbeddings(){
-    debugger
+    
     const formData = new FormData();
     formData.append('bot_id', "1");
     formData.append('workspace_id', String(this.workspace_id));
@@ -237,7 +237,7 @@ export class ConversationalBotConfigurationComponent  implements OnInit {
     })
   }
   updatevectorDb(){
-    debugger
+    
     const formData = new FormData();
     formData.append('bot_id', "1");
     formData.append('workspace_id', String(this.workspace_id));
@@ -253,7 +253,7 @@ export class ConversationalBotConfigurationComponent  implements OnInit {
     })
   }
   updateName(){
-    debugger
+    
     const formData = new FormData();
     formData.append('bot_id', "1");
     formData.append('workspace_id', String(this.workspace_id));
@@ -266,7 +266,7 @@ export class ConversationalBotConfigurationComponent  implements OnInit {
   }
 
   updateLimit(){
-    debugger
+    
     const formData = new FormData();
     formData.append('bot_id', "1");
     formData.append('workspace_id', String(this.workspace_id));
@@ -278,7 +278,7 @@ export class ConversationalBotConfigurationComponent  implements OnInit {
     })
   }
   updatePrompt(){
-    debugger
+    
     const formData = new FormData();
     formData.append('bot_id', "1");
     formData.append('workspace_id', String(this.workspace_id));

@@ -11,7 +11,10 @@ import { AnalyticsService } from '../../service/analytics.service';
 export class BotKpiComponent {
   sessionTime: any;
   fallRate: any;
-  fallbackRateCount: any;
+  filterDays:any = 7;
+  timeSpan: any = "week";
+selectedTimeLabel: any ="Last 7 days";
+  fallbackRateCount: any = 9;
   sessiontimeout: any;
   botEsclationRate: any;
   avgWaitTime: any;
@@ -26,6 +29,23 @@ export class BotKpiComponent {
     })
   }
   ngOnInit(): void {
+    this.refreshCharts()
+    localStorage.setItem("filterDays", this.filterDays);
+    localStorage.setItem("timeSpan", this.timeSpan);
+  }
+  get getTimeSpan(){
+    return localStorage.getItem("timeSpan")
+  }
+  refreshFilters(NumberOfDays:any, timeSpan:any, selectedTimeLabel:any){
+    this.filterDays = NumberOfDays;
+    this.timeSpan = timeSpan;
+    this.selectedTimeLabel = selectedTimeLabel;
+    // const filterDays = { filterDays: this.filterDays, timeSpan: this.timeSpan };
+    localStorage.setItem("filterDays", this.filterDays);
+    localStorage.setItem("timeSpan", this.timeSpan);
+    this.refreshCharts();
+  }
+  refreshCharts(){
     this.BotEsclationRate();
     this.AvgWaitTime();
     this.TimeoutCount();
@@ -41,11 +61,10 @@ export class BotKpiComponent {
     this.heatMap();
     this.TimeoutCount()
   }
-
   BotEsclationRate() {
     this._analytics.GetBotEsclationRate().subscribe(
       (res: any) => {
-        this.botEsclationRate = res.detail;
+        this.botEsclationRate = res;
       },
       (error: any) => {
         console.error("An error occurred while fetching the bot esclation rate:", error);
@@ -56,7 +75,7 @@ export class BotKpiComponent {
   AvgWaitTime() {
     this._analytics.GetAvgWaitTime().subscribe(
       (res: any) => {
-        this.avgWaitTime = res.detail;
+        this.avgWaitTime = res;
       },
       (error: any) => {
         console.error("An error occurred while fetching the bot avgerage wait time:", error);
@@ -70,7 +89,7 @@ export class BotKpiComponent {
         // const countData = res.count
         // const countKey = Object.keys(countData)[0];
         // this.sessiontimeout = countData[countKey];;
-        this.sessiontimeout = res.detail;
+        this.sessiontimeout = res;
 
       },
       (error: any) => {
@@ -174,10 +193,10 @@ export class BotKpiComponent {
 
     // prettier-ignore
     const hours = [
-      '12a', '1a', '2a', '3a', '4a', '5a', '6a',
-      '7a', '8a', '9a', '10a', '11a',
-      '12p', '1p', '2p', '3p', '4p', '5p',
-      '6p', '7p', '8p', '9p', '10p', '11p'
+      '0', '1', '2', '3', '4', '5', '6',
+      '7', '8', '9', '10', '11',
+      '12', '13', '14', '15', '16', '17',
+      '18', '19', '20', '21', '22', '23'
     ];
     // prettier-ignore
     const days = [
@@ -244,7 +263,7 @@ export class BotKpiComponent {
 
   }
   getIntegerPart(rate: number): number {
-    return Math.floor(rate > 0 ? rate : 0);
+    return parseFloat((rate > 0 ? rate : 0).toFixed(2));
   }
   fallback() {
     var chartDom = document.getElementById('fallbackrate');
@@ -410,7 +429,7 @@ export class BotKpiComponent {
     const timeoutData = session_timeout;
     const fallbackData = human_transfer_rate;
     const averageHandleTime = avg_handle_time
-    debugger
+    
     var chartDom = document.getElementById('sessionTime');
     this.sessionTime = echarts.init(chartDom);
     const option = {

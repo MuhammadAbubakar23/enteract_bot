@@ -18,6 +18,9 @@ export class ConversationAnalyticsComponent {
   tagsAnalatics: any;
   totalAgentChart: any;
   botTagsChart: any;
+  filterDays:any = 7;
+  timeSpan: any = "week";
+selectedTimeLabel: any ="Last 7 days";
   humanTransferRateData: any;
   constructor(private _hS: HeaderService, private _analytics: AnalyticsService, private spinner: NgxSpinnerService) {
     _hS.updateHeaderData({
@@ -28,6 +31,24 @@ export class ConversationAnalyticsComponent {
     })
   }
   ngOnInit(): void {
+    this.refreshCharts()
+    localStorage.setItem("filterDays", this.filterDays);
+    localStorage.setItem("timeSpan", this.timeSpan);
+
+  }
+  get getTimeSpan(){
+    return localStorage.getItem("timeSpan")
+  }
+  refreshFilters(NumberOfDays:any, timeSpan:any, selectedTimeLabel:any){
+    this.filterDays = NumberOfDays;
+    this.timeSpan = timeSpan;
+    this.selectedTimeLabel = selectedTimeLabel;
+    // const filterDays = { filterDays: this.filterDays, timeSpan: this.timeSpan };
+    localStorage.setItem("filterDays", this.filterDays);
+    localStorage.setItem("timeSpan", this.timeSpan);
+    this.refreshCharts();
+  }
+  refreshCharts(){
     this.TotalConversation();
     this.TotalAgents();
     this.AvgBotConversationTime();
@@ -39,7 +60,7 @@ export class ConversationAnalyticsComponent {
   TotalConversation() {
     this._analytics.GetTotalBotConversation().subscribe(
       (res: any) => {
-        this.botConversation = res?.detail;
+        this.botConversation = res;
       },
       (error: any) => {
         console.error("An error occurred while fetching the bot conversation:", error);
@@ -108,7 +129,7 @@ export class ConversationAnalyticsComponent {
   AvgBotConversationTime() {
     this._analytics.GetAvgBotConversationTime().subscribe(
       (res: any) => {
-        this.avgBotConversationTime = res?.detail;
+        this.avgBotConversationTime = res;
       },
       (error: any) => {
         console.error("An error occurred while fetching the average bot converstion time:", error);
@@ -216,7 +237,7 @@ export class ConversationAnalyticsComponent {
     })
   }
   getIntegerPart(rate: number): number {
-    return Math.floor(rate > 0 ? rate : 0);
+    return parseFloat((rate > 0 ? rate : 0).toFixed(2));
   }
   botEscalationRate(counts: any) {
     const formattedDates = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];

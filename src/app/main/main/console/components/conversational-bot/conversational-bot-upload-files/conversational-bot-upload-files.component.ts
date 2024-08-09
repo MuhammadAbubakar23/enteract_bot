@@ -204,7 +204,7 @@ export class ConversationalBotUploadFilesComponent  implements OnInit {
     })
   }
   updateDocStatus(doc: any,event: any) {
-    debugger
+    
     const formData = new FormData;
     formData.append('bot_id', "1");
     formData.append('workspace_id', String(this.workspace_id));
@@ -249,6 +249,6 @@ export class ConversationalBotUploadFilesComponent  implements OnInit {
   routeToCreate() {
     this.ValueSettingServiceService.default = "create";
     this.ValueSettingServiceService.setEditFormValues("null",null);
-    debugger
+    
   }
 }

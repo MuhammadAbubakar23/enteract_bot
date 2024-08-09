@@ -11,12 +11,12 @@ export class ConversationlBotService {
 
   
   createBot(data: any): Observable<any> {
-    debugger
+    
     return this.http.post(baseUrl + "workspaces/create", data)
   }
 
   getBots(): Observable<any> {
-    debugger
+    
     return this.http.get(baseUrl + "workspaces/get?bot_id=1")
   }
   getDocuments(params: any): Observable<any> {

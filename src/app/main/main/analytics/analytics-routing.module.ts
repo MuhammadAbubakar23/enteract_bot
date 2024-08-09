@@ -5,6 +5,7 @@ import { ConversationAnalyticsComponent } from './components/conversation-analyt
 import { BotKpiComponent } from './components/bot-kpi/bot-kpi.component';
 import { SentimentsAndTagsComponent } from './components/sentiments-and-tags/sentiments-and-tags.component';
 import { TokensComponent } from './components/tokens/tokens.component';
+import { AiDashboardComponent } from './components/ai-dashboard/ai-dashboard.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'ai-bot-analytics', pathMatch: 'full' },
@@ -13,6 +14,7 @@ const routes: Routes = [
   { path: 'bot-kpi', component: BotKpiComponent },
   { path: 'sentiments-and-tags', component: SentimentsAndTagsComponent },
   { path: 'tokens', component: TokensComponent },
+  { path: 'ai-dashboard', component: AiDashboardComponent}
 ];
 
 @NgModule({

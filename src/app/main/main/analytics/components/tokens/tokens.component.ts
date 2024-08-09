@@ -10,6 +10,9 @@ import { AnalyticsService } from '../../service/analytics.service';
 export class TokensComponent {
   avgTokenCount: any
   totalTokenCount: any
+  filterDays:any = 7;
+  timeSpan: any = "week";
+selectedTimeLabel: any ="Last 7 days";
   tokenPerDayCount: any;
   averageTokenPerChat: any;
   constructor(private _hS: HeaderService, private _analytics: AnalyticsService) {
@@ -21,6 +24,24 @@ export class TokensComponent {
     })
   }
   ngOnInit(): void {
+    this.refreshCharts()
+    localStorage.setItem("filterDays", this.filterDays);
+    localStorage.setItem("timeSpan", this.timeSpan);
+
+  }
+  get getTimeSpan(){
+    return localStorage.getItem("timeSpan")
+  }
+  refreshFilters(NumberOfDays:any, timeSpan:any, selectedTimeLabel:any){
+    this.filterDays = NumberOfDays;
+    this.timeSpan = timeSpan;
+    this.selectedTimeLabel = selectedTimeLabel;
+    // const filterDays = { filterDays: this.filterDays, timeSpan: this.timeSpan };
+    localStorage.setItem("filterDays", this.filterDays);
+    localStorage.setItem("timeSpan", this.timeSpan);
+    this.refreshCharts();
+  }
+  refreshCharts(){
     this.AverageTokenPerChat();
     this.TotalToken();
     this.AvgToken();
@@ -63,13 +84,13 @@ export class TokensComponent {
     this._analytics.GetAverageTokenPerChat().subscribe((response: any) => {
       this.averageTokenPerChat = response.detail
       const counts = [
-        response.detail.Monday[0],
-        response.detail.Tuesday[0],
-        response.detail.Wednesday[0],
-        response.detail.Thursday[0],
-        response.detail.Friday[0],
-        response.detail.Saturday[0],
-        response.detail.Sunday[0]
+        parseFloat(response.detail.Monday[0].toFixed(2)),
+        parseFloat(response.detail.Tuesday[0].toFixed(2)),
+        parseFloat(response.detail.Wednesday[0].toFixed(2)),
+        parseFloat(response.detail.Thursday[0].toFixed(2)),
+        parseFloat(response.detail.Friday[0].toFixed(2)),
+        parseFloat(response.detail.Saturday[0].toFixed(2)),
+        parseFloat(response.detail.Sunday[0].toFixed(2))
       ];
       // this.botEscalationRate(counts);
       setTimeout(() => {

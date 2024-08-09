@@ -77,7 +77,7 @@ export class ChatHistoryComponent implements OnInit {
     clearInterval(this.interval);
   }
   // refreshHistory() {
-  //   debugger
+  //   
   //   this._botS.ChatHistory({ 'slug': this.chat[0].slug }).subscribe((res: any) => {
   //     if (res[0].history.length > 0) {
   //       res[0].history[0]['slug'] = this.chat[0].slug;

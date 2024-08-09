@@ -39,6 +39,7 @@ export class BotMonitoringService {
     formData.append('text', form.text);
     formData.append('session_id', form.session_id);
     formData.append('token',form.token)
+    formData.append('agent_name',form.agent_name)
     return this.http.post(this.chatBotBaseUrl + "chats/human_agent", formData).pipe(timeout(120 * 1000));
   }
   ChatHistory(form: any) {

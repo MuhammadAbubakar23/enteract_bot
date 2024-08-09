@@ -12,36 +12,34 @@
                         <ul class="list-inline">
                             <li class="list-inline-item">
                                 <div class="dropdown">
-                                    <!-- <button class="btn dropdown-toggle fw-bold" type="button" id="dropdownMenuButton1"
-                                        data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="fal fa-calendar"></i> Any Time
-                                    </button>
-                                    <ul class="dropdown-menu assignFirstDropdownList1"
-                                        aria-labelledby="dropdownMenuButton1">
-
-                                        <li class="dropdown-item">
-                                            <a href="#0"> Any Time</a>
-                                        </li>
-                                        <li class="dropdown-item">
-                                            <a href="#0">Older then a week</a>
-                                        </li>
-                                        <li class="dropdown-item">
-                                            <a href="#0">Older then a month</a>
-                                        </li>
-                                        <li class="dropdown-item">
-
-                                            <a href="#0"> Older then a 6 months</a>
-                                        </li>
-                                        <li class="dropdown-item">
-                                            <a href="#0">Older then a year</a>
-                                        </li>
-                                        <li>
-                                            <hr class="dropdown-divider">
-                                        </li>
-                                        <li class="dropdown-item" id="customrange1">
-                                            <a href="#0">Custom Range</a>
-                                        </li>
-                                    </ul> -->
+                                    <button class="btn dropdown-toggle fw-bold" type="button" id="dropdownMenuButton1"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fal fa-calendar"></i> {{ selectedTimeLabel }}
+                            </button>
+                            <ul class="dropdown-menu assignFirstDropdownList1" aria-labelledby="dropdownMenuButton1">
+                                <!-- <li class="dropdown-item" (click)="refreshFilters(2000)">
+                                    <a> Any Time</a>
+                                </li> -->
+                                <li class="dropdown-item" (click)="refreshFilters(7, 'week', 'Last 7 days')">
+                                    <a>Last 7 days</a>
+                                </li>
+                                <li class="dropdown-item" (click)="refreshFilters(30, 'month', 'Older than a month')">
+                                    <a>Older than a month</a>
+                                </li>
+                                <li class="dropdown-item"
+                                    (click)="refreshFilters(180, '6 months', 'Older than a 6 months')">
+                                    <a> Older than a 6 months</a>
+                                </li>
+                                <li class="dropdown-item" (click)="refreshFilters(365, 'year','Older than a year')">
+                                    <a>Older than a year</a>
+                                </li>
+                                <!-- <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li class="dropdown-item" id="customrange1">
+                                    <a>Custom Range</a>
+                                </li> -->
+                            </ul>
                                     <div class="dropdown-menu end-0 assignSecondDropdownList1"
                                         aria-labelledby="customrange1">
                                         <form class="px-3 py-3">

@@ -22,16 +22,16 @@ export class ChatHistoryComponent implements OnInit {
   isRemoved: boolean = false;
   @Output() minimizeToggle: EventEmitter<void> = new EventEmitter<void>();
   interval: any;
-  bot_id= environment.bot_id;
-  workspace_id= environment.workspace_id;
+  bot_id = environment.bot_id;
+  workspace_id = environment.workspace_id;
 
-  constructor(private chatVisibilityService: ChatVisibilityService, private _botS: BotMonitoringService,private _spinner:NgxSpinnerService,
+  constructor(private chatVisibilityService: ChatVisibilityService, private _botS: BotMonitoringService, private _spinner: NgxSpinnerService,
     private datePipe: DatePipe) { }
   ngOnInit(): void {
     this.interval = setInterval(() => {
       this.refreshHistory();
     }, 5000)
-    this.chat.map((item:any) => {
+    this.chat.map((item: any) => {
       item.timestamp = this.formatDate(item.timestamp);
     })
     console.log("this.chat", this.chat)
@@ -43,19 +43,19 @@ export class ChatHistoryComponent implements OnInit {
     const index = this.chatVisibilityService.refreshHistoryArray.indexOf(this.chat.session_id);
     if (index !== -1) {
       this.chatVisibilityService.refreshHistoryArray.splice(index, 0);
-}
+    }
 
   }
   toggleMinimized(): void {
     this.isMinimized = !this.isMinimized;
   }
   refreshHistory() {
-    const formData = {bot_id:this.bot_id,workspace_id:this.workspace_id,session_id:this.chat.session_id}
+    const formData = { bot_id: this.bot_id, workspace_id: this.workspace_id, session_id: this.chat.session_id }
     this._botS.ChatHistory(formData).subscribe((res: any) => {
       if (res.detail.length > 0) {
         res.detail['session_id'] = this.chat.session_id;
         res.detail['last_message'] = this.chat.last_message;
-        res.detail.map((item:any) => {
+        res.detail.map((item: any) => {
           item.timestamp = this.formatDate(item.timestamp);
         })
         this.chat = res.detail;
@@ -75,7 +75,7 @@ export class ChatHistoryComponent implements OnInit {
     return this.datePipe.transform(parsedDate, 'h:mm a');
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     clearInterval(this.interval);
   }
 }

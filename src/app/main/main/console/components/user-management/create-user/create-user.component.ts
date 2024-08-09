@@ -84,7 +84,7 @@ export class CreateUserComponent implements OnInit {
     //   this.identity = Number(paramMap.get('id'));
     // });
     // ;
-    debugger
+    
     if (this.id != null) {
       this.getUserById();
       this.btnText = "Update"
@@ -107,7 +107,7 @@ export class CreateUserComponent implements OnInit {
     this.spinnerServerice.show();
     this.uservc.getMyRoles().subscribe((res: any) => {
       this.spinnerServerice.hide()
-      debugger
+      
       this.botMenuList = res;
     })
   }
@@ -172,7 +172,7 @@ export class CreateUserComponent implements OnInit {
 
   getUserById() {
     this.spinnerServerice.show();
-    debugger
+    
     this.uservc.GetUsersById(this.id).subscribe(
       (response: any) => {
         response.roleId = this.mapRoleNamesToIds(response.roleId);
@@ -204,7 +204,7 @@ export class CreateUserComponent implements OnInit {
     this.userForm.controls['skillId'].reset();
   }
   onSubmit(): void {
-    debugger
+    
     // let _self = this;
     // this.userForm.controls['roleId'].reset();
     // this.userForm.controls['teamId'].reset();

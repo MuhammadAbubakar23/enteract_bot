@@ -45,7 +45,7 @@ export class ExpandedConsoleComponent {
   }
 
   ngOnInit(): void {
-    // debugger
+    // 
     // const storedParentValue = localStorage.getItem('consoleActiveParentIndex');
     // const storedChildValue = localStorage.getItem('consoleActiveChildIndex');
     // let parnetindex = 0;

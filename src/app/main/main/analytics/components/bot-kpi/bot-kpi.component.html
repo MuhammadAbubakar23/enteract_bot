@@ -13,36 +13,34 @@
                             <ul class="list-inline">
                                 <li class="list-inline-item">
                                     <div class="dropdown">
-                                        <!-- <button class="btn dropdown-toggle fw-bold" type="button"
-                                            id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="fal fa-calendar"></i> Any Time
-                                        </button>
-                                        <ul class="dropdown-menu assignFirstDropdownList1"
-                                            aria-labelledby="dropdownMenuButton1">
-
-                                            <li class="dropdown-item">
-                                                <a href="#0"> Any Time</a>
-                                            </li>
-                                            <li class="dropdown-item">
-                                                <a href="#0">Older then a week</a>
-                                            </li>
-                                            <li class="dropdown-item">
-                                                <a href="#0">Older then a month</a>
-                                            </li>
-                                            <li class="dropdown-item">
-
-                                                <a href="#0"> Older then a 6 months</a>
-                                            </li>
-                                            <li class="dropdown-item">
-                                                <a href="#0">Older then a year</a>
-                                            </li>
-                                            <li>
-                                                <hr class="dropdown-divider">
-                                            </li>
-                                            <li class="dropdown-item" id="customrange1">
-                                                <a href="#0">Custom Range</a>
-                                            </li>
-                                        </ul> -->
+                                        <button class="btn dropdown-toggle fw-bold" type="button" id="dropdownMenuButton1"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fal fa-calendar"></i> {{ selectedTimeLabel }}
+                            </button>
+                            <ul class="dropdown-menu assignFirstDropdownList1" aria-labelledby="dropdownMenuButton1">
+                                <!-- <li class="dropdown-item" (click)="refreshFilters(2000)">
+                                    <a> Any Time</a>
+                                </li> -->
+                                <li class="dropdown-item" (click)="refreshFilters(7, 'week', 'Last 7 days')">
+                                    <a>Last 7 days</a>
+                                </li>
+                                <li class="dropdown-item" (click)="refreshFilters(30, 'month', 'Older than a month')">
+                                    <a>Older than a month</a>
+                                </li>
+                                <li class="dropdown-item"
+                                    (click)="refreshFilters(180, '6 months', 'Older than a 6 months')">
+                                    <a> Older than a 6 months</a>
+                                </li>
+                                <li class="dropdown-item" (click)="refreshFilters(365, 'year','Older than a year')">
+                                    <a>Older than a year</a>
+                                </li>
+                                <!-- <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li class="dropdown-item" id="customrange1">
+                                    <a>Custom Range</a>
+                                </li> -->
+                            </ul>
                                         <div class="dropdown-menu end-0 assignSecondDropdownList1"
                                             aria-labelledby="customrange1">
                                             <form class="px-3 py-3">
@@ -76,13 +74,20 @@
                                         <h6 class="mb-3 text-uppercase">Bot Escalation Rate </h6>
                                         <div class="d-flex align-items-center justify-content-between">
                                             <div class="d-flex align-items-center">
-                                                <h3 class="m-0 fw-bold">{{getIntegerPart(botEsclationRate > 0 ? botEsclationRate : 0)}}<small>%</small></h3>
-                                                <small class="ms-2"><i class="fa-light fa-arrow-up mint"></i> <span
-                                                        class="mint">13.8%</span> than
-                                                    last
-                                                    week</small>
+                                                <h3 class="m-0 fw-bold">{{getIntegerPart(botEsclationRate?.detail > 0 ?
+                                                    botEsclationRate?.detail : 0)}} <small>%</small></h3>
+                                                <small class="ms-2" style="font-size: 12px !important;">
+                                                    <i class="fa-light" [ngClass]="{
+                                                         'fa-arrow-up mint': botEsclationRate?.percentage > 0,
+                                                         'fa-arrow-down anyred-class': botEsclationRate?.percentage < 0
+                                                       }"></i>
+                                                    <span
+                                                        [ngClass]="{'mint': botEsclationRate?.percentage > 0, 'anyred-class': botEsclationRate?.percentage < 0}">
+                                                        {{ botEsclationRate?.percentage }}%
+                                                    </span> than last {{getTimeSpan}}
+                                                </small>
+    
                                             </div>
-
                                         </div>
 
                                     </div>
@@ -95,8 +100,8 @@
                                         <div class="d-flex align-items-center justify-content-between">
                                             <div class="d-flex align-items-center">
                                                 <h3 class="m-0 fw-bold">{{fallbackRateCount > 0 ? fallbackRateCount : 0}}</h3>
-                                                <small class="ms-2"><i class="fa-light fa-arrow-up mint"></i> <span
-                                                        class="mint">13.8%</span> than last
+                                                <small class="ms-2" style="font-size: 12px !important;"><i class="fa-light fa-arrow-up mint"></i> <span
+                                                        class="mint">100%</span> than last
                                                     week</small>
                                             </div>
                                             <!-- <div>
@@ -113,12 +118,19 @@
                                         <h6 class="mb-3 text-uppercase">SESSION TIME OUT</h6>
                                         <div class="d-flex align-items-center justify-content-between">
                                             <div class="d-flex align-items-center">
-                                                <h3 class="m-0 fw-bold">{{sessiontimeout}} 
-                                                    <!-- <small>min</small> -->
+                                                <h3 class="m-0 fw-bold">{{sessiontimeout?.detail > 0 ? sessiontimeout?.detail : 0}}
+                                                    <!-- <small>%</small> -->
                                                 </h3>
-                                                <small class="ms-2"><i class="fa-light fa-arrow-up mint"></i> <span
-                                                        class="mint">13.8%</span> than last
-                                                    week</small>
+                                                <small style="font-size: 12px !important;">
+                                                    <i class="fa-light" [ngClass]="{
+                                                         'fa-arrow-up mint': sessiontimeout?.percentage > 0,
+                                                         'fa-arrow-down anyred-class': sessiontimeout?.percentage < 0
+                                                       }"></i>
+                                                    <span
+                                                        [ngClass]="{'mint': sessiontimeout?.percentage > 0, 'anyred-class': sessiontimeout?.percentage < 0}">
+                                                        {{ sessiontimeout?.percentage }}%
+                                                    </span> than last {{getTimeSpan}}
+                                                </small>
                                             </div>
                                             <!-- <div>
                                                 <div id="abadonRate" style="height: 100%; width: 100%; max-width:600px"></div>
@@ -136,10 +148,20 @@
                                         <h6 class="mb-3 text-uppercase">Average Wait Time </h6>
                                         <div class="d-flex align-items-center justify-content-between">
                                             <div class="d-flex align-items-center">
-                                                <h3 class="m-0 fw-bold">{{getIntegerPart(avgWaitTime)}} <small class="fs-12 coal" style="font-size: 12px !important;">min</small></h3>
-                                                <small class="ms-2"><i class="fa-light fa-arrow-up mint"></i> <span
-                                                        class="mint">13.8%</span> than last
-                                                    week</small>
+                                                <h3 class="m-0 fw-bold">{{getIntegerPart(avgWaitTime?.detail > 0 ?
+                                                    avgWaitTime?.detail : 0)}} <small class="fs-12 coal"
+                                                        style="font-size: 12px !important;">min</small></h3>
+                                                <small style="font-size: 12px !important;">
+                                                    <i class="fa-light" [ngClass]="{
+                                                         'fa-arrow-up mint': avgWaitTime?.percentage > 0,
+                                                         'fa-arrow-down anyred-class': avgWaitTime?.percentage < 0
+                                                       }"></i>
+                                                    <span
+                                                        [ngClass]="{'mint': avgWaitTime?.percentage > 0, 'anyred-class': avgWaitTime?.percentage < 0}">
+                                                        {{ avgWaitTime?.percentage || 0 }}%
+                                                    </span> than last {{getTimeSpan}}
+                                                </small>
+            
                                             </div>
                                             <!-- <div>
                                                 <div id="waitTime" style="height: 100%; width: 100%; max-width:600px"></div>

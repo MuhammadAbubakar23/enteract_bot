@@ -50,7 +50,7 @@ export class KnowledgeBaseComponent implements OnInit{
   }
 
   submitForm() {
-    debugger
+    
     if (this.knowledgeBaseForm.valid) {
       // this.isButtonDisabled = true;
       const formData = new FormData();

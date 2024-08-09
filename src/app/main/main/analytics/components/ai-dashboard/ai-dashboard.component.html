@@ -1,0 +1,588 @@
+<div class="content-box-wrapper d-flex w-100">
+    <div class="middle-content d-flex">
+        <div class="py-4 d-grid w-100">
+            <div class="px-4 analytics-dashboard analytics-dashboard" data-scrollbar="true" tabindex="-1"
+                style="overflow: auto; outline: none;">
+                <div class="scroll-content">
+                    <div class="analytics executive-dashboard">
+                        <div class="filter-toolbar border-0 d-flex align-items-center justify-content-between">
+                            <h6 class="text-uppercase">Bot Analytics </h6>
+                            <ul class="list-inline">
+                                <li class="list-inline-item">
+                                    <div class="dropdown">
+                                        <button class="btn dropdown-toggle fw-bold" type="button" id="dropdownMenuButton1"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fal fa-calendar"></i> {{ selectedTimeLabel }}
+                            </button>
+                            <ul class="dropdown-menu assignFirstDropdownList1" aria-labelledby="dropdownMenuButton1">
+                                <li class="dropdown-item" (click)="refreshFilters(7, 'week', 'Last 7 days')">
+                                    <a>Last 7 days</a>
+                                </li>
+                                <li class="dropdown-item" (click)="refreshFilters(30, 'month', 'Older than a month')">
+                                    <a>Older than a month</a>
+                                </li>
+                                <li class="dropdown-item"
+                                    (click)="refreshFilters(180, '6 months', 'Older than a 6 months')">
+                                    <a> Older than a 6 months</a>
+                                </li>
+                                <li class="dropdown-item" (click)="refreshFilters(365, 'year','Older than a year')">
+                                    <a>Older than a year</a>
+                                </li>
+                            </ul>
+                                        <div class="dropdown-menu end-0 assignSecondDropdownList1"
+                                            aria-labelledby="customrange1">
+                                            <form class="px-3 py-3">
+                                                <div class="d-flex mb-3">
+                                                    <div class="form-floating">
+                                                        <input type="date" class="form-control border-end-0 rounded-0"
+                                                            id="start-date" placeholder="Start Date">
+                                                        <label for="start-date">Start Date </label>
+                                                    </div>
+                                                    <div class="form-floating">
+                                                        <input type="date" class="form-control rounded-0" id="end-date"
+                                                            placeholder="End Date">
+                                                        <label for="end-date">End Date</label>
+                                                    </div>
+                                                </div>
+                                                <div class="text-end">
+                                                    <button type="submit" class="btn skyBg btn-small">Apply</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="row align-items-start mb-3 g-2">
+                            <div class="col-2">
+                                <div class="card onerowcad mb-3">
+                                    <div class="card-body">
+                                        <h6 class="mb-3 text-uppercase text-center">Total Sessions </h6>
+                                        <h3 class="mb-3 fw-bold text-center">{{totalSessionsData?.detail}}</h3>
+                                        <ul class="list-inline d-flex align-items-center justify-content-center m-0">
+                                            <li class="list-group-item border-end pe-3">
+                                                <small>
+                                                    <i class="fa-light" [ngClass]="{
+                                                         'fa-arrow-up mint': totalSessionsData?.percentage > 0,
+                                                         'fa-arrow-down anyred-class': totalSessionsData?.percentage < 0
+                                                       }"></i><span
+                                                       [ngClass]="totalSessionsData?.percentage > 0 ? 'mint':'anyred-class'">{{totalSessionsData?.percentage}}%</span>
+                                                       <span class="d-block coal">Change</span>
+                                                </small>
+                                                <!-- <small><i class="fa-light fa-arrow-up mint"></i> <span
+                                                        class="mint">{{totalSessionsData?.percentage}}%</span>
+                                                    <span class="d-block coal">Change</span>
+                                                </small> -->
+                                            </li>
+                                            <li class="list-group-item ps-3">
+                                                <small> <span>65%</span>
+                                                    <span class="d-block coal">prev.30d</span>
+                                                </small>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <div class="card onerowcad mb-3">
+                                    <div class="card-body">
+                                        <h6 class="mb-3 text-uppercase text-center">Engaged session rate </h6>
+                                        <h3 class="mb-3 fw-bold text-center">
+                                            {{totalSessionsData?.percentage}}<small>%</small></h3>
+                                        <ul class="list-inline d-flex align-items-center justify-content-center m-0">
+                                            <li class="list-group-item border-end pe-3">
+                                                <small><i class="fa-light fa-arrow-up mint"></i> <span
+                                                        class="mint">0%</span>
+                                                    <span class="d-block coal">Change</span>
+                                                </small>
+                                            </li>
+                                            <li class="list-group-item ps-3">
+                                                <small> <span>65%</span>
+                                                    <span class="d-block coal">prev.30d</span>
+                                                </small>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <div class="card onerowcad mb-3">
+                                    <div class="card-body">
+                                        <h6 class="mb-3 text-uppercase text-center">Average Session per user </h6>
+                                        <h3 class="mb-3 fw-bold text-center">35</h3>
+                                        <ul class="list-inline d-flex align-items-center justify-content-center m-0">
+                                            <li class="list-group-item border-end pe-3">
+                                                <small><i class="fa-light fa-arrow-down radical"></i> <span
+                                                        class="radical">-19%</span>
+                                                    <span class="d-block coal">Change</span>
+                                                </small>
+                                            </li>
+                                            <li class="list-group-item ps-3">
+                                                <small> <span>65%</span>
+                                                    <span class="d-block coal">prev.30d</span>
+                                                </small>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <div class="card onerowcad mb-3">
+                                    <div class="card-body">
+                                        <h6 class="mb-3 text-uppercase text-center">Total Users </h6>
+                                        <h3 class="mb-3 fw-bold text-center">{{totalSessionsData?.detail}}</h3>
+                                        <ul class="list-inline d-flex align-items-center justify-content-center m-0">
+                                            <li class="list-group-item border-end pe-3">
+                                                <small>
+                                                    <i class="fa-light" [ngClass]="{
+                                                         'fa-arrow-up mint': totalSessionsData?.percentage > 0,
+                                                         'fa-arrow-down anyred-class': totalSessionsData?.percentage < 0
+                                                       }"></i><span
+                                                       [ngClass]="totalSessionsData?.percentage > 0 ? 'mint':'anyred-class'">{{totalSessionsData?.percentage}}%</span>
+                                                       <span class="d-block coal">Change</span>
+                                                </small>
+                                            </li>
+                                            <li class="list-group-item ps-3">
+                                                <small> <span>65%</span>
+                                                    <span class="d-block coal">prev.30d</span>
+                                                </small>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <div class="card onerowcad mb-3">
+                                    <div class="card-body">
+                                        <h6 class="mb-3 text-uppercase text-center">User Retention Rate </h6>
+                                        <h3 class="mb-3 fw-bold text-center">13<small>%</small></h3>
+                                        <ul class="list-inline d-flex align-items-center justify-content-center m-0">
+                                            <li class="list-group-item border-end pe-3">
+                                                <small><i class="fa-light fa-arrow-up mint"></i> <span
+                                                        class="mint">13.8%</span>
+                                                    <span class="d-block coal">Change</span>
+                                                </small>
+                                            </li>
+                                            <li class="list-group-item ps-3">
+                                                <small> <span>65%</span>
+                                                    <span class="d-block coal">prev.30d</span>
+                                                </small>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <div class="card onerowcad mb-3">
+                                    <div class="card-body">
+                                        <h6 class="mb-3 text-uppercase text-center">Session Containment Rate</h6>
+                                        <h3 class="mb-3 fw-bold text-center">100 <small>%</small></h3>
+                                        <ul class="list-inline d-flex align-items-center justify-content-center m-0">
+                                            <li class="list-group-item border-end pe-3">
+                                                <small><i class="fa-light fa-arrow-up mint"></i> <span
+                                                        class="mint">13.8%</span>
+                                                    <span class="d-block coal">Change</span>
+                                                </small>
+                                            </li>
+                                            <li class="list-group-item ps-3">
+                                                <small> <span>65%</span>
+                                                    <span class="d-block coal">prev.30d</span>
+                                                </small>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card mb-3">
+                            <div class="card-body p-4">
+                                <h6 class="text-uppercase mb-4"> Session Summary</h6>
+                                <div class="row align-items-center mb-4 border-bottom pb-3">
+                                    <div class="col-2">
+                                        <h6>Total Sessions</h6>
+                                    </div>
+                                    <div class="col">
+                                        <h2 class="mb-1 fw-bold text-center">{{totalSessionsData?.detail}}</h2>
+                                        <p class="mb-0 coal text-center">Total Sessions </p>
+                                    </div>
+                                    <div class="col">
+                                        <h2 class="mb-1 fw-bold text-center">1.6</h2>
+                                        <p class="mb-0 coal text-center"> Avg. session per user </p>
+                                    </div>
+                                </div>
+                                <div class="row align-items-center mb-3">
+                                    <div class="col-2">
+                                        <h6>Engaged Sessions</h6>
+                                    </div>
+                                    <div class="col">
+                                        <h3 class="mb-1 fw-bold text-center">{{totalSessionsData?.percentage}}</h3>
+                                        <p class="mb-0 coal text-center">Total Engaged Sessions </p>
+                                    </div>
+                                    <div class="col">
+                                        <h3 class="mb-1 fw-bold text-center">2</h3>
+                                        <p class="mb-0 coal text-center"> Avg. engaged session per user </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row align-items-start mb-3">
+                            <div class="col-md-6">
+                                <div class="card p-3">
+                                    <div class="d-flex align-items-center justify-content-between mb-3">
+                                        <h6 class="text-uppercase">Total Messages</h6>
+                                    </div>
+                                    <div class="chartcontainer d-flex justify-content-center mt-4 pt-4">
+                                        <div id="totalMessages" style="height: 200px; width: 100%">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card p-3">
+                                    <div class="d-flex align-items-center justify-content-between mb-3">
+                                        <h6 class="text-uppercase">Total Sessions</h6>
+                                    </div>
+                                    <div class="chartcontainer d-flex justify-content-center mt-4 pt-4">
+                                        <div id="totalSession" style="height: 200px; width: 100%;">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row align-items-start mb-3">
+                            <div class="col-md-6">
+                                <div class="card sentimentcard">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center justify-content-between mb-4">
+                                            <h6 class="mb-0 text-uppercase"> Messages</h6>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" role="switch"
+                                                    id="messages">
+                                                <label class="form-check-label small" for="messages">Engaged
+                                                    Sessions</label>
+                                            </div>
+                                        </div>
+                                        <div class="chartcontainer d-flex justify-content-center my-4">
+                                            <div id="main" style="height: 250px; width: 102%">
+                                            </div>
+                                        </div>
+                                        <ul class="list-group list-group-flush mt-4 px-4 pb-2">
+                                            <li
+                                                class="list-group-item d-flex align-items-center justify-content-between">
+                                                <h6>Inbound</h6>
+                                                <small>2,243</small>
+                                            </li>
+                                            <li
+                                                class="list-group-item d-flex align-items-center justify-content-between">
+                                                <h6> Outbound</h6>
+                                                <small> 223</small>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center justify-content-between mb-4">
+                                            <h6 class="mb-0 text-uppercase"> Users</h6>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" role="switch"
+                                                    id="users1">
+                                                <label class="form-check-label small" for="users1">Engaged
+                                                    Sessions</label>
+                                            </div>
+                                        </div>
+                                        <div class="chartcontainer d-flex justify-content-center my-4">
+                                            <div id="users" style="height: 250px; width: 100%">
+                                            </div>
+                                        </div>
+                                        <ul class="list-group list-group-flush mt-4 px-4 pb-2">
+                                            <li
+                                                class="list-group-item d-flex align-items-center justify-content-between">
+                                                <h6>New users</h6>
+                                                <small>1345</small>
+                                            </li>
+                                            <li
+                                                class="list-group-item d-flex align-items-center justify-content-between">
+                                                <h6> Returning users</h6>
+                                                <small> 155</small>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row align-items-start mb-3">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center justify-content-between mb-4">
+                                            <h6 class="mb-0 text-uppercase"> Session expiry reason</h6>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" role="switch"
+                                                    id="sessionexp">
+                                                <label class="form-check-label small" for="sessionexp">Engaged
+                                                    Sessions</label>
+                                            </div>
+                                        </div>
+                                        <div class="row py-5 px-3">
+                                            <div class="col-md-6 text-center">
+                                                <div id="sessionExpiry" style="height: 250px; width: 100%"></div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <ul class="list-group list-group-flush">
+                                                    <li
+                                                        class="list-group-item d-flex align-items-center justify-content-between">
+                                                        <span>
+                                                            <i class="fa-regular fa-circle me-2 sky"></i>
+                                                            Expired
+                                                            Session
+                                                        </span>
+                                                        <strong>300</strong>
+                                                    </li>
+                                                    <li
+                                                        class="list-group-item d-flex align-items-center justify-content-between">
+                                                        <span>
+                                                            <i class="fa-regular fa-circle me-2 cherry"></i>
+                                                            Agent
+                                                            Takeover
+                                                        </span>
+                                                        <strong>484</strong>
+                                                    </li>
+                                                    <li
+                                                        class="list-group-item d-flex align-items-center justify-content-between">
+                                                        <span>
+                                                            <i class="fa-regular fa-circle me-2 berry"></i> Go
+                                                            to
+                                                            Agent
+                                                            Action
+                                                        </span>
+                                                        <strong>580</strong>
+                                                    </li>
+                                                    <li
+                                                        class="list-group-item d-flex align-items-center justify-content-between">
+                                                        <span>
+                                                            <i class="fa-regular fa-circle me-2 radical"></i>
+                                                            Close
+                                                            session action
+                                                        </span>
+                                                        <strong>735</strong>
+                                                    </li>
+                                                    <li
+                                                        class="list-group-item d-flex align-items-center justify-content-between">
+                                                        <span>
+                                                            <i class="fa-regular fa-circle me-2 pearl"></i> user
+                                                            closed
+                                                            session
+                                                        </span>
+                                                        <strong>1048</strong>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card" style="height:426px">
+                                    <div class="card-body">
+                                        <ul class="nav nav-tabs linetabs nav-fill" id="myTab" role="tablist">
+                                            <li class="nav-item" role="presentation">
+                                                <button class="nav-link active" id="home-tab" data-bs-toggle="tab"
+                                                    data-bs-target="#home-tab-pane" type="button" role="tab"
+                                                    aria-controls="home-tab-pane" aria-selected="true">Session
+                                                    duration</button>
+                                            </li>
+                                            <li class="nav-item" role="presentation">
+                                                <button class="nav-link" id="profile-tab" data-bs-toggle="tab"
+                                                    data-bs-target="#profile-tab-pane" type="button" role="tab"
+                                                    aria-controls="profile-tab-pane" aria-selected="false"
+                                                    tabindex="-1">Engaged sess.
+                                                    duration</button>
+                                            </li>
+                                            <li class="nav-item" role="presentation">
+                                                <button class="nav-link" id="contact-tab" data-bs-toggle="tab"
+                                                    data-bs-target="#contact-tab-pane" type="button" role="tab"
+                                                    aria-controls="contact-tab-pane" aria-selected="false"
+                                                    tabindex="-1">Interaction
+                                                    Time</button>
+                                            </li>
+                                        </ul>
+                                        <div class="tab-content px-4 py-5" id="myTabContent">
+                                            <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel"
+                                                aria-labelledby="home-tab" tabindex="0">
+                                                <div class="row">
+                                                    <div class="col-md-5">
+                                                        <h1>00:02:52</h1>
+                                                        <h6 class="coal">Avg session duration</h6>
+                                                    </div>
+                                                    <div class="col-md-7">
+                                                        <ul class="list-group list-group-flush">
+                                                            <li
+                                                                class="list-group-item d-flex align-items-center justify-content-between">
+                                                                <span>
+                                                                    <i class="fa-regular fa-circle me-2 sky"></i>
+                                                                    Expired Session
+                                                                </span>
+                                                                <strong>00:01:56</strong>
+                                                            </li>
+                                                            <li
+                                                                class="list-group-item d-flex align-items-center justify-content-between">
+                                                                <span>
+                                                                    <i class="fa-regular fa-circle me-2 cherry"></i>
+                                                                    Agent Takeover
+                                                                </span>
+                                                                <strong>00:01:06</strong>
+                                                            </li>
+                                                            <li
+                                                                class="list-group-item d-flex align-items-center justify-content-between">
+                                                                <span>
+                                                                    <i class="fa-regular fa-circle me-2 berry"></i>
+                                                                    Go
+                                                                    to Agent Action
+                                                                </span>
+                                                                <strong>00:02:24</strong>
+                                                            </li>
+                                                            <li
+                                                                class="list-group-item d-flex align-items-center justify-content-between">
+                                                                <span>
+                                                                    <i class="fa-regular fa-circle me-2 radical"></i>
+                                                                    Close session action
+                                                                </span>
+                                                                <strong>00:00:40</strong>
+                                                            </li>
+                                                            <li
+                                                                class="list-group-item d-flex align-items-center justify-content-between">
+                                                                <span>
+                                                                    <i class="fa-regular fa-circle me-2 pearl"></i>
+                                                                    user
+                                                                    closed session
+                                                                </span>
+                                                                <strong>00:04:21</strong>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel"
+                                                aria-labelledby="profile-tab" tabindex="0">
+                                                <div class="row">
+                                                    <div class="col-md-5">
+                                                        <h1>00:03:45</h1>
+                                                        <h6 class="coal">Avg session duration</h6>
+                                                    </div>
+                                                    <div class="col-md-7">
+                                                        <ul class="list-group list-group-flush">
+                                                            <li
+                                                                class="list-group-item d-flex align-items-center justify-content-between">
+                                                                <span>
+                                                                    <i class="fa-regular fa-circle me-2 sky"></i>
+                                                                    Expired Session
+                                                                </span>
+                                                                <strong>00:03:56</strong>
+                                                            </li>
+                                                            <li
+                                                                class="list-group-item d-flex align-items-center justify-content-between">
+                                                                <span>
+                                                                    <i class="fa-regular fa-circle me-2 cherry"></i>
+                                                                    Agent Takeover
+                                                                </span>
+                                                                <strong>00:04:24</strong>
+                                                            </li>
+                                                            <li
+                                                                class="list-group-item d-flex align-items-center justify-content-between">
+                                                                <span>
+                                                                    <i class="fa-regular fa-circle me-2 berry"></i>
+                                                                    Go
+                                                                    to Agent Action
+                                                                </span>
+                                                                <strong>00:11:44</strong>
+                                                            </li>
+                                                            <li
+                                                                class="list-group-item d-flex align-items-center justify-content-between">
+                                                                <span>
+                                                                    <i class="fa-regular fa-circle me-2 radical"></i>
+                                                                    Close session action
+                                                                </span>
+                                                                <strong>00:00:50</strong>
+                                                            </li>
+                                                            <li
+                                                                class="list-group-item d-flex align-items-center justify-content-between">
+                                                                <span>
+                                                                    <i class="fa-regular fa-circle me-2 pearl"></i>
+                                                                    user
+                                                                    closed session
+                                                                </span>
+                                                                <strong>00:02:51</strong>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane fade" id="contact-tab-pane" role="tabpanel"
+                                                aria-labelledby="contact-tab" tabindex="0">
+                                                <div class="row">
+                                                    <div class="col-md-5">
+                                                        <h1>00:02:52</h1>
+                                                        <h6 class="coal">Avg session duration</h6>
+                                                    </div>
+                                                    <div class="col-md-7">
+                                                        <ul class="list-group list-group-flush">
+                                                            <li
+                                                                class="list-group-item d-flex align-items-center justify-content-between">
+                                                                <span>
+                                                                    <i class="fa-regular fa-circle me-2 sky"></i>
+                                                                    Expired Session
+                                                                </span>
+                                                                <strong>00:03:56</strong>
+                                                            </li>
+                                                            <li
+                                                                class="list-group-item d-flex align-items-center justify-content-between">
+                                                                <span>
+                                                                    <i class="fa-regular fa-circle me-2 cherry"></i>
+                                                                    Agent Takeover
+                                                                </span>
+                                                                <strong>00:04:24</strong>
+                                                            </li>
+                                                            <li
+                                                                class="list-group-item d-flex align-items-center justify-content-between">
+                                                                <span>
+                                                                    <i class="fa-regular fa-circle me-2 berry"></i>
+                                                                    Go
+                                                                    to Agent Action
+                                                                </span>
+                                                                <strong>00:11:44</strong>
+                                                            </li>
+                                                            <li
+                                                                class="list-group-item d-flex align-items-center justify-content-between">
+                                                                <span>
+                                                                    <i class="fa-regular fa-circle me-2 radical"></i>
+                                                                    Close session action
+                                                                </span>
+                                                                <strong>00:00:50</strong>
+                                                            </li>
+                                                            <li
+                                                                class="list-group-item d-flex align-items-center justify-content-between">
+                                                                <span>
+                                                                    <i class="fa-regular fa-circle me-2 pearl"></i>
+                                                                    user
+                                                                    closed session
+                                                                </span>
+                                                                <strong>00:02:51</strong>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -31,37 +31,37 @@ export class AnalyticsService {
 
 
   GetTotalBotConversation() {
-    return this.http.get(this.chatBotBaseUrl + this.getTotalBotConversation)
+    return this.http.get(this.chatBotBaseUrl + this.getTotalBotConversation + `?bot_id=${environment.bot_id}&filter_days=${localStorage.getItem("filterDays")}`)
   }
   GetTotalAgents() {
     return this.http.get(this.chatBotBaseUrl + this.getTotalAgents)
   }
   GetAvgBotConversationTime() {
-    return this.http.get(this.chatBotBaseUrl + this.avgBotConversationTime)
+    return this.http.get(this.chatBotBaseUrl + this.avgBotConversationTime + `?bot_id=${environment.bot_id}&filter_days=${localStorage.getItem("filterDays")}`)
   }
   GetBotEsclationRate() {
-    return this.http.get(this.chatBotBaseUrl + this.botEsclationRate)
+    return this.http.get(this.chatBotBaseUrl + this.botEsclationRate + `?bot_id=${environment.bot_id}&filter_days=${localStorage.getItem("filterDays")}`)
   }
   GetAvgWaitTime() {
-    return this.http.get(this.chatBotBaseUrl + this.avgWaitTime)
+    return this.http.get(this.chatBotBaseUrl + this.avgWaitTime+ `?bot_id=${environment.bot_id}&filter_days=${localStorage.getItem("filterDays")}`)
   }
   GetSentimentAnalysis() {
-    return this.http.get(this.chatBotBaseUrl + this.sentimentAnalysis)
+    return this.http.get(this.chatBotBaseUrl + this.sentimentAnalysis + `?bot_id=${environment.bot_id}&filter_days=${localStorage.getItem("filterDays")}`)
   }  
   GetTagsAnalatics() {
-    return this.http.get(this.chatBotBaseUrl + this.tagsAnalatics)
+    return this.http.get(this.chatBotBaseUrl + this.tagsAnalatics+ `?bot_id=${environment.bot_id}&filter_days=${localStorage.getItem("filterDays")}`)
   }
   GetPeakHours() {
     return this.http.get(this.chatBotBaseUrl + this.peakHours)
   }
   TotalToken() {
-    return this.http.get(this.chatBotBaseUrl + this.totalToken)
+    return this.http.get(this.chatBotBaseUrl + this.totalToken+ `?bot_id=${environment.bot_id}&filter_days=${localStorage.getItem("filterDays")}`)
   }
   AvgToken() {
-    return this.http.get(this.chatBotBaseUrl + this.avgToken)
+    return this.http.get(this.chatBotBaseUrl + this.avgToken+ `?bot_id=${environment.bot_id}&filter_days=${localStorage.getItem("filterDays")}`)
   }
   TimeoutCount() {
-    return this.http.get(this.chatBotBaseUrl + this.timeoutCount)
+    return this.http.get(this.chatBotBaseUrl + this.timeoutCount+ `?bot_id=${environment.bot_id}&filter_days=${localStorage.getItem("filterDays")}`)
   }
   TokenPerDay() {
     return this.http.get(this.chatBotBaseUrl + this.tokenPerDay)
@@ -73,19 +73,19 @@ export class AnalyticsService {
   }
 
   ConversationOverTimeData(botId:any){
-    return this.http.get(this.chatBotBaseUrl + this.conversationOverTime + `?bot_id=${environment.bot_id}&filter_days=7`)
+    return this.http.get(this.chatBotBaseUrl + this.conversationOverTime + `?bot_id=${environment.bot_id}&filter_days=${localStorage.getItem("filterDays")}`)
     // return this.http.get('http://52.77.162.250:5005/analytics/conversations_over_time?bot_id=7&filter_days=7')
   }
 
   GethumanTransferRate(){
-    return this.http.get(this.chatBotBaseUrl + this.humanTransferRate + `?bot_id=${environment.bot_id}&filter_days=7`)
+    return this.http.get(this.chatBotBaseUrl + this.humanTransferRate + `?bot_id=${environment.bot_id}&filter_days=${localStorage.getItem("filterDays")}`)
   }
 
   GetAverageTokenPerChat(){
-    return this.http.get(this.chatBotBaseUrl + this.averageTokenPerChat + `?bot_id=${environment.bot_id}&filter_days=7`)
+    return this.http.get(this.chatBotBaseUrl + this.averageTokenPerChat + `?bot_id=${environment.bot_id}&filter_days=${localStorage.getItem("filterDays")}`)
   }
 
   GetTotalBotSessionsOvertime(){
-    return this.http.get(this.chatBotBaseUrl + this.totalBotSessionsOvertime + `?bot_id=${environment.bot_id}&filter_days=7`)
+    return this.http.get(this.chatBotBaseUrl + this.totalBotSessionsOvertime + `?bot_id=${environment.bot_id}&filter_days=${localStorage.getItem("filterDays")}`)
   }
 }

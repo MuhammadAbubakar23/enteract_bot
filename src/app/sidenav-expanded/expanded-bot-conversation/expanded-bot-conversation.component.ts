@@ -61,7 +61,7 @@ export class ExpandedBotConversationComponent {
   }
 
   ngOnInit(): void {
-    // debugger
+    // 
     // this.chatVisibilityService.refreshHistoryArray
     this.getChatBotHistory();
     this.chatVisibilityService.thirdActiveHistory$.subscribe((obj: any) => {
@@ -75,7 +75,7 @@ export class ExpandedBotConversationComponent {
 
     this.interval = setInterval(() => {
       this.getChatBotHistoryonRefresh();
-    }, 15000)
+    }, 5000)
   }
   // updatevalue(string: any) {
 
@@ -107,6 +107,7 @@ export class ExpandedBotConversationComponent {
 
   
   toggleChatVisibility(clickedItem: any) {
+    debugger
     // this.activechatBotHistory.find((a:any)=>a.session_id === clickedItem.session_id).active = !clickedItem.active;
     // clickedItem.active = !clickedItem.active;
     this.chatVisibilityService.notifyNewChatIdHistory(clickedItem);
@@ -168,6 +169,7 @@ export class ExpandedBotConversationComponent {
       })
     },
       (error: any) => {
+        this.activechatBotHistory=[]
         //alert('Service unavailable');
       })
 

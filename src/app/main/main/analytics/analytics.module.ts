@@ -9,6 +9,7 @@ import { SentimentsAndTagsComponent } from './components/sentiments-and-tags/sen
 import { TokensComponent } from './components/tokens/tokens.component';
 import { ThousandSuffPipe } from './Pipe/thousand-suff.pipe';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { AiDashboardComponent } from './components/ai-dashboard/ai-dashboard.component';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     BotKpiComponent,
     SentimentsAndTagsComponent,
     TokensComponent,
-    ThousandSuffPipe
+    ThousandSuffPipe,
+    AiDashboardComponent
   ],
   imports: [
     CommonModule,

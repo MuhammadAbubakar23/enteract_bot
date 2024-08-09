@@ -100,7 +100,7 @@ export class ChatBotHistoryComponent implements OnInit {
   }
 
   // getHistoryDetails(data: any) {
-  //   debugger
+  //   
   //   this._spinner.show('chat-history');
   //   return this._botS.ChatHistory({ 'slug': data.slug }).pipe(
   //     exhaustMap((res: any) => {

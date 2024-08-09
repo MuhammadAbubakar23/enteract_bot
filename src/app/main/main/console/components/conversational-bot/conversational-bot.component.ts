@@ -91,9 +91,9 @@ export class ConversationalBotComponent implements OnInit {
     this.editButtonClicked = true
     const currentBot = this.bots.find(bot=> bot.workspace_id == this.workspace_id);
     this.ValueSettingServiceService.setEditFormValues(currentBot, workspace_id);
-    debugger
+    
     this.loadConfigComponent();
-    // debugger
+    // 
     // this.conversationalBotForm.get('botName')?.setValue(currentBot.workspace_name);
     // this.conversationalBotForm.get('LLM')?.setValue(currentBot.llm);
     // this.conversationalBotForm.get('llmApiKey')?.setValue(currentBot.llm_api_key);
@@ -193,7 +193,7 @@ export class ConversationalBotComponent implements OnInit {
       this.spinner.hide()
       this.currentToken = res.token;
       this.tokenExpiryDate = this.convertToOriginalFormat(res.expiry);
-      debugger
+      
       this.tokenData = res;
     },
     (error:any)=>{
@@ -207,7 +207,7 @@ export class ConversationalBotComponent implements OnInit {
 
   createToken(){
     const formData = new FormData();
-    debugger
+    
     const formattedDate = this.convertDate(this.tokenExpiryDate);
     formData.append('bot_id', "1");
     // formData.append('workspace_id', String(this.workspace_id));
@@ -231,7 +231,7 @@ export class ConversationalBotComponent implements OnInit {
   }
 
   convertToOriginalFormat(formattedDate: string): string {
-    debugger
+    
     const [datePart, timePart] = formattedDate.split(' ');
     const [year, month, day] = datePart.split('-').map(Number);
     const [hours, minutes, seconds] = timePart.split(':').map(Number);

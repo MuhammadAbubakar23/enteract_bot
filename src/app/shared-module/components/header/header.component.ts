@@ -30,13 +30,17 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {
     this.username = localStorage.getItem('username') || "";
-    this.initial=localStorage.getItem('initial') || "";
+    this.initial = localStorage.getItem('initial') || "";
 
-    this._headerService.currentHeaderData.subscribe((data:any) => {
+    this._headerService.currentHeaderData.subscribe((data: any) => {
       this.headerData = data;
-      console.log("header Date===>", data)
-    });
 
+    });
+    this.sharedService.showChatWidget$.subscribe((value) => {
+      if (value != null && value !== undefined) {
+        this.isWidget = value;
+      }
+    })
 
   }
 

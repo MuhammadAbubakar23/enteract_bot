@@ -24,6 +24,7 @@ export class ExpandedAnalyticsComponent {
     { DisplayName: "Bot KPI's", RouteName: "analytics/bot-kpi", expanded: false, isChild: false, class:"fa-light fa-calendar pe-2", Children:[]},
     { DisplayName: "Sentiments and Tags", RouteName: "analytics/sentiments-and-tags", expanded: false, isChild: false, class:"fa-light fa-eye-slash pe-2",Children:[] },
     { DisplayName: "Tokens", RouteName: "analytics/tokens", expanded: false , isChild: false, class:"fa-light fa-upload pe-2",Children:[]},
+    { DisplayName: "Ai Dashboard", RouteName: "analytics/ai-dashboard", expanded: false , isChild: false, class:"fa-light fa-chart-line-up pe-2",Children:[]},
   ];
 
   constructor(private sidenavService: SidenavService, private chatVisibilityService : ChatVisibilityService, private route: ActivatedRoute, private router: Router) {

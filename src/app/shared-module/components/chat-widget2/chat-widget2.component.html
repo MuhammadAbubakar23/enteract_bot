@@ -61,8 +61,11 @@
                         <div class="time">{{getCurrentTime()}}</div>
                       </div>
                       <div class="messagebubble">
-                        Hi! I'm enteract.bot 😎 Nice to meet you! 👋
+                        Hi! I'm enteract.bot 😎 Nice to meet you! 👋 Please don't hesitate to ask us anything or share your feedback.
                       </div>
+                      <!-- <div class="messagebubble">
+                        Please don't hesitate to ask us anything or share your feedback.
+                      </div> -->
                     </div>
                   </div>
 
@@ -82,7 +85,7 @@
                             <div *ngIf="msg.type === 'ai-agent' || msg.type == 'human-agent'" class="e_chat-icon">
                               <img src="../../../../assets/Images/ebot.svg" />
                             </div>
-                            {{ msg.type === "human" ? "You" : msg.type=== "ai-agent" ? "enteract.bot" : "Human Agent"}}
+                            {{ msg.type === "human" ? "You" : msg.type=== "ai-agent" ? "enteract.bot" : msg.type === "human-agent"?msg.agent_name || "Human Agent" :"Human Agent"}}
                           </div>
                           <div class="time">
                             {{ msg.timestamp }}
@@ -171,7 +174,7 @@
                 </ng-container> -->
 
                   <form [formGroup]="chatForm">
-                    <ul class="list-inline d-flex align-items-center justify-content-center listbtns">
+                    <ul class="list-inline d-flex align-items-center justify-content-center listbtns" *ngIf="buttonAlreadyClicked == false">
                       
                         <li class="list-inline-item">
                           <button class="btn btn-white px-3 rounded-pill bg-white " (click)="chatForm.controls['message'].setValue('Good Bye'); submitMessage('/bye')"><i class="fa-solid fa-heart me-2 radical"></i> Good Bye</button>
@@ -184,7 +187,7 @@
                     
                   </form>
                 </section>
-                <footer>
+                <footer *ngIf="conversation_end==0">
                   <form [formGroup]="chatForm">
                     <input
                       class="form-control"
@@ -198,6 +201,15 @@
                       <i class="fa-light fa-paper-plane-top"></i>
                     </button>
                   </form>
+                </footer>
+
+                <footer *ngIf="conversation_end==1">
+                  <ul class="list-inline d-flex align-items-center justify-content-center listbtns">
+                    <li class="list-inline-item">
+                      <div class = "justify-content-center">Conversation ended by Agent</div>
+                    </li>            
+                  </ul>
+                  
                 </footer>
               </div>
             </div>

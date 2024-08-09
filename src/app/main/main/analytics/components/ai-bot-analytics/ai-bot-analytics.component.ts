@@ -12,11 +12,12 @@ import { NgxSpinnerService } from 'ngx-spinner';
 })
 export class AiBotAnalyticsComponent {
   totalBot: any
+  filterDays:any = 7;
   fallRate: any;
   sessionTime: any;
   botConversation: any;
   sessiontimeout: any;
-  fallbackRateCount: any;
+  fallbackRateCount: any = 0;
   avgTokenCount: any;
   totalTokenCount: any;
   tokenPerDayCount: any;
@@ -31,6 +32,8 @@ export class AiBotAnalyticsComponent {
   humanTransferRateData: any;
   averageTokenPerChat: any;
   totalBotSessionsOvertimeData: any;
+  timeSpan: any = "week";
+selectedTimeLabel: any ="Last 7 days";
   constructor(private _hS: HeaderService, private _analytics: AnalyticsService, private spinner: NgxSpinnerService) {
     _hS.updateHeaderData({
       title: 'Ai Bot Analytics',
@@ -40,7 +43,23 @@ export class AiBotAnalyticsComponent {
     })
   }
   ngOnInit(): void {
-    //New
+    this.refreshCharts()
+    localStorage.setItem("filterDays", this.filterDays);
+    localStorage.setItem("timeSpan", this.timeSpan);
+  }
+  get getTimeSpan(){
+    return localStorage.getItem("timeSpan")
+  }
+  refreshFilters(NumberOfDays:any, timeSpan:any, selectedTimeLabel:any){
+    this.filterDays = NumberOfDays;
+    this.timeSpan = timeSpan;
+    this.selectedTimeLabel = selectedTimeLabel;
+    // const filterDays = { filterDays: this.filterDays, timeSpan: this.timeSpan };
+    localStorage.setItem("filterDays", this.filterDays);
+    localStorage.setItem("timeSpan", this.timeSpan);
+    this.refreshCharts();
+  }
+  refreshCharts(){
     this.HumanTransferRate();
     this.AverageTokenPerChat();
     this.TotalConversation();
@@ -55,30 +74,14 @@ export class AiBotAnalyticsComponent {
     this.TimeoutCount();
     this.TokenPerDay();
     this.PeakHours();
-    // this.FallBackCount();
-
-    //Old
     this.conversationOverTime();
-    // setTimeout(() => {
-    // this.botEscalationRate();
-    // })
-    // this.botSessionTime();
     this.totalBotSessionOvertime();
-    // this.averageToken();
-    //this.waitTime();
-    //this.abadonRate();
-    //this.fullBackRate();
-    // this.heatMap();
-    // this.fallBackRate();
-
-
-
   }
   TotalConversation() {
     this.spinner.show()
     this._analytics.GetTotalBotConversation().subscribe(
       (res: any) => {
-        this.botConversation = res.detail;
+        this.botConversation = res;
         this.spinner.hide()
       },
       (error: any) => {
@@ -151,7 +154,7 @@ export class AiBotAnalyticsComponent {
     this.spinner.show()
     this._analytics.GetAvgBotConversationTime().subscribe(
       (res: any) => {
-        this.avgBotConversationTime = res.detail;
+        this.avgBotConversationTime = res;
         this.spinner.hide()
       },
       (error: any) => {
@@ -164,7 +167,7 @@ export class AiBotAnalyticsComponent {
     this.spinner.show()
     this._analytics.GetBotEsclationRate().subscribe(
       (res: any) => {
-        this.botEsclationRate = res.detail;
+        this.botEsclationRate = res;
         this.spinner.hide()
       },
       (error: any) => {
@@ -174,13 +177,13 @@ export class AiBotAnalyticsComponent {
     );
   }
   getIntegerPart(rate: number): number {
-    return Math.floor(rate > 0 ? rate : 0);
+    return parseFloat((rate > 0 ? rate : 0).toFixed(2));
   }
   AvgWaitTime() {
     this.spinner.show()
     this._analytics.GetAvgWaitTime().subscribe(
       (res: any) => {
-        this.avgWaitTime = res.detail;
+        this.avgWaitTime = res;
         this.spinner.hide()
       },
       (error: any) => {
@@ -193,7 +196,7 @@ export class AiBotAnalyticsComponent {
     this.spinner.show()
     this._analytics.GetSentimentAnalysis().subscribe(
       (res: any) => {
-        this.sentimentAnalysis = res.detail;
+        this.sentimentAnalysis = res;
         this.sentimentsBOTCsat();
         this.spinner.hide()
       },
@@ -279,7 +282,7 @@ export class AiBotAnalyticsComponent {
         // const countData = res.count
         // const countKey = Object.keys(countData)[0];
         // this.sessiontimeout = countData[countKey];;
-        this.sessiontimeout = res.detail;
+        this.sessiontimeout = res;
         this.spinner.hide()
       },
       (error: any) => {
@@ -401,6 +404,9 @@ export class AiBotAnalyticsComponent {
         response.detail.Saturday[0],
         response.detail.Sunday[0]
       ];
+      counts.forEach((count:any)=>{
+        this.fallbackRateCount = this.fallbackRateCount+count;
+      })
       setTimeout(() => {
         this.botEscalationRate(counts);
       })
@@ -618,7 +624,7 @@ export class AiBotAnalyticsComponent {
     const timeoutData = session_timeout;
     const fallbackData = human_transfer_rate;
     const averageHandleTime = avg_handle_time
-    debugger
+    
     var chartDom = document.getElementById('sessionTime');
     this.sessionTime = echarts.init(chartDom);
     const option = {
@@ -681,24 +687,24 @@ export class AiBotAnalyticsComponent {
     var chartDom = document.getElementById('analysisCsat');
     var myChart = echarts.init(chartDom);
     const sentiments = this.sentimentAnalysis;
-    const totalSentiments = sentiments?.Positive + sentiments?.Negative + sentiments?.Neutral;
+    const totalSentiments = sentiments?.positive + sentiments?.negative + sentiments?.neutral;
     const data = [
       {
-        value: sentiments?.Positive,
+        value: sentiments?.positive,
         name: 'Positive',
         itemStyle: {
           color: '#90EE90'
         }
       },
       {
-        value: sentiments?.Negative,
+        value: sentiments?.negative,
         name: 'Negative',
         itemStyle: {
           color: '#fa7373'
         }
       },
       {
-        value: sentiments?.Neutral,
+        value: sentiments?.neutral,
         name: 'Neutral',
         itemStyle: {
           color: '#f7c465'
@@ -836,13 +842,13 @@ export class AiBotAnalyticsComponent {
     this._analytics.GetAverageTokenPerChat().subscribe((response: any) => {
       this.averageTokenPerChat = response.detail
       const counts = [
-        response.detail.Monday[0],
-        response.detail.Tuesday[0],
-        response.detail.Wednesday[0],
-        response.detail.Thursday[0],
-        response.detail.Friday[0],
-        response.detail.Saturday[0],
-        response.detail.Sunday[0]
+        parseFloat(response.detail.Monday[0].toFixed(2)),
+        parseFloat(response.detail.Tuesday[0].toFixed(2)),
+        parseFloat(response.detail.Wednesday[0].toFixed(2)),
+        parseFloat(response.detail.Thursday[0].toFixed(2)),
+        parseFloat(response.detail.Friday[0].toFixed(2)),
+        parseFloat(response.detail.Saturday[0].toFixed(2)),
+        parseFloat(response.detail.Sunday[0].toFixed(2))
       ];
       // this.botEscalationRate(counts);
       setTimeout(() => {
@@ -906,10 +912,10 @@ export class AiBotAnalyticsComponent {
 
     // prettier-ignore
     const hours = [
-      '12a', '1a', '2a', '3a', '4a', '5a', '6a',
-      '7a', '8a', '9a', '10a', '11a',
-      '12p', '1p', '2p', '3p', '4p', '5p',
-      '6p', '7p', '8p', '9p', '10p', '11p'
+      '0', '1', '2', '3', '4', '5', '6',
+      '7', '8', '9', '10', '11',
+      '12', '13', '14', '15', '16', '17',
+      '18', '19', '20', '21', '22', '23'
     ];
     // prettier-ignore
     const days = [

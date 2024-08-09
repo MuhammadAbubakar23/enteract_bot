@@ -40,10 +40,23 @@
         <div class="col-lg-6 col-sm-6">
           
           <div class="right-header-components">
-            <span *ngIf="headerData.title==='Bot Interactions' || headerData.title==='Human Interactions'"
-         class="iconButton medium iconHover notification me-2 showbots" data-bs-toggle="button" 
-         data-bs-placement="bottom" data-bs-title="Bot" aria-pressed="false" (click)="showChatWidget()">
-          <i class="fa-light fa-comments"></i></span>
+            <span
+          *ngIf="
+            headerData.title === 'Bot Interactions' ||
+            headerData.title === 'Human Interactions'
+          "
+          [ngClass]="{
+            'iconButton medium iconHover notification me-2 showbots': true,
+            active: isWidget
+          }"
+          data-bs-toggle="button"
+          data-bs-placement="bottom"
+          data-bs-title="Bot"
+          aria-pressed="false"
+          (click)="showChatWidget()"
+        >
+          <i class="fa-light fa-comments"></i
+        ></span>
 <!--         
           <div class="dropdown dropdown-center create-button me-3 w-auto">
             <button class="iconButton medium notification iconHover custom-fa-col" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">

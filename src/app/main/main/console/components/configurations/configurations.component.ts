@@ -67,7 +67,7 @@ export class ConfigurationsComponent implements OnInit {
     })
   }
   getBotDetails(){
-    debugger
+    
     this.botsForm.value.botId
     const res = {
       activeHoursDetails: [
@@ -96,7 +96,7 @@ export class ConfigurationsComponent implements OnInit {
   // patchFormValues(): void {
   //   this.commonService.GetBotConfigById(this.currentId, this.type).subscribe(
   //     (res: any) => {
-  //       debugger
+  //       
   //       this.botsForm.get('contentType')?.setValue(res.contentType);
   //       this.getContentTypes();
   //       this.botsForm.patchValue({
@@ -124,7 +124,7 @@ export class ConfigurationsComponent implements OnInit {
   }
 
   getContentTypes(){
-    debugger
+    
     var channel:any;
     if(this.botsForm.value.platform){
       channel = this.contentTypes.find((x:any)=> x.id == this.botsForm.value.platform );
@@ -190,7 +190,7 @@ export class ConfigurationsComponent implements OnInit {
   saveForm(){
     
     console.log("d['activeFrom']",typeof(this.Days.controls[0].value['activeFrom']))
-    debugger
+    
       this.botsForm
     //   this.commonService.AddBotConfig(this.baseUrl, this.botsForm.value).subscribe(
     //   (res: any) => {
