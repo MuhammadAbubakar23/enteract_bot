@@ -27,7 +27,7 @@ selectedTimeLabel: any ="Last 7 days";
       title: 'Conversation Analytics',
       tabs: [{ title: '', url: '', isActive: true }],
       isTab: false,
-      class: "fa-light fa-chart-line-up"
+      class: "fal fa-cubes pe-2"
     })
   }
   ngOnInit(): void {

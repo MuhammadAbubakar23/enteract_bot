@@ -20,7 +20,7 @@ selectedTimeLabel: any ="Last 7 days";
       title: 'Tokens',
       tabs: [{ title: '', url: '', isActive: true }],
       isTab: false,
-      class: "fa-light fa-chart-line-up"
+      class: "fa-light fa-upload pe-2"
     })
   }
   ngOnInit(): void {

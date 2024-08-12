@@ -17,6 +17,7 @@ export const environment = {
         botEsclationRate:`analytics/bot_escalation_rate`,
         avgWaitTime:`analytics/avg_wait_time`,
         sentimentAnalysis:`analytics/sentiments_analysis_bot_csat`,
+        humanAgentCsat:'analytics/sentiments_analysis_agent_csat',
         tagsAnalatics:`analytics/tags_analytics`,
         peakHours:'analytics/peak_hours?bot_id=1',
         totalToken:`analytics/total_tokens`,

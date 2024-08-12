@@ -15,6 +15,7 @@ export class AnalyticsService {
   botEsclationRate = environment.link.analytics.botEsclationRate
   avgWaitTime = environment.link.analytics.avgWaitTime
   sentimentAnalysis = environment.link.analytics.sentimentAnalysis
+  humanAgentCsat = environment.link.analytics.humanAgentCsat
   tagsAnalatics = environment.link.analytics.tagsAnalatics
   peakHours = environment.link.analytics.peakHours
   totalToken = environment.link.analytics.totalToken
@@ -48,6 +49,9 @@ export class AnalyticsService {
   GetSentimentAnalysis() {
     return this.http.get(this.chatBotBaseUrl + this.sentimentAnalysis + `?bot_id=${environment.bot_id}&filter_days=${localStorage.getItem("filterDays")}`)
   }  
+  GetHumanAgentCsat(){
+    return this.http.get(this.chatBotBaseUrl + this.humanAgentCsat + `?bot_id=${environment.bot_id}&filter_days=${localStorage.getItem("filterDays")}`)
+  }
   GetTagsAnalatics() {
     return this.http.get(this.chatBotBaseUrl + this.tagsAnalatics+ `?bot_id=${environment.bot_id}&filter_days=${localStorage.getItem("filterDays")}`)
   }

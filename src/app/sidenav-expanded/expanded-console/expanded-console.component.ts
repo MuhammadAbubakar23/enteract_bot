@@ -37,7 +37,7 @@ export class ExpandedConsoleComponent {
     { DisplayName: "User Management", RouteName: "console/users", expanded: false , isChild: false, class:"fal fa-users pe-2",  Children: []},
     { DisplayName: "Tags", RouteName: "console/tags", expanded: false, isChild: false, class:"fal fa-tags pe-2",Children: [] },
     { DisplayName: "Knowledge Base", RouteName: "console/knowledge-base", expanded: false , isChild: false, class:"fal fa-book-open pe-2",Children: []},
-    { DisplayName: "Settings", RouteName: "console/settings", expanded: false, isChild: false, class:"fa-light fa-gear pe-2" ,Children: []}
+    // { DisplayName: "Settings", RouteName: "console/settings", expanded: false, isChild: false, class:"fa-light fa-gear pe-2" ,Children: []}
 
   ];
 

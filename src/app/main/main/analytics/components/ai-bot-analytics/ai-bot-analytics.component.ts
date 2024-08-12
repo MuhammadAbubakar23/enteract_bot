@@ -39,7 +39,7 @@ selectedTimeLabel: any ="Last 7 days";
       title: 'Ai Bot Analytics',
       tabs: [{ title: '', url: '', isActive: true }],
       isTab: false,
-      class: "fa-light fa-chart-line-up"
+      class: "fal fa-eye pe-2"
     })
   }
   ngOnInit(): void {
@@ -398,6 +398,7 @@ selectedTimeLabel: any ="Last 7 days";
 
   HumanTransferRate() {
     this.spinner.show()
+    this.fallbackRateCount = 0;
     this._analytics.GethumanTransferRate().subscribe((response: any) => {
       this.spinner.hide()
       this.humanTransferRateData = response.detail;

@@ -10,6 +10,7 @@ import { AnalyticsService } from '../../service/analytics.service';
 })
 export class SentimentsAndTagsComponent {
   sentimentAnalysis: any;
+  humanAgentCsat:any
   filterDays:any = 7;
   timeSpan: any = "week";
 selectedTimeLabel: any ="Last 7 days";
@@ -18,7 +19,7 @@ selectedTimeLabel: any ="Last 7 days";
       title: 'Sentiments',
       tabs: [{ title: '', url: '', isActive: true }],
       isTab: false,
-      class: "fa-light fa-chart-line-up"
+      class: "fa-light fa-eye-slash pe-2"
     })
   }
   ngOnInit(): void {
@@ -41,7 +42,8 @@ selectedTimeLabel: any ="Last 7 days";
   }
   refreshCharts(){
     this.SentimentAnalysis()
-    this.humanCsat()
+    this.humanCsatApi()
+    // this.humanCsat()
   }
   SentimentAnalysis(){
     this._analytics.GetSentimentAnalysis().subscribe(
@@ -140,46 +142,100 @@ selectedTimeLabel: any ="Last 7 days";
     myChart.setOption(option);
 
   }
+  humanCsatApi(){
+    this._analytics.GetHumanAgentCsat().subscribe(
+      (res: any) => {
+        this.humanAgentCsat = res;
+        this.humanCsat();
+      },
+      (error: any) => {
+        console.error("An error occurred while fetching the bot sentiment analysis:", error);
+
+      }
+    );
+  }
   humanCsat() {
     var chartDom = document.getElementById('humanCsat');
     var myChart = echarts.init(chartDom);
-    var option;
+    const sentiments = this.humanAgentCsat;
+    const totalSentiments = sentiments?.positive + sentiments?.negative + sentiments?.neutral;
+    const data = [
+      {
+        value: sentiments?.positive,
+        name: 'Positive',
+        itemStyle: {
+          color: '#abedd0'
+        }
+      },
+      {
+        value: sentiments?.negative,
+        name: 'Negative',
+        itemStyle: {
+          color: '#ffcccf'
+        }
+      },
+      {
+        value: sentiments?.neutral,
+        name: 'Neutral',
+        itemStyle: {
+          color: '#ffe0b3'
+        }
+      }
+    ];
 
-    option = {
+    var option = {
       tooltip: {
         trigger: 'item'
       },
-
       series: [
         {
-          name: 'Human Agent From',
+          name: 'Sentiments',
           type: 'pie',
           radius: ['40%', '70%'],
           avoidLabelOverlap: false,
           label: {
-            show: false,
-            position: 'center'
+            show: true,
+            position: 'center',
+            formatter: function() {
+              // Apply the thousandSuff logic directly here
+              const formatValue = (value: number): string => {
+                if (value >= 1000000) {
+                  return (value / 1000000).toFixed(1) + 'M';
+                }
+                if (value >= 1000) {
+                  return (value / 1000).toFixed(1) + 'K';
+                }
+                return value.toString();
+              };
+              return `\n${formatValue(totalSentiments)}\n{interaction|Interactions}`;
+            },
+            rich: {
+              interaction: {
+                fontSize: 12,
+                padding: [10, 0, 0, 0]
+              }
+            },
+            fontSize: 20,
+            fontWeight: 'bold'
           },
           emphasis: {
             label: {
-              show: true,
-              fontSize: 15,
-              fontWeight: 'bold'
+              show: false,
+              fontSize: 24,
+              fontWeight: 'bold',
+              formatter: '{c}'
             }
           },
           labelLine: {
             show: false
           },
-          data: [
-            { value: 1048, name: 'Positive',itemStyle: {color: '#abedd0'}},
-            { value: 735, name: 'Negative',itemStyle: {color: '#ffcccf'}},
-            { value: 580, name: 'Neutral',itemStyle: {color: '#ffe0b3'}}
-          ]
+          data: data
         }
       ]
     };
 
-    option && myChart.setOption(option);
+    //option.series[0].label.formatter = `\n${totalSentiments}\n{interaction|Interactions}`;
+    myChart.setOption(option);
 
   }
 }

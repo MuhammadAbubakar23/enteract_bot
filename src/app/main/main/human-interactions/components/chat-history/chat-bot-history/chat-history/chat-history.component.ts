@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
@@ -20,6 +20,7 @@ import { exhaustMap, tap } from 'rxjs/operators';
   providers: [DatePipe]
 })
 export class ChatHistoryComponent implements OnInit {
+  @ViewChild('chatsection') private chatBody?: ElementRef;
 
   @Input() chat: any = { history: [], tags: [] };
   isMinimized: boolean = true;
