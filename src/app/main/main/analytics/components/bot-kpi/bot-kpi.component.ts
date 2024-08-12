@@ -14,12 +14,13 @@ export class BotKpiComponent {
   filterDays:any = 7;
   timeSpan: any = "week";
 selectedTimeLabel: any ="Last 7 days";
-  fallbackRateCount: any = 9;
+  fallbackRateCount: any = 0;
   sessiontimeout: any;
   botEsclationRate: any;
   avgWaitTime: any;
   peakHours: any[] = [];
   totalBotSessionsOvertimeData: any;
+  humanTransferRateData: any;
   constructor(private _hS: HeaderService, private _analytics: AnalyticsService) {
     _hS.updateHeaderData({
       title: 'Bot Kpi',
@@ -57,7 +58,8 @@ selectedTimeLabel: any ="Last 7 days";
     //this.waitTime();
     // this.botSessionTime();
     this.totalBotSessionOvertime();
-    //this.FallBackCount()
+    this.FallBackCount()
+    this.HumanTransferRate()
     this.heatMap();
     this.TimeoutCount()
   }
@@ -121,19 +123,43 @@ selectedTimeLabel: any ="Last 7 days";
   }
 
 
-
+  HumanTransferRate() {
+    // this.spinner.show()
+    this._analytics.GethumanTransferRate().subscribe((response: any) => {
+      // this.spinner.hide()
+      this.humanTransferRateData = response.detail;
+      const counts = [
+        response.detail.Monday[0],
+        response.detail.Tuesday[0],
+        response.detail.Wednesday[0],
+        response.detail.Thursday[0],
+        response.detail.Friday[0],
+        response.detail.Saturday[0],
+        response.detail.Sunday[0]
+      ];
+      counts.forEach((count:any)=>{
+        this.fallbackRateCount = this.fallbackRateCount+count;
+      })
+      // setTimeout(() => {
+      //   this.botEscalationRate(counts);
+      // })
+    })
+  }
 
 
   FallBackCount() {
+    // this.spinner.show()
     this._analytics.FallBackCount().subscribe(
       (res: any) => {
         const countData = res.count
         const countKey = Object.keys(countData)[0];
         this.fallbackRateCount = countData[countKey];;
-
+        //this.fullBackRate();
+        // this.spinner.hide()
       },
       (error: any) => {
         console.error("An error occurred while fetching the bot conversation:", error);
+        // this.spinner.hide()
 
       }
     );

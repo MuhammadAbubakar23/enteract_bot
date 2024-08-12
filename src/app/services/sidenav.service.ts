@@ -18,7 +18,12 @@ export class SidenavService {
   }
 
   getMenus() {
-    return this.http.get(this.baseUrl + "Roles/BotMenuPreviews");
+    if(!localStorage.getItem("BotMenuPreviews")){
+      return this.http.get(this.baseUrl + "Roles/BotMenuPreviews");
+    }
+    else{
+      return JSON.parse(localStorage.getItem("BotMenuPreviews") || '[]')
+    }
   }
 
 }

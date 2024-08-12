@@ -67,5 +67,12 @@
               id="generateButton" style="background-color: grey; color: white;">Cancel
           </a>
       </div>
-  </div>
+    </div>
+    <div class="row" *ngIf="documents==null">
+      <div class="col-6 mb-3 d-flex">
+        <a (click)="routeToCreate()" class="btn btn-default btn-small cancelBtn newbtn"
+            id="generateButton" style="background-color: grey; color: white;">Cancel
+        </a>
+    </div>
+    </div>
   </div>

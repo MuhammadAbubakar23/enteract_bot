@@ -8,11 +8,11 @@ import { TokensComponent } from './components/tokens/tokens.component';
 import { AiDashboardComponent } from './components/ai-dashboard/ai-dashboard.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'ai-bot-analytics', pathMatch: 'full' },
-  { path: 'ai-bot-analytics', component: AiBotAnalyticsComponent },
-  { path: 'conversation-analytics', component: ConversationAnalyticsComponent },
-  { path: 'bot-kpi', component: BotKpiComponent },
-  { path: 'sentiments-and-tags', component: SentimentsAndTagsComponent },
+  { path: '', redirectTo: 'bot-analytics', pathMatch: 'full' },
+  { path: 'bot-analytics', component: AiBotAnalyticsComponent },
+  { path: 'conversation', component: ConversationAnalyticsComponent },
+  { path: 'bot-kpis', component: BotKpiComponent },
+  { path: 'sentiments', component: SentimentsAndTagsComponent },
   { path: 'tokens', component: TokensComponent },
   { path: 'ai-dashboard', component: AiDashboardComponent}
 ];

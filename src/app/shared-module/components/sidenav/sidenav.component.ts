@@ -44,17 +44,23 @@ export class SidenavComponent implements OnInit {
   menus:any =[];
 
   ConsoleRouteName = '/bot/console/bot-management/conversational-bot';
-  activeConsole = false;
+  // activeConsole = false;
   activeIndex = 0;
   isActive = false;
+  analyticsSubMenus: any;
+  consoleSubMenus: any;
   constructor(private sidenavService: SidenavService, private router: Router) { }
   ngOnInit(): void {
     this.getMenus();
     const urlSegments = this.router.url.split('/');
     let moduleSegment = urlSegments[2];
-    this.activeIndex = this.menus.findIndex((item: { RouteName: string; }) => item.RouteName.split('/')[2] === moduleSegment);
-    if(this.activeIndex == -1) this.activeConsole = true;
-    else this.activeConsole = false;
+    let moduleSegment2 = urlSegments.slice(-2).join('/')
+    this.activeIndex = this.menus.findIndex((item:any )=> item.link === moduleSegment);
+    if(this.activeIndex == -1){
+      this.activeIndex = this.menus.findIndex((item:any )=> item.link === moduleSegment2);
+    }
+    // if(this.activeIndex == -1) this.activeConsole = true;
+    // else this.activeConsole = false;
   }
 
   // getMenus() {
@@ -66,26 +72,38 @@ export class SidenavComponent implements OnInit {
     this.isActive = true;
     this.sidenavService.updateMessage(name);
 
-    if(name == 'Console'){
-      this.activeConsole = true;
-    }
-    else this.activeConsole = false;
+    // if(name == 'Console'){
+    //   this.activeConsole = true;
+    // }
+    // else this.activeConsole = false;
     localStorage.setItem('analyticActiveParentIndex', '0');
     localStorage.setItem('consoleActiveParentIndex', '0');
   }
 
 
   getMenus() {
-    this.sidenavService.getMenus().subscribe(
-      (res: any) => {
-        if (res){
-          this.menus = res;
-          //this.menus = this.menus.filter((item: any) => item.ParentId === null);
-        }
-      }, (error: any) => {
-        console.error("Internal Server Error", error);
-        const toasterObject = { isShown: true, isSuccess: false, toastHeading: "Failed", toastParagrahp: "Internal Server Error!" }
-    });
+    if(!localStorage.getItem("BotMenuPreviews")){
+      this.sidenavService.getMenus()?.subscribe(
+        (res: any) => {
+          if (res){
+            this.menus = res;
+            this.analyticsSubMenus = this.menus.find( (menu:any) => menu.name == "Analytics")
+            this.consoleSubMenus = this.menus.find( (menu:any) => menu.name == "Console")
+            localStorage.setItem("BotMenuPreviews",JSON.stringify(res))
+            localStorage.setItem("analyticsSubMenus", JSON.stringify(this.analyticsSubMenus?.subMenu))
+            localStorage.setItem("consoleSubMenus", JSON.stringify(this.consoleSubMenus?.subMenu))
+            //this.menus = this.menus.filter((item: any) => item.ParentId === null);
+          }
+        }, (error: any) => {
+          console.error("Internal Server Error", error);
+          const toasterObject = { isShown: true, isSuccess: false, toastHeading: "Failed", toastParagrahp: "Internal Server Error!" }
+      });
+    }
+    else{
+      this.menus = JSON.parse(localStorage.getItem("BotMenuPreviews")||'[]')
+      this.analyticsSubMenus = this.menus.find( (menu:any) => menu.name == "Analytics")
+      this.consoleSubMenus = this.menus.find( (menu:any) => menu.name == "Console")
+    }
 
   }
 }

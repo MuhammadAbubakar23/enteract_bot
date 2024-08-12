@@ -59,7 +59,7 @@ export class LoginComponent implements OnInit {
 
             // const decodeToken = this._aS.decodeToken(res.data);
             // console.log(decodeToken);
-            this.router.navigateByUrl('/bot/analytics/ai-bot-analytics');
+            this.router.navigateByUrl('/bot/analytics/bot-analytics');
             const toasterObject = { isShown: true, isSuccess: true, toastHeading: "Success", toastParagrahp: "Login Successfully!" }
             this._toastS.success("Login Successfully!", "Success",{
               timeOut: 3000,

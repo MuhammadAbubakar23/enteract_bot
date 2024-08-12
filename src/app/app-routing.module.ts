@@ -9,7 +9,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'bot/analytics/ai-bot-analytics',
+    redirectTo: 'bot/analytics/bot-analytics',
     pathMatch: 'full',
   },
   {

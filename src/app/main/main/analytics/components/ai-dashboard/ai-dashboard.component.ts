@@ -11,9 +11,9 @@ import * as echarts from 'echarts';
 export class AiDashboardComponent implements OnInit {
   sessionChart: any;
   totalSessionsData: any;
-  filterDays:any = 7;
+  filterDays: any = 7;
   timeSpan: any = "week";
-  selectedTimeLabel: any ="Last 7 days";
+  selectedTimeLabel: any = "Last 7 days";
   constructor(private _hS: HeaderService, private _analytics: AnalyticsService, private spinnerServerice: NgxSpinnerService) {
     _hS.updateHeaderData({
       title: 'Dashboard',
@@ -25,7 +25,7 @@ export class AiDashboardComponent implements OnInit {
   ngOnInit(): void {
     this.refreshCharts();
   }
-  refreshFilters(NumberOfDays:any, timeSpan:any, selectedTimeLabel:any){
+  refreshFilters(NumberOfDays: any, timeSpan: any, selectedTimeLabel: any) {
     this.filterDays = NumberOfDays;
     this.timeSpan = timeSpan;
     this.selectedTimeLabel = selectedTimeLabel;
@@ -34,7 +34,7 @@ export class AiDashboardComponent implements OnInit {
     localStorage.setItem("timeSpan", this.timeSpan);
     this.refreshCharts();
   }
-  refreshCharts(){
+  refreshCharts() {
     this.totalMessages();
     this.sessionExpiryChart();
     this.messagesChart();
@@ -83,6 +83,16 @@ export class AiDashboardComponent implements OnInit {
           return `${date}<br/>Conversations: ${conversationCount}`;
         }
       },
+      legend: {
+        data: ['All Chatbots'],
+        icon: 'square',
+      },
+      grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+      },
       xAxis: {
         type: 'category',
         boundaryGap: false,
@@ -94,6 +104,7 @@ export class AiDashboardComponent implements OnInit {
       series: [
         {
           data: counts,
+          name: 'All Chatbots',
           type: 'line',
           areaStyle: {
             color: 'rgba(0, 123, 255, 0.5)'
@@ -222,23 +233,23 @@ export class AiDashboardComponent implements OnInit {
     var myChart = echarts.init(chartDom);
     var option;
     var data = [
-      { value: 1048, name: 'Expired Session' },
-      { value: 735, name: 'Agent Takeover' },
+      { value: 300, name: 'Expired Session' },
+      { value: 484, name: 'Agent Takeover' },
       { value: 580, name: 'Go to Agent Action' },
-      { value: 484, name: 'Close session action' },
-      { value: 300, name: 'user closed session' }
+      { value: 735, name: 'Close session action' },
+      { value: 1048, name: 'user closed session' }
     ];
     var total = data.reduce((sum, item) => sum + item.value, 0);
 
     option = {
       title: {
-        text: `${total}\nTotal Sessions`,
+        text: `${total}\nSessions`,
         left: 'center',
         top: '30%',
         textAlign: 'center',
         textStyle: {
-          fontSize: 16,
-          fontWeight: 'lineHeight',
+          fontSize: 18,
+          fontWeight: 'bold',
           lineHeight: 24
         }
       },
@@ -247,8 +258,8 @@ export class AiDashboardComponent implements OnInit {
         {
           name: 'Access From',
           type: 'pie',
-          radius: ['50%', '70%'],
-          center: ['41%', '44%'],
+          radius: ['55%', '80%'],
+          center: ['40.5%', '44%'],
 
           avoidLabelOverlap: false,
           label: {
@@ -277,18 +288,18 @@ export class AiDashboardComponent implements OnInit {
   }
 
   messagesChart() {
-    var chartDom = document.getElementById('main');
+    var chartDom = document.getElementById('main2');
     var myChart = echarts.init(chartDom);
     var option;
     option = {
       title: {
-        text: '2,466\nExchanged Messages',
+        text: '900\n Messages',
         left: 'center',
         top: '50%',
         textAlign: 'center',
         textStyle: {
-          fontSize: 14,
-          fontWeight: 'lineHeight',
+          fontSize: 16,
+          fontWeight: 'bold',
           lineHeight: 24
         }
       },
@@ -299,23 +310,25 @@ export class AiDashboardComponent implements OnInit {
           },
           name: 'Access From',
           type: 'pie',
-          radius: ['60%', '70%'],
-          center: ['40%', '70%'],
+          radius: ['90%', '100%'],
+          center: ['43.5%', '70%'],
           startAngle: 180,
           endAngle: 360,
           data: [
             {
-              value: 1048,
+              value: 500,
               name: 'Search Engine',
               itemStyle: {
-                color: 'rgba(255, 124, 195, 1)' // Adjust alpha value to 1 for full opacity
+                color: 'rgba(163, 161, 251, 1)'
+                // Adjust alpha value to 1 for full opacity
               }
             },
             {
-              value: 735,
+              value: 400,
               name: 'Direct',
               itemStyle: {
-                color: 'rgba(163, 161, 251, 1)' // Adjust alpha value to 1 for full opacity
+                color: 'rgba(255, 124, 195, 1)'
+                // Adjust alpha value to 1 for full opacity
               }
             }
           ]
@@ -334,13 +347,13 @@ export class AiDashboardComponent implements OnInit {
     var option;
     option = {
       title: {
-        text: '1500\nTotal Users',
+        text: '113\nTotal Users',
         left: 'center',
         top: '50%',
         textAlign: 'center',
         textStyle: {
-          fontSize: 14,
-          fontWeight: 'lineHeight',
+          fontSize: 16,
+          fontWeight: 'Bold',
           lineHeight: 24
         }
       },
@@ -351,20 +364,20 @@ export class AiDashboardComponent implements OnInit {
           },
           name: 'Access From',
           type: 'pie',
-          radius: ['60%', '70%'],
-          center: ['45%', '70%'],
+          radius: ['90%', '100%'],
+          center: ['43%', '70%'],
           startAngle: 180,
           endAngle: 360,
           data: [
             {
-              value: 1048,
+              value: 100,
               name: 'Search Engine',
               itemStyle: {
                 color: 'rgba(60,196,128,255)' // Adjust alpha value to 1 for full opacity
               }
             },
             {
-              value: 735,
+              value: 13,
               name: 'Direct',
               itemStyle: {
                 color: 'rgba(84,176,242,255)'

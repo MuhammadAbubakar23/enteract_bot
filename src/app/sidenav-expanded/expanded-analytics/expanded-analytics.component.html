@@ -11,19 +11,19 @@
         class="list-group-item list-group-item-action"
         [ngClass]="{
           'collapsed': expandedIndex !== i,
-          'background': activeParentIndex === i && menu.isChild == false
+          'background': activeParentIndex === i && menu.subMenu == null
         }"
         *ngFor="let menu of subMenus; let i = index"
       >
         <a
           class="d-flex align-items-center"
-          [routerLink]="menu['RouteName'] || null"
+          [routerLink]="menu.link ? ['analytics', menu.link] : null"
           [ngClass]="menu.isChild ? 'chevron-icon' : ''"
           type="button"
           (click)="toggleCollapse(i)"
           >
-          <i [ngClass]="menu.class"></i>
-          {{ menu['DisplayName'] }}
+          <i [ngClass]="menu.icon"></i>
+          {{ menu['name'] }}
         </a>
       
         <!-- <ul

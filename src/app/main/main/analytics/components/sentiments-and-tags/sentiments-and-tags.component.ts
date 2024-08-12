@@ -15,7 +15,7 @@ export class SentimentsAndTagsComponent {
 selectedTimeLabel: any ="Last 7 days";
   constructor(private _hS: HeaderService, private _analytics: AnalyticsService) {
     _hS.updateHeaderData({
-      title: 'Sentiments and Tags',
+      title: 'Sentiments',
       tabs: [{ title: '', url: '', isActive: true }],
       isTab: false,
       class: "fa-light fa-chart-line-up"

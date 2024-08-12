@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { jwtDecode } from 'jwt-decode';
-import { Observable, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
 import {
@@ -52,6 +52,10 @@ export class AuthService {
 
   doLogout() {
     let removeToken = localStorage.removeItem('access_token');
+    localStorage.removeItem("BotMenuPreviews");
+    localStorage.removeItem("analyticsSubMenus");
+    localStorage.removeItem("consoleSubMenus");
+
     if (removeToken == null) {
       this.router.navigate(['auth/login']);
     }
@@ -96,5 +100,17 @@ export class AuthService {
     } catch (error) {
       console.error('Error decoding token:', error);
     }
+  }
+
+  private subMenusSubject = new BehaviorSubject<any[]>(this.getSubMenus());
+  subMenus$ = this.subMenusSubject.asObservable();
+
+  private getSubMenus(): any[] {
+    return JSON.parse(localStorage.getItem('analyticsSubMenus') || '[]');
+  }
+
+  setSubMenus(subMenus: any[]): void {
+    localStorage.setItem('analyticsSubMenus', JSON.stringify(subMenus));
+    this.subMenusSubject.next(subMenus);
   }
 }
