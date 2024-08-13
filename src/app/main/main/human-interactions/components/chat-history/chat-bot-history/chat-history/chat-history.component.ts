@@ -185,7 +185,7 @@ export class ChatHistoryComponent implements OnInit {
       "workspace_id": this.workspace_id,
       "bot_id": this.bot_id,
       // "token": "7dIxWgeDrvMY3cFAS3UsZuZCoZWto4lzcurzJn0QL7Myw7KHe7LdWlOnEtAeSoe1"
-      "token":"aBeTgzi8YWT80GGApYGVenqbqRlhoTvSka63OSWQPKYGGSX1LS7X2tJHIplzZv4w",
+      "token":localStorage.getItem("token"),
       "agent_name":localStorage.getItem("username")
     };
     var date = this.getCurrentTime();

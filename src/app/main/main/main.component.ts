@@ -7,6 +7,7 @@ import { ExpandedAnalyticsComponent } from 'src/app/sidenav-expanded/expanded-an
 import { ExpandedBotConversationComponent } from 'src/app/sidenav-expanded/expanded-bot-conversation/expanded-bot-conversation.component';
 import { ExpandedChatHistoryComponent } from 'src/app/sidenav-expanded/expanded-chat-history/expanded-chat-history.component';
 import { ExpandedHumanInteractionsComponent } from 'src/app/sidenav-expanded/expanded-human-interactions/expanded-human-interactions.component';
+import { ConversationlBotService } from './console/services/conversationl-bot.service';
 
 @Component({
   selector: 'app-main',
@@ -22,7 +23,8 @@ export class MainComponent {
   constructor(
     private resolver: ComponentFactoryResolver,
     private sidenavService: SidenavService,
-    private router: Router
+    private router: Router,
+    private _bS:ConversationlBotService
   ) {
     this.updateSidenav();
   }
@@ -52,11 +54,18 @@ export class MainComponent {
   }
 
   ngOnInit(): void {
+    this.setToken();
     this.sidenavService.getMessage.subscribe((msg: string) => {
       this.componentName = msg;
       this.target?.clear();
       this.loadComponent(this.componentName);
     });
+  }
+
+  setToken(){
+    this._bS.getToken(1).subscribe((res:any)=>{
+      localStorage.setItem("token", res.token);
+    })
   }
 
   ngAfterViewInit(): void {
