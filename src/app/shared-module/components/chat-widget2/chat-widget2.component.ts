@@ -165,7 +165,6 @@ export class ChatWidget2Component implements OnInit {
           this.refreshHistory()
         }
        
-        this.typing = false;
         // this.messages.push({
         //   message: res.detail,
         //   type: 'bot',
@@ -215,6 +214,7 @@ export class ChatWidget2Component implements OnInit {
         res.detail.map((item: any) => {
           item.timestamp = this.formatDate(item.timestamp);
         })
+        this.typing = false;
         this.chatMessages = res.detail;
         this.conversation_end = res.conversation_end;
         //this.chats.push(res[0].history);

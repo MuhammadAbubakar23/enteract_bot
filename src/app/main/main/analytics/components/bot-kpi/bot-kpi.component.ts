@@ -515,4 +515,8 @@ selectedTimeLabel: any ="Last 7 days";
     option && this.sessionTime.setOption(option);
 
   }
+  ngOnDestroy(){
+    localStorage.setItem("filterDays", "7");
+    localStorage.setItem("timeSpan", "week");
+  }
 }

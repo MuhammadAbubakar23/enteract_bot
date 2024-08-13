@@ -370,4 +370,8 @@ selectedTimeLabel: any ="Last 7 days";
       }
     });
   }
+  ngOnDestroy(){
+    localStorage.setItem("filterDays", "7");
+    localStorage.setItem("timeSpan", "week");
+  }
 }

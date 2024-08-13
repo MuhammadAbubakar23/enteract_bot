@@ -14,6 +14,9 @@
                                 <i class="fal fa-calendar"></i> {{ selectedTimeLabel }}
                             </button>
                             <ul class="dropdown-menu assignFirstDropdownList1" aria-labelledby="dropdownMenuButton1">
+                                <li class="dropdown-item" (click)="refreshFilters(1, 'day', 'Last 24 hours')">
+                                    <a>Last 24 hours</a>
+                                </li>
                                 <li class="dropdown-item" (click)="refreshFilters(7, 'week', 'Last 7 days')">
                                     <a>Last 7 days</a>
                                 </li>

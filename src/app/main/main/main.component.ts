@@ -63,7 +63,7 @@ export class MainComponent {
   }
 
   setToken(){
-    this._bS.getToken(1).subscribe((res:any)=>{
+    this._bS.getToken(6).subscribe((res:any)=>{
       localStorage.setItem("token", res.token);
     })
   }

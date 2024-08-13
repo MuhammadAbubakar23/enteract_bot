@@ -238,4 +238,8 @@ selectedTimeLabel: any ="Last 7 days";
     myChart.setOption(option);
 
   }
+  ngOnDestroy(){
+    localStorage.setItem("filterDays", "7");
+    localStorage.setItem("timeSpan", "week");
+  }
 }

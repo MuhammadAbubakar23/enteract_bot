@@ -393,4 +393,8 @@ export class AiDashboardComponent implements OnInit {
       myChart.resize();
     });
   }
+  ngOnDestroy(){
+    localStorage.setItem("filterDays", "7");
+    localStorage.setItem("timeSpan", "week");
+  }
 }
