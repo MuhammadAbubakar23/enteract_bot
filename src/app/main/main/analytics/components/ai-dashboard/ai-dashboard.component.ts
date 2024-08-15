@@ -49,28 +49,29 @@ export class AiDashboardComponent implements OnInit {
     })
   }
   conversationOverTime() {
-    this.spinnerServerice.show()
-    this._analytics.ConversationOverTimeData(1).subscribe((response: any) => {
-      const counts = [
-        response.detail.Monday[0],
-        response.detail.Tuesday[0],
-        response.detail.Wednesday[0],
-        response.detail.Thursday[0],
-        response.detail.Friday[0],
-        response.detail.Saturday[0],
-        response.detail.Sunday[0]
-      ];
-      this.totalBotConversation(counts);
-      this.spinnerServerice.hide()
-    },
+    this._analytics.ConversationOverTimeData(1).subscribe(
+      (response: any) => {
+        const detail = response.detail;
+
+        const daysOrMonths = Object.keys(detail).reverse();
+        const counts = daysOrMonths.map(day => detail[day]);
+        const formattedDaysOrMonths = daysOrMonths.map(date => {
+          const [year, month, day] = date.split('-');
+          return `${parseInt(month)}/${parseInt(day)}`;
+        });
+        this.totalBotConversation(counts, formattedDaysOrMonths);
+
+        console.log(daysOrMonths);
+
+      },
       (error: any) => {
         console.error(error.error);
       }
-    )
+    );
   }
 
-  totalBotConversation(count: any) {
-    const dates = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  totalBotConversation(count: any, date: any) {
+    const dates = date;
     const counts = count;
     var chartDom = document.getElementById('totalSession');
     var myChart = echarts.init(chartDom);
@@ -88,7 +89,7 @@ export class AiDashboardComponent implements OnInit {
         icon: 'square',
       },
       grid: {
-        left: '3%',
+        left: '5%',
         right: '4%',
         bottom: '3%',
         containLabel: true
@@ -97,6 +98,10 @@ export class AiDashboardComponent implements OnInit {
         type: 'category',
         boundaryGap: false,
         data: dates,
+        // axisLabel: {
+        //   rotate: 45,
+        //   interval: 0
+        // }
       },
       yAxis: {
         type: 'value'

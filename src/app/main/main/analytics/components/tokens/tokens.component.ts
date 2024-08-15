@@ -83,24 +83,36 @@ selectedTimeLabel: any ="Last 7 days";
   AverageTokenPerChat() {
     this._analytics.GetAverageTokenPerChat().subscribe((response: any) => {
       this.averageTokenPerChat = response.detail
-      const counts = [
-        parseFloat(response.detail.Monday[0].toFixed(2)),
-        parseFloat(response.detail.Tuesday[0].toFixed(2)),
-        parseFloat(response.detail.Wednesday[0].toFixed(2)),
-        parseFloat(response.detail.Thursday[0].toFixed(2)),
-        parseFloat(response.detail.Friday[0].toFixed(2)),
-        parseFloat(response.detail.Saturday[0].toFixed(2)),
-        parseFloat(response.detail.Sunday[0].toFixed(2))
-      ];
+
+      
+      const detail = response.detail;
+
+      const daysOrMonths = Object.keys(detail).reverse();
+
+      const counts = daysOrMonths.map(day => detail[day].toFixed(2));
+      const formattedDaysOrMonths = daysOrMonths.map(date => {
+        const [year, month, day] = date.split('-');
+        return `${parseInt(month)}/${parseInt(day)}`;
+      });
+
+      // const counts = [
+      //   parseFloat(response.detail.Monday[0].toFixed(2)),
+      //   parseFloat(response.detail.Tuesday[0].toFixed(2)),
+      //   parseFloat(response.detail.Wednesday[0].toFixed(2)),
+      //   parseFloat(response.detail.Thursday[0].toFixed(2)),
+      //   parseFloat(response.detail.Friday[0].toFixed(2)),
+      //   parseFloat(response.detail.Saturday[0].toFixed(2)),
+      //   parseFloat(response.detail.Sunday[0].toFixed(2))
+      // ];
       // this.botEscalationRate(counts);
       setTimeout(() => {
-        this.averageToken(counts);
+        this.averageToken(counts, formattedDaysOrMonths);
       })
     })
   }
-  averageToken(counts: any) {
+  averageToken(counts: any, daysOrMonths:any) {
     var count = counts
-    const formattedDates = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    const formattedDates = daysOrMonths;
     var chartDom = document.getElementById('average');
     var myChart = echarts.init(chartDom);
     var option;

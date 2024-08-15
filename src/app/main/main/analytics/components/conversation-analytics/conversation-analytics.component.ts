@@ -22,6 +22,7 @@ export class ConversationAnalyticsComponent {
   timeSpan: any = "week";
 selectedTimeLabel: any ="Last 7 days";
   humanTransferRateData: any;
+  fallbackRateCount: any;
   constructor(private _hS: HeaderService, private _analytics: AnalyticsService, private spinner: NgxSpinnerService) {
     _hS.updateHeaderData({
       title: 'Conversation Analytics',
@@ -219,28 +220,48 @@ selectedTimeLabel: any ="Last 7 days";
   }
   HumanTransferRate() {
     this.spinner.show()
+    this.fallbackRateCount = 0;
     this._analytics.GethumanTransferRate().subscribe((response: any) => {
       this.spinner.hide()
+
+      const detail = response.detail;
+
+      const daysOrMonths = Object.keys(detail).reverse();
+
+      const counts = daysOrMonths.map(day => detail[day]);
+
       this.humanTransferRateData = response.detail;
-      const counts = [
-        response.detail.Monday[0],
-        response.detail.Tuesday[0],
-        response.detail.Wednesday[0],
-        response.detail.Thursday[0],
-        response.detail.Friday[0],
-        response.detail.Saturday[0],
-        response.detail.Sunday[0]
-      ];
-      setTimeout(() => {
-        this.botEscalationRate(counts);
+      // const counts = [
+      //   response.detail.Monday[0],
+      //   response.detail.Tuesday[0],
+      //   response.detail.Wednesday[0],
+      //   response.detail.Thursday[0],
+      //   response.detail.Friday[0],
+      //   response.detail.Saturday[0],
+      //   response.detail.Sunday[0]
+      // ];
+      counts.forEach((count: any) => {
+        this.fallbackRateCount = this.fallbackRateCount + count;
       })
-    })
+      const formattedDaysOrMonths = daysOrMonths.map(date => {
+        const [year, month, day] = date.split('-');
+        return `${parseInt(month)}/${parseInt(day)}`;
+      });
+      setTimeout(() => {
+        this.botEscalationRate(counts, formattedDaysOrMonths);
+      })
+    },
+      (error: any) => {
+        console.error(error.error);
+        this.spinner.hide();
+      }
+    )
   }
   getIntegerPart(rate: number): number {
     return parseFloat((rate > 0 ? rate : 0).toFixed(2));
   }
-  botEscalationRate(counts: any) {
-    const formattedDates = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  botEscalationRate(counts: any, daysOrMonths: any) {
+    const formattedDates = daysOrMonths;
     const values = counts;
     var chartDom = document.getElementById('BotRate');
     var myChart = echarts.init(chartDom);
@@ -264,6 +285,10 @@ selectedTimeLabel: any ="Last 7 days";
           axisTick: {
             alignWithLabel: true
           }
+          // axisLabel: {
+          //   rotate: 45,
+          //   interval: 0
+          // }
         }
       ],
       yAxis: [
@@ -287,29 +312,32 @@ selectedTimeLabel: any ="Last 7 days";
     option && myChart.setOption(option);
   }
   conversationOverTime() {
-    this.spinner.show()
-    this._analytics.ConversationOverTimeData(1).subscribe((response: any) => {
-      const counts = [
-        response.detail.Monday[0],
-        response.detail.Tuesday[0],
-        response.detail.Wednesday[0],
-        response.detail.Thursday[0],
-        response.detail.Friday[0],
-        response.detail.Saturday[0],
-        response.detail.Sunday[0]
-      ];
-      this.botConversationOverTime(counts);
-      this.spinner.hide()
-    },
+    this.spinner.show();
+    this._analytics.ConversationOverTimeData(1).subscribe(
+      (response: any) => {
+        const detail = response.detail;
+
+        const daysOrMonths = Object.keys(detail).reverse();
+        const counts = daysOrMonths.map(day => detail[day]);
+        const formattedDaysOrMonths = daysOrMonths.map(date => {
+          const [year, month, day] = date.split('-');
+          return `${parseInt(month)}/${parseInt(day)}`;
+        });
+        this.totalBotConversation(counts, formattedDaysOrMonths);
+
+        console.log(daysOrMonths);
+
+        this.spinner.hide();
+      },
       (error: any) => {
         console.error(error.error);
+        this.spinner.hide();
       }
-    )
+    );
   }
-  botConversationOverTime(count: any) {
-    const dates = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  totalBotConversation(count: any, date: any) {
+    const dates = date;
     const counts = count;
-
     var chartDom = document.getElementById('main');
     this.totalBot = echarts.init(chartDom);
     const option = {
@@ -322,7 +350,7 @@ selectedTimeLabel: any ="Last 7 days";
         }
       },
       grid: {
-        left: '3%',
+        left: '4%',
         right: '4%',
         bottom: '3%',
         containLabel: true
@@ -331,6 +359,10 @@ selectedTimeLabel: any ="Last 7 days";
         type: 'category',
         boundaryGap: false,
         data: dates,
+        // axisLabel: {
+        //   rotate: 45,
+        //   interval: 0
+        // }
       },
       yAxis: {
         type: 'value'
@@ -356,6 +388,7 @@ selectedTimeLabel: any ="Last 7 days";
     option && this.totalBot.setOption(option);
 
   }
+
   makeChart() {
     window.addEventListener('resize', () => {
       if (this.fallback) {

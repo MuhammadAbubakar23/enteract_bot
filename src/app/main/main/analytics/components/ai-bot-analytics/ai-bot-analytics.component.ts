@@ -12,7 +12,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 })
 export class AiBotAnalyticsComponent {
   totalBot: any
-  filterDays:any = 7;
+  filterDays: any = 7;
   fallRate: any;
   sessionTime: any;
   botConversation: any;
@@ -33,7 +33,7 @@ export class AiBotAnalyticsComponent {
   averageTokenPerChat: any;
   totalBotSessionsOvertimeData: any;
   timeSpan: any = "week";
-selectedTimeLabel: any ="Last 7 days";
+  selectedTimeLabel: any = "Last 7 days";
   constructor(private _hS: HeaderService, private _analytics: AnalyticsService, private spinner: NgxSpinnerService) {
     _hS.updateHeaderData({
       title: 'Ai Bot Analytics',
@@ -47,10 +47,10 @@ selectedTimeLabel: any ="Last 7 days";
     localStorage.setItem("filterDays", this.filterDays);
     localStorage.setItem("timeSpan", this.timeSpan);
   }
-  get getTimeSpan(){
+  get getTimeSpan() {
     return localStorage.getItem("timeSpan")
   }
-  refreshFilters(NumberOfDays:any, timeSpan:any, selectedTimeLabel:any){
+  refreshFilters(NumberOfDays: any, timeSpan: any, selectedTimeLabel: any) {
     this.filterDays = NumberOfDays;
     this.timeSpan = timeSpan;
     this.selectedTimeLabel = selectedTimeLabel;
@@ -59,7 +59,7 @@ selectedTimeLabel: any ="Last 7 days";
     localStorage.setItem("timeSpan", this.timeSpan);
     this.refreshCharts();
   }
-  refreshCharts(){
+  refreshCharts() {
     this.HumanTransferRate();
     this.AverageTokenPerChat();
     this.TotalConversation();
@@ -325,29 +325,54 @@ selectedTimeLabel: any ="Last 7 days";
     );
   }
 
+  // conversationOverTime() {
+  //   this.spinner.show()
+  //   this._analytics.ConversationOverTimeData(1).subscribe((response: any) => {
+  //     const counts = [
+  //       response.detail.Monday[0],
+  //       response.detail.Tuesday[0],
+  //       response.detail.Wednesday[0],
+  //       response.detail.Thursday[0],
+  //       response.detail.Friday[0],
+  //       response.detail.Saturday[0],
+  //       response.detail.Sunday[0]
+  //     ];
+  //     this.totalBotConversation(counts);
+  //     this.spinner.hide()
+  //   },
+  //     (error: any) => {
+  //       console.error(error.error);
+  //     }
+  //   )
+  // }
   conversationOverTime() {
-    this.spinner.show()
-    this._analytics.ConversationOverTimeData(1).subscribe((response: any) => {
-      const counts = [
-        response.detail.Monday[0],
-        response.detail.Tuesday[0],
-        response.detail.Wednesday[0],
-        response.detail.Thursday[0],
-        response.detail.Friday[0],
-        response.detail.Saturday[0],
-        response.detail.Sunday[0]
-      ];
-      this.totalBotConversation(counts);
-      this.spinner.hide()
-    },
+    this.spinner.show();
+    this._analytics.ConversationOverTimeData(1).subscribe(
+      (response: any) => {
+        const detail = response.detail;
+
+        const daysOrMonths = Object.keys(detail).reverse();
+        const counts = daysOrMonths.map(day => detail[day]);
+        const formattedDaysOrMonths = daysOrMonths.map(date => {
+          const [year, month, day] = date.split('-');
+          return `${parseInt(month)}/${parseInt(day)}`;
+        });
+        this.totalBotConversation(counts, formattedDaysOrMonths);
+
+        console.log(daysOrMonths);
+
+        this.spinner.hide();
+      },
       (error: any) => {
         console.error(error.error);
+        this.spinner.hide();
       }
-    )
+    );
   }
 
-  totalBotConversation(count: any) {
-    const dates = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
+  totalBotConversation(count: any, date: any) {
+    const dates = date;
     const counts = count;
     var chartDom = document.getElementById('main');
     this.totalBot = echarts.init(chartDom);
@@ -361,7 +386,7 @@ selectedTimeLabel: any ="Last 7 days";
         }
       },
       grid: {
-        left: '3%',
+        left: '4%',
         right: '4%',
         bottom: '3%',
         containLabel: true
@@ -370,6 +395,10 @@ selectedTimeLabel: any ="Last 7 days";
         type: 'category',
         boundaryGap: false,
         data: dates,
+        // axisLabel: {
+        //   rotate: 45,
+        //   interval: 0
+        // }
       },
       yAxis: {
         type: 'value'
@@ -401,26 +430,42 @@ selectedTimeLabel: any ="Last 7 days";
     this.fallbackRateCount = 0;
     this._analytics.GethumanTransferRate().subscribe((response: any) => {
       this.spinner.hide()
+
+      const detail = response.detail;
+
+      const daysOrMonths = Object.keys(detail).reverse();
+
+      const counts = daysOrMonths.map(day => detail[day]);
+
       this.humanTransferRateData = response.detail;
-      const counts = [
-        response.detail.Monday[0],
-        response.detail.Tuesday[0],
-        response.detail.Wednesday[0],
-        response.detail.Thursday[0],
-        response.detail.Friday[0],
-        response.detail.Saturday[0],
-        response.detail.Sunday[0]
-      ];
-      counts.forEach((count:any)=>{
-        this.fallbackRateCount = this.fallbackRateCount+count;
+      // const counts = [
+      //   response.detail.Monday[0],
+      //   response.detail.Tuesday[0],
+      //   response.detail.Wednesday[0],
+      //   response.detail.Thursday[0],
+      //   response.detail.Friday[0],
+      //   response.detail.Saturday[0],
+      //   response.detail.Sunday[0]
+      // ];
+      counts.forEach((count: any) => {
+        this.fallbackRateCount = this.fallbackRateCount + count;
       })
+      const formattedDaysOrMonths = daysOrMonths.map(date => {
+        const [year, month, day] = date.split('-');
+        return `${parseInt(month)}/${parseInt(day)}`;
+      });
       setTimeout(() => {
-        this.botEscalationRate(counts);
+        this.botEscalationRate(counts, formattedDaysOrMonths);
       })
-    })
+    },
+      (error: any) => {
+        console.error(error.error);
+        this.spinner.hide();
+      }
+    )
   }
-  botEscalationRate(counts: any) {
-    const formattedDates = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  botEscalationRate(counts: any, daysOrMonths: any) {
+    const formattedDates = daysOrMonths;
     const values = counts;
     var chartDom = document.getElementById('BotRate');
     var myChart = echarts.init(chartDom);
@@ -443,7 +488,11 @@ selectedTimeLabel: any ="Last 7 days";
           data: formattedDates,
           axisTick: {
             alignWithLabel: true
-          }
+          },
+          // axisLabel: {
+          // rotate: 45,
+          // interval: 0
+          // }
         }
       ],
       yAxis: [
@@ -589,49 +638,74 @@ selectedTimeLabel: any ="Last 7 days";
 
     option && this.fallRate.setOption(option);
   }
+  // totalBotSessionOvertime() {
+  //   this._analytics.GetTotalBotSessionsOvertime().subscribe((response: any) => {
+  //     this.totalBotSessionsOvertimeData = response.detail;
+  //     const avg_handle_time = [
+  //       response.detail.Monday.avg_handle_time,
+  //       response.detail.Tuesday.avg_handle_time,
+  //       response.detail.Wednesday.avg_handle_time,
+  //       response.detail.Thursday.avg_handle_time,
+  //       response.detail.Friday.avg_handle_time,
+  //       response.detail.Saturday.avg_handle_time,
+  //       response.detail.Sunday.avg_handle_time
+  //     ];
+  //     const human_transfer_rate = [
+  //       response.detail.Monday.human_transfer_rate,
+  //       response.detail.Tuesday.human_transfer_rate,
+  //       response.detail.Wednesday.human_transfer_rate,
+  //       response.detail.Thursday.human_transfer_rate,
+  //       response.detail.Friday.human_transfer_rate,
+  //       response.detail.Saturday.human_transfer_rate,
+  //       response.detail.Sunday.human_transfer_rate
+  //     ];
+  //     const session_timeout = [
+  //       response.detail.Monday.session_timeout,
+  //       response.detail.Tuesday.session_timeout,
+  //       response.detail.Wednesday.session_timeout,
+  //       response.detail.Thursday.session_timeout,
+  //       response.detail.Friday.session_timeout,
+  //       response.detail.Saturday.session_timeout,
+  //       response.detail.Sunday.session_timeout
+  //     ];
+  //     setTimeout(() => {
+  //       this.botSessionTime(avg_handle_time, human_transfer_rate, session_timeout)
+  //     })
+  //   })
+  // }
   totalBotSessionOvertime() {
     this._analytics.GetTotalBotSessionsOvertime().subscribe((response: any) => {
       this.totalBotSessionsOvertimeData = response.detail;
-      const avg_handle_time = [
-        response.detail.Monday.avg_handle_time,
-        response.detail.Tuesday.avg_handle_time,
-        response.detail.Wednesday.avg_handle_time,
-        response.detail.Thursday.avg_handle_time,
-        response.detail.Friday.avg_handle_time,
-        response.detail.Saturday.avg_handle_time,
-        response.detail.Sunday.avg_handle_time
-      ];
-      const human_transfer_rate = [
-        response.detail.Monday.human_transfer_rate,
-        response.detail.Tuesday.human_transfer_rate,
-        response.detail.Wednesday.human_transfer_rate,
-        response.detail.Thursday.human_transfer_rate,
-        response.detail.Friday.human_transfer_rate,
-        response.detail.Saturday.human_transfer_rate,
-        response.detail.Sunday.human_transfer_rate
-      ];
-      const session_timeout = [
-        response.detail.Monday.session_timeout,
-        response.detail.Tuesday.session_timeout,
-        response.detail.Wednesday.session_timeout,
-        response.detail.Thursday.session_timeout,
-        response.detail.Friday.session_timeout,
-        response.detail.Saturday.session_timeout,
-        response.detail.Sunday.session_timeout
-      ];
+      const daysOrMonths = Object.keys(response.detail).reverse();
+  
+      // Extract avg_handle_time for each day
+      const avg_handle_time = daysOrMonths.map(day => response.detail[day].avg_handle_time.toFixed(2));
+  
+      // Extract human_transfer_rate for each day
+      const human_transfer_rate = daysOrMonths.map(day => response.detail[day].human_transfer_rate.toFixed(2));
+  
+      // Extract session_timeout for each day
+      const session_timeout = daysOrMonths.map(day => response.detail[day].session_timeout.toFixed(2));
+      const formattedDaysOrMonths = daysOrMonths.map(date => {
+        const [year, month, day] = date.split('-');
+        return `${parseInt(month)}/${parseInt(day)}`;
+      });
       setTimeout(() => {
-        this.botSessionTime(avg_handle_time, human_transfer_rate, session_timeout)
-      })
-    })
+        this.botSessionTime(avg_handle_time, human_transfer_rate, session_timeout, formattedDaysOrMonths);
+      });
+    });
   }
-  botSessionTime(avg_handle_time: any, human_transfer_rate: any, session_timeout: any) {
-
-    // const allDates = ['2024-07-01', '2024-07-02', '2024-07-03', '2024-07-04', '2024-07-05', '2024-07-06', '2024-07-07'];
-    const formattedDates = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  
+  botSessionTime(avg_handle_time: any, human_transfer_rate: any, session_timeout: any, daysOrMonths:any) {
+    console.log("daysOrMonths = ", daysOrMonths)
+    console.log("avg_handle_time = ", avg_handle_time)
+    console.log("human_transfer_rate = ", human_transfer_rate)
+    console.log("session_timeout = ", session_timeout)
+    const formattedDates = daysOrMonths;
     const timeoutData = session_timeout;
     const fallbackData = human_transfer_rate;
     const averageHandleTime = avg_handle_time
-    
+
     var chartDom = document.getElementById('sessionTime');
     this.sessionTime = echarts.init(chartDom);
     const option = {
@@ -848,25 +922,37 @@ selectedTimeLabel: any ="Last 7 days";
   AverageTokenPerChat() {
     this._analytics.GetAverageTokenPerChat().subscribe((response: any) => {
       this.averageTokenPerChat = response.detail
-      const counts = [
-        parseFloat(response.detail.Monday[0].toFixed(2)),
-        parseFloat(response.detail.Tuesday[0].toFixed(2)),
-        parseFloat(response.detail.Wednesday[0].toFixed(2)),
-        parseFloat(response.detail.Thursday[0].toFixed(2)),
-        parseFloat(response.detail.Friday[0].toFixed(2)),
-        parseFloat(response.detail.Saturday[0].toFixed(2)),
-        parseFloat(response.detail.Sunday[0].toFixed(2))
-      ];
+
+      
+      const detail = response.detail;
+
+      const daysOrMonths = Object.keys(detail).reverse();
+
+      const counts = daysOrMonths.map(day => detail[day].toFixed(2));
+      const formattedDaysOrMonths = daysOrMonths.map(date => {
+        const [year, month, day] = date.split('-');
+        return `${parseInt(month)}/${parseInt(day)}`;
+      });
+
+      // const counts = [
+      //   parseFloat(response.detail.Monday[0].toFixed(2)),
+      //   parseFloat(response.detail.Tuesday[0].toFixed(2)),
+      //   parseFloat(response.detail.Wednesday[0].toFixed(2)),
+      //   parseFloat(response.detail.Thursday[0].toFixed(2)),
+      //   parseFloat(response.detail.Friday[0].toFixed(2)),
+      //   parseFloat(response.detail.Saturday[0].toFixed(2)),
+      //   parseFloat(response.detail.Sunday[0].toFixed(2))
+      // ];
       // this.botEscalationRate(counts);
       setTimeout(() => {
-        this.averageToken(counts);
+        this.averageToken(counts, formattedDaysOrMonths);
       })
     })
   }
 
-  averageToken(counts: any) {
+  averageToken(counts: any, daysOrMonths:any) {
     var count = counts
-    const formattedDates = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    const formattedDates = daysOrMonths;
     var chartDom = document.getElementById('average');
     var myChart = echarts.init(chartDom);
     var option;
@@ -1011,7 +1097,7 @@ selectedTimeLabel: any ="Last 7 days";
       }
     });
   }
-  ngOnDestroy(){
+  ngOnDestroy() {
     localStorage.setItem("filterDays", "7");
     localStorage.setItem("timeSpan", "week");
   }

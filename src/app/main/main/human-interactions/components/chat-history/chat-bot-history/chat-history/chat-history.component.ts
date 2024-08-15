@@ -21,7 +21,7 @@ import { exhaustMap, tap } from 'rxjs/operators';
 })
 export class ChatHistoryComponent implements OnInit {
   @ViewChild('chatsection') private chatBody?: ElementRef;
-
+  @ViewChild('scrollMe') private myScrollContainer!: ElementRef;
   @Input() chat: any = { history: [], tags: [] };
   isMinimized: boolean = true;
   isRemoved: boolean = false;
@@ -49,6 +49,19 @@ export class ChatHistoryComponent implements OnInit {
       item.timestamp = this.formatDate(item.timestamp);
     })
     console.log("this.chat", this.chat)
+  }
+  ngAfterViewChecked() {        
+    this.scrollToPosition();
+  } 
+  scrollToPosition() {
+    try {
+      const element = this.myScrollContainer.nativeElement;
+      const bottomPosition = element.scrollHeight - element.clientHeight;
+      // Scroll to 1% up from the bottom
+      element.scrollTop = bottomPosition * 0.99;
+    } catch (err) { 
+      console.error(err);
+    }                 
   }
   removeScreen() {
     let newChat =
@@ -244,6 +257,10 @@ export class ChatHistoryComponent implements OnInit {
     const secondsStr = seconds < 10 ? '0' + seconds : seconds;
 
     return `${hours}:${minutesStr}:${secondsStr} ${ampm}`;
+  }
+
+  onScroll(event: Event) {
+    this.scrollToPosition();
   }
 }
 

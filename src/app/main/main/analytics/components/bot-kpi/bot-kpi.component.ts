@@ -418,45 +418,35 @@ selectedTimeLabel: any ="Last 7 days";
   totalBotSessionOvertime() {
     this._analytics.GetTotalBotSessionsOvertime().subscribe((response: any) => {
       this.totalBotSessionsOvertimeData = response.detail;
-      const avg_handle_time = [
-        response.detail.Monday.avg_handle_time,
-        response.detail.Tuesday.avg_handle_time,
-        response.detail.Wednesday.avg_handle_time,
-        response.detail.Thursday.avg_handle_time,
-        response.detail.Friday.avg_handle_time,
-        response.detail.Saturday.avg_handle_time,
-        response.detail.Sunday.avg_handle_time
-      ];
-      const human_transfer_rate = [
-        response.detail.Monday.human_transfer_rate,
-        response.detail.Tuesday.human_transfer_rate,
-        response.detail.Wednesday.human_transfer_rate,
-        response.detail.Thursday.human_transfer_rate,
-        response.detail.Friday.human_transfer_rate,
-        response.detail.Saturday.human_transfer_rate,
-        response.detail.Sunday.human_transfer_rate
-      ];
-      const session_timeout = [
-        response.detail.Monday.session_timeout,
-        response.detail.Tuesday.session_timeout,
-        response.detail.Wednesday.session_timeout,
-        response.detail.Thursday.session_timeout,
-        response.detail.Friday.session_timeout,
-        response.detail.Saturday.session_timeout,
-        response.detail.Sunday.session_timeout
-      ]; setTimeout(() => {
-        this.botSessionTime(avg_handle_time, human_transfer_rate, session_timeout)
-      })
-    })
+      const daysOrMonths = Object.keys(response.detail).reverse();
+  
+      // Extract avg_handle_time for each day
+      const avg_handle_time = daysOrMonths.map(day => response.detail[day].avg_handle_time.toFixed(2));
+  
+      // Extract human_transfer_rate for each day
+      const human_transfer_rate = daysOrMonths.map(day => response.detail[day].human_transfer_rate.toFixed(2));
+  
+      // Extract session_timeout for each day
+      const session_timeout = daysOrMonths.map(day => response.detail[day].session_timeout.toFixed(2));
+      const formattedDaysOrMonths = daysOrMonths.map(date => {
+        const [year, month, day] = date.split('-');
+        return `${parseInt(month)}/${parseInt(day)}`;
+      });
+      setTimeout(() => {
+        this.botSessionTime(avg_handle_time, human_transfer_rate, session_timeout, formattedDaysOrMonths);
+      });
+    });
   }
-  botSessionTime(avg_handle_time: any, human_transfer_rate: any, session_timeout: any) {
-
-    // const allDates = ['2024-07-01', '2024-07-02', '2024-07-03', '2024-07-04', '2024-07-05', '2024-07-06', '2024-07-07'];
-    const formattedDates = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  botSessionTime(avg_handle_time: any, human_transfer_rate: any, session_timeout: any, daysOrMonths:any) {
+    console.log("daysOrMonths = ", daysOrMonths)
+    console.log("avg_handle_time = ", avg_handle_time)
+    console.log("human_transfer_rate = ", human_transfer_rate)
+    console.log("session_timeout = ", session_timeout)
+    const formattedDates = daysOrMonths;
     const timeoutData = session_timeout;
     const fallbackData = human_transfer_rate;
     const averageHandleTime = avg_handle_time
-    
+
     var chartDom = document.getElementById('sessionTime');
     this.sessionTime = echarts.init(chartDom);
     const option = {

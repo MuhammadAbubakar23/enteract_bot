@@ -77,19 +77,22 @@ export class AnalyticsService {
   }
 
   ConversationOverTimeData(botId:any){
-    return this.http.get(this.chatBotBaseUrl + this.conversationOverTime + `?bot_id=${environment.bot_id}&filter_days=${localStorage.getItem("filterDays")}`)
+    // return this.http.get(this.chatBotBaseUrl + this.conversationOverTime + `?bot_id=${environment.bot_id}&filter_days=${localStorage.getItem("filterDays")}`)
+    return this.http.get(this.chatBotBaseUrl + this.conversationOverTime + `?bot_id=${environment.bot_id}&filter_days=7`)
     // return this.http.get('http://52.77.162.250:5005/analytics/conversations_over_time?bot_id=7&filter_days=7')
   }
 
   GethumanTransferRate(){
-    return this.http.get(this.chatBotBaseUrl + this.humanTransferRate + `?bot_id=${environment.bot_id}&filter_days=${localStorage.getItem("filterDays")}`)
+    // return this.http.get(this.chatBotBaseUrl + this.humanTransferRate + `?bot_id=${environment.bot_id}&filter_days=${localStorage.getItem("filterDays")}`)
+    return this.http.get(this.chatBotBaseUrl + this.humanTransferRate + `?bot_id=${environment.bot_id}&filter_days=7`)
   }
 
   GetAverageTokenPerChat(){
-    return this.http.get(this.chatBotBaseUrl + this.averageTokenPerChat + `?bot_id=${environment.bot_id}&filter_days=${localStorage.getItem("filterDays")}`)
+    // return this.http.get(this.chatBotBaseUrl + this.averageTokenPerChat + `?bot_id=${environment.bot_id}&filter_days=${localStorage.getItem("filterDays")}`)
+    return this.http.get(this.chatBotBaseUrl + this.averageTokenPerChat + `?bot_id=${environment.bot_id}&filter_days=7`)
   }
 
   GetTotalBotSessionsOvertime(){
-    return this.http.get(this.chatBotBaseUrl + this.totalBotSessionsOvertime + `?bot_id=${environment.bot_id}&filter_days=${localStorage.getItem("filterDays")}`)
+    return this.http.get(this.chatBotBaseUrl + this.totalBotSessionsOvertime + `?bot_id=${environment.bot_id}&filter_days=7`)
   }
 }

@@ -35,7 +35,7 @@
     </div> -->
         <div class="chatsection">
             <div class="main-chat">
-                <div class="chat-box-wrap" #chatsection  style="overflow: auto;" #scrollMe [scrollTop]="scrollMe.scrollHeight">
+                <div class="chat-box-wrap" #chatsection  style="overflow: auto;" #scrollMe [scrollTop]="scrollMe.scrollHeight" (scroll)="onScroll($event)">
                     <ng-container *ngFor="let msg of chat; let i = index">
                         <div class="message-wrap agent-message-wrap" [ngClass]="{
                 right: msg.type === 'human',
