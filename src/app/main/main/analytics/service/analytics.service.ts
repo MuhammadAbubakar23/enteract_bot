@@ -56,7 +56,7 @@ export class AnalyticsService {
     return this.http.get(this.chatBotBaseUrl + this.tagsAnalatics+ `?bot_id=${environment.bot_id}&filter_days=${localStorage.getItem("filterDays")}`)
   }
   GetPeakHours() {
-    return this.http.get(this.chatBotBaseUrl + this.peakHours)
+    return this.http.get(this.chatBotBaseUrl + this.peakHours+ `&filter_days=7`)
   }
   TotalToken() {
     return this.http.get(this.chatBotBaseUrl + this.totalToken+ `?bot_id=${environment.bot_id}&filter_days=${localStorage.getItem("filterDays")}`)
@@ -68,7 +68,7 @@ export class AnalyticsService {
     return this.http.get(this.chatBotBaseUrl + this.timeoutCount+ `?bot_id=${environment.bot_id}&filter_days=${localStorage.getItem("filterDays")}`)
   }
   TokenPerDay() {
-    return this.http.get(this.chatBotBaseUrl + this.tokenPerDay)
+    return this.http.get(this.chatBotBaseUrl + this.tokenPerDay + `&filter_days=${localStorage.getItem("filterDays")}`)
   }
 
 

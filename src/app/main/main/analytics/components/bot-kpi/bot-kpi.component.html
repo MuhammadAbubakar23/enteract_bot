@@ -82,10 +82,10 @@
                                                 <small class="ms-2" style="font-size: 12px !important;">
                                                     <i class="fa-light" [ngClass]="{
                                                          'fa-arrow-up mint': botEsclationRate?.percentage > 0,
-                                                         'fa-arrow-down anyred-class': botEsclationRate?.percentage < 0
+                                                         'fa-arrow-down rose': botEsclationRate?.percentage < 0
                                                        }"></i>
                                                     <span
-                                                        [ngClass]="{'mint': botEsclationRate?.percentage > 0, 'anyred-class': botEsclationRate?.percentage < 0}">
+                                                        [ngClass]="{'mint': botEsclationRate?.percentage > 0, 'rose': botEsclationRate?.percentage < 0}">
                                                         {{ botEsclationRate?.percentage }}%
                                                     </span> than last {{getTimeSpan}}
                                                 </small>
@@ -135,10 +135,10 @@
                                                 <small style="font-size: 12px !important;">
                                                     <i class="fa-light" [ngClass]="{
                                                          'fa-arrow-up mint': sessiontimeout?.percentage > 0,
-                                                         'fa-arrow-down anyred-class': sessiontimeout?.percentage < 0
+                                                         'fa-arrow-down rose': sessiontimeout?.percentage < 0
                                                        }"></i>
                                                     <span
-                                                        [ngClass]="{'mint': sessiontimeout?.percentage > 0, 'anyred-class': sessiontimeout?.percentage < 0}">
+                                                        [ngClass]="{'mint': sessiontimeout?.percentage > 0, 'rose': sessiontimeout?.percentage < 0}">
                                                         {{ sessiontimeout?.percentage }}%
                                                     </span> than last {{getTimeSpan}}
                                                 </small>
@@ -165,10 +165,10 @@
                                                 <small style="font-size: 12px !important;">
                                                     <i class="fa-light" [ngClass]="{
                                                          'fa-arrow-up mint': avgWaitTime?.percentage > 0,
-                                                         'fa-arrow-down anyred-class': avgWaitTime?.percentage < 0
+                                                         'fa-arrow-down rose': avgWaitTime?.percentage < 0
                                                        }"></i>
                                                     <span
-                                                        [ngClass]="{'mint': avgWaitTime?.percentage > 0, 'anyred-class': avgWaitTime?.percentage < 0}">
+                                                        [ngClass]="{'mint': avgWaitTime?.percentage > 0, 'rose': avgWaitTime?.percentage < 0}">
                                                         {{ avgWaitTime?.percentage || 0 }}%
                                                     </span> than last {{getTimeSpan}}
                                                 </small>

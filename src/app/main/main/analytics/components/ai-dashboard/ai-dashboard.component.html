@@ -66,10 +66,10 @@
                                             <li class="list-group-item border-end pe-3">
                                                 <small>
                                                     <i class="fa-light" [ngClass]="{
-                                                         'fa-arrow-up mint': totalSessionsData?.percentage > 0,
-                                                         'fa-arrow-down anyred-class': totalSessionsData?.percentage < 0
+                                                         'fa-arrow-up mint': totalSessionsData?.percentage >= 0,
+                                                         'fa-arrow-down rose': totalSessionsData?.percentage < 0
                                                        }"></i><span
-                                                       [ngClass]="totalSessionsData?.percentage > 0 ? 'mint':'anyred-class'">{{totalSessionsData?.percentage}}%</span>
+                                                       [ngClass]="totalSessionsData?.percentage >= 0 ? 'mint':'rose'">{{totalSessionsData?.percentage}}%</span>
                                                        <span class="d-block coal">Change</span>
                                                 </small>
                                                 <!-- <small><i class="fa-light fa-arrow-up mint"></i> <span
@@ -138,10 +138,10 @@
                                             <li class="list-group-item border-end pe-3">
                                                 <small>
                                                     <i class="fa-light" [ngClass]="{
-                                                         'fa-arrow-up mint': totalSessionsData?.percentage > 0,
-                                                         'fa-arrow-down anyred-class': totalSessionsData?.percentage < 0
+                                                         'fa-arrow-up mint': totalSessionsData?.percentage >= 0,
+                                                         'fa-arrow-down rose': totalSessionsData?.percentage < 0
                                                        }"></i><span
-                                                       [ngClass]="totalSessionsData?.percentage > 0 ? 'mint':'anyred-class'">{{totalSessionsData?.percentage}}%</span>
+                                                       [ngClass]="totalSessionsData?.percentage >= 0 ? 'mint':'rose'">{{totalSessionsData?.percentage}}%</span>
                                                        <span class="d-block coal">Change</span>
                                                 </small>
                                             </li>

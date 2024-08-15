@@ -34,6 +34,7 @@ export class AiBotAnalyticsComponent {
   totalBotSessionsOvertimeData: any;
   timeSpan: any = "week";
   selectedTimeLabel: any = "Last 7 days";
+  formattedDaysOrMonths: any;
   constructor(private _hS: HeaderService, private _analytics: AnalyticsService, private spinner: NgxSpinnerService) {
     _hS.updateHeaderData({
       title: 'Ai Bot Analytics',
@@ -234,6 +235,11 @@ export class AiBotAnalyticsComponent {
           });
           index++;
         }
+        const daysOrMonths = Object.keys(this.peakHours);
+        this.formattedDaysOrMonths = daysOrMonths.map(date => {
+          const [year, month, day] = date.split('-');
+          return `${parseInt(month)}/${parseInt(day)}`;
+        });
         this.heatMap();
         this.spinner.hide()
       },
@@ -1011,10 +1017,7 @@ export class AiBotAnalyticsComponent {
       '18', '19', '20', '21', '22', '23'
     ];
     // prettier-ignore
-    const days = [
-      'Sunday', 'Monday', 'Tuesday',
-      'Wednesday', 'Thursday', 'Friday', 'Saturday'
-    ];
+    const days = this.formattedDaysOrMonths;
     // prettier-ignore
     const data = this.peakhoursData
       .map(function (item) {

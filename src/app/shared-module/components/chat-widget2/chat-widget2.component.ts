@@ -134,6 +134,7 @@ export class ChatWidget2Component implements OnInit {
           const refreshIndex = this.chatVisibilityService.refreshHistoryArray.findIndex(session_id => session_id == this.session_id);
           this.session_id = ""
           this.chatMessages=[];
+          this.typing = false;
           clearInterval(this.interval);
           debugger
           if(refreshIndex!=-1){

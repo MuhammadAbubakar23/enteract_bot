@@ -50,19 +50,19 @@ export class ChatHistoryComponent implements OnInit {
     })
     console.log("this.chat", this.chat)
   }
-  ngAfterViewChecked() {        
-    this.scrollToPosition();
-  } 
-  scrollToPosition() {
-    try {
-      const element = this.myScrollContainer.nativeElement;
-      const bottomPosition = element.scrollHeight - element.clientHeight;
-      // Scroll to 1% up from the bottom
-      element.scrollTop = bottomPosition * 0.99;
-    } catch (err) { 
-      console.error(err);
-    }                 
-  }
+  // ngAfterViewChecked() {        
+  //   this.scrollToPosition();
+  // } 
+  // scrollToPosition() {
+  //   try {
+  //     const element = this.myScrollContainer.nativeElement;
+  //     const bottomPosition = element.scrollHeight - element.clientHeight;
+  //     // Scroll to 1% up from the bottom
+  //     element.scrollTop = bottomPosition * 0.99;
+  //   } catch (err) { 
+  //     console.error(err);
+  //   }                 
+  // }
   removeScreen() {
     let newChat =
       { "session_id": this.chat.session_id }
@@ -210,6 +210,7 @@ export class ChatHistoryComponent implements OnInit {
       type: 'human-agent',
       agent_name:localStorage.getItem("username")
     })
+    // this.scrollToBottom()
     // this.messages.push({
     //   message: this.chatForm.value['message'],
     //   slug: this.chat.session_id,
@@ -256,11 +257,33 @@ export class ChatHistoryComponent implements OnInit {
     const minutesStr = minutes < 10 ? '0' + minutes : minutes;
     const secondsStr = seconds < 10 ? '0' + seconds : seconds;
 
-    return `${hours}:${minutesStr}:${secondsStr} ${ampm}`;
+    return `${hours}:${minutesStr} ${ampm}`;
   }
 
-  onScroll(event: Event) {
-    this.scrollToPosition();
+  onScroll(event: any) {
+    const scrollTop = event.target.scrollTop;
+    const scrollHeight = event.target.scrollHeight;
+    const clientHeight = event.target.clientHeight;
+  
+    const maxScrollTop = scrollHeight - clientHeight;
+    const targetPosition = maxScrollTop * 0.99;
+  
+    if (scrollTop > targetPosition) {
+      event.target.scrollTop = targetPosition;
+    }
+  }
+
+  scrollToBottom() {
+    const scrollHeight = this.myScrollContainer.nativeElement.scrollHeight;
+    const clientHeight = this.myScrollContainer.nativeElement.clientHeight;
+    const maxScrollTop = scrollHeight - clientHeight;
+    console.log("test", maxScrollTop)
+    const targetPosition = maxScrollTop*1.1;
+    console.log("test", targetPosition)
+
+    this.myScrollContainer.nativeElement.scrollTop = targetPosition;
+    console.log("test", this.myScrollContainer.nativeElement.scrollTop)
+
   }
 }
 

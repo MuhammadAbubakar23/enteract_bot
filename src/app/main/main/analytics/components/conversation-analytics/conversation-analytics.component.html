@@ -75,10 +75,10 @@
                                             <small>
                                                 <i class="fa-light" 
                                                    [ngClass]="{
-                                                     'fa-arrow-up mint': botConversation?.percentage > 0,
-                                                     'fa-arrow-down anyred-class': botConversation?.percentage < 0
+                                                     'fa-arrow-up mint': botConversation?.percentage >= 0,
+                                                     'fa-arrow-down rose': botConversation?.percentage < 0
                                                    }"></i>
-                                                <span [ngClass]="{'mint': botConversation?.percentage > 0, 'anyred-class': botConversation?.percentage < 0}">
+                                                <span [ngClass]="{'mint': botConversation?.percentage >= 0, 'rose': botConversation?.percentage < 0}">
                                                   {{ botConversation?.percentage }}%
                                                 </span> than last {{getTimeSpan}}
                                               </small>
@@ -173,11 +173,11 @@
     
                                                 <small class="ms-2" style="font-size: 12px !important;">
                                                     <i class="fa-light" [ngClass]="{
-                                                     'fa-arrow-up mint': avgBotConversationTime?.percentage > 0,
-                                                     'fa-arrow-down anyred-class': avgBotConversationTime?.percentage < 0
+                                                     'fa-arrow-up mint': avgBotConversationTime?.percentage >= 0,
+                                                     'fa-arrow-down rose': avgBotConversationTime?.percentage < 0
                                                    }"></i>
                                                     <span
-                                                        [ngClass]="{'mint': avgBotConversationTime?.percentage > 0, 'anyred-class': avgBotConversationTime?.percentage < 0}">
+                                                        [ngClass]="{'mint': avgBotConversationTime?.percentage >= 0, 'rose': avgBotConversationTime?.percentage < 0}">
                                                         {{ avgBotConversationTime?.percentage }}%
                                                     </span> than last {{getTimeSpan}}
                                                 </small>

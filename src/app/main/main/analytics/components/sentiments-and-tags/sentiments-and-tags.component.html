@@ -91,12 +91,12 @@
                                                     <h3 class="m-0 fw-bold">{{ sentimentAnalysis?.positive }}</h3>
                                                     <small>
                                                         <i class="fa-light" [ngClass]="{
-                                                         'fa-arrow-up mint': sentimentAnalysis?.positive_percentage > 0,
-                                                         'fa-arrow-down anyred-class': sentimentAnalysis?.positive_percentage < 0
+                                                         'fa-arrow-up mint': sentimentAnalysis?.positive_percentage >= 0,
+                                                         'fa-arrow-down rose': sentimentAnalysis?.positive_percentage < 0
                                                        }"></i>
                                                         <span [ngClass]="{
-                                                      'mint': sentimentAnalysis?.positive_percentage > 0,
-                                                      'anyred-class': sentimentAnalysis?.positive_percentage < 0
+                                                      'mint': sentimentAnalysis?.positive_percentage >= 0,
+                                                      'rose': sentimentAnalysis?.positive_percentage < 0
                                                     }">
                                                             {{ sentimentAnalysis?.positive_percentage }}%
                                                         </span> than last {{getTimeSpan}}
@@ -115,12 +115,12 @@
                                                     <h3 class="m-0 fw-bold">{{ sentimentAnalysis?.negative }}</h3>
                                                     <small>
                                                         <i class="fa-light" [ngClass]="{
-                                                         'fa-arrow-up mint': sentimentAnalysis?.negative_percentage > 0,
-                                                         'fa-arrow-down anyred-class': sentimentAnalysis?.negative_percentage < 0
+                                                         'fa-arrow-up mint': sentimentAnalysis?.negative_percentage >= 0,
+                                                         'fa-arrow-down rose': sentimentAnalysis?.negative_percentage < 0
                                                        }"></i>
                                                         <span [ngClass]="{
-                                                      'mint': sentimentAnalysis?.negative_percentage > 0,
-                                                      'anyred-class': sentimentAnalysis?.negative_percentage < 0
+                                                      'mint': sentimentAnalysis?.negative_percentage >= 0,
+                                                      'rose': sentimentAnalysis?.negative_percentage < 0
                                                     }">
                                                             {{ sentimentAnalysis?.negative_percentage }}%
                                                         </span> than last {{getTimeSpan}}
@@ -139,12 +139,12 @@
                                                     <h3 class="m-0 fw-bold">{{ sentimentAnalysis?.neutral }}</h3>
                                                     <small>
                                                         <i class="fa-light" [ngClass]="{
-                                                         'fa-arrow-up mint': sentimentAnalysis?.neutral_percentage > 0,
-                                                         'fa-arrow-down anyred-class': sentimentAnalysis?.neutral_percentage < 0
+                                                         'fa-arrow-up mint': sentimentAnalysis?.neutral_percentage >= 0,
+                                                         'fa-arrow-down rose': sentimentAnalysis?.neutral_percentage < 0
                                                        }"></i>
                                                         <span [ngClass]="{
-                                                      'mint': sentimentAnalysis?.neutral_percentage > 0,
-                                                      'anyred-class': sentimentAnalysis?.neutral_percentage < 0
+                                                      'mint': sentimentAnalysis?.neutral_percentage >= 0,
+                                                      'rose': sentimentAnalysis?.neutral_percentage < 0
                                                     }">
                                                             {{ sentimentAnalysis?.neutral_percentage }}%
                                                         </span> than last {{getTimeSpan}}
@@ -177,12 +177,12 @@
                                                     <h3 class="m-0 fw-bold">{{ humanAgentCsat?.positive }}</h3>
                                                     <small>
                                                         <i class="fa-light" [ngClass]="{
-                                                         'fa-arrow-up mint': humanAgentCsat?.positive_percentage > 0,
-                                                         'fa-arrow-down anyred-class': humanAgentCsat?.positive_percentage < 0
+                                                         'fa-arrow-up mint': humanAgentCsat?.positive_percentage >= 0,
+                                                         'fa-arrow-down rose': humanAgentCsat?.positive_percentage < 0
                                                        }"></i>
                                                         <span [ngClass]="{
-                                                      'mint': humanAgentCsat?.positive_percentage > 0,
-                                                      'anyred-class': humanAgentCsat?.positive_percentage < 0
+                                                      'mint': humanAgentCsat?.positive_percentage >= 0,
+                                                      'rose': humanAgentCsat?.positive_percentage < 0
                                                     }">
                                                             {{ humanAgentCsat?.positive_percentage }}%
                                                         </span> than last {{getTimeSpan}}
@@ -201,12 +201,12 @@
                                                     <h3 class="m-0 fw-bold">{{ humanAgentCsat?.negative }}</h3>
                                                     <small>
                                                         <i class="fa-light" [ngClass]="{
-                                                         'fa-arrow-up mint': humanAgentCsat?.negative_percentage > 0,
-                                                         'fa-arrow-down anyred-class': humanAgentCsat?.negative_percentage < 0
+                                                         'fa-arrow-up mint': humanAgentCsat?.negative_percentage >= 0,
+                                                         'fa-arrow-down rose': humanAgentCsat?.negative_percentage < 0
                                                        }"></i>
                                                         <span [ngClass]="{
-                                                      'mint': humanAgentCsat?.negative_percentage > 0,
-                                                      'anyred-class': humanAgentCsat?.negative_percentage < 0
+                                                      'mint': humanAgentCsat?.negative_percentage >= 0,
+                                                      'rose': humanAgentCsat?.negative_percentage < 0
                                                     }">
                                                             {{ humanAgentCsat?.negative_percentage }}%
                                                         </span> than last {{getTimeSpan}}
@@ -225,12 +225,12 @@
                                                     <h3 class="m-0 fw-bold">{{ humanAgentCsat?.neutral }}</h3>
                                                     <small>
                                                         <i class="fa-light" [ngClass]="{
-                                                         'fa-arrow-up mint': humanAgentCsat?.neutral_percentage > 0,
-                                                         'fa-arrow-down anyred-class': humanAgentCsat?.neutral_percentage < 0
+                                                         'fa-arrow-up mint': humanAgentCsat?.neutral_percentage >= 0,
+                                                         'fa-arrow-down rose': humanAgentCsat?.neutral_percentage < 0
                                                        }"></i>
                                                         <span [ngClass]="{
-                                                      'mint': humanAgentCsat?.neutral_percentage > 0,
-                                                      'anyred-class': humanAgentCsat?.neutral_percentage < 0
+                                                      'mint': humanAgentCsat?.neutral_percentage >= 0,
+                                                      'rose': humanAgentCsat?.neutral_percentage < 0
                                                     }">
                                                             {{ humanAgentCsat?.neutral_percentage }}%
                                                         </span> than last {{getTimeSpan}}

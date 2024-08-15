@@ -21,6 +21,7 @@ selectedTimeLabel: any ="Last 7 days";
   peakHours: any[] = [];
   totalBotSessionsOvertimeData: any;
   humanTransferRateData: any;
+  formattedDaysOrMonths: any;
   constructor(private _hS: HeaderService, private _analytics: AnalyticsService) {
     _hS.updateHeaderData({
       title: 'Bot Kpi',
@@ -113,6 +114,11 @@ selectedTimeLabel: any ="Last 7 days";
           });
           index++;
         }
+        const daysOrMonths = Object.keys(this.peakHours);
+        this.formattedDaysOrMonths = daysOrMonths.map(date => {
+          const [year, month, day] = date.split('-');
+          return `${parseInt(month)}/${parseInt(day)}`;
+        });
         this.heatMap();
       },
       (error: any) => {
@@ -129,18 +135,29 @@ selectedTimeLabel: any ="Last 7 days";
     this._analytics.GethumanTransferRate().subscribe((response: any) => {
       // this.spinner.hide()
       this.humanTransferRateData = response.detail;
-      const counts = [
-        response.detail.Monday[0],
-        response.detail.Tuesday[0],
-        response.detail.Wednesday[0],
-        response.detail.Thursday[0],
-        response.detail.Friday[0],
-        response.detail.Saturday[0],
-        response.detail.Sunday[0]
-      ];
-      counts.forEach((count:any)=>{
-        this.fallbackRateCount = this.fallbackRateCount+count;
+      const detail = response.detail;
+
+      const daysOrMonths = Object.keys(detail).reverse();
+
+      const counts = daysOrMonths.map(day => detail[day]);
+
+      this.humanTransferRateData = response.detail;
+      // const counts = [
+      //   response.detail.Monday[0],
+      //   response.detail.Tuesday[0],
+      //   response.detail.Wednesday[0],
+      //   response.detail.Thursday[0],
+      //   response.detail.Friday[0],
+      //   response.detail.Saturday[0],
+      //   response.detail.Sunday[0]
+      // ];
+      counts.forEach((count: any) => {
+        this.fallbackRateCount = this.fallbackRateCount + count;
       })
+      const formattedDaysOrMonths = daysOrMonths.map(date => {
+        const [year, month, day] = date.split('-');
+        return `${parseInt(month)}/${parseInt(day)}`;
+      });
       // setTimeout(() => {
       //   this.botEscalationRate(counts);
       // })
@@ -226,10 +243,7 @@ selectedTimeLabel: any ="Last 7 days";
       '18', '19', '20', '21', '22', '23'
     ];
     // prettier-ignore
-    const days = [
-      'Sunday', 'Monday', 'Tuesday',
-      'Wednesday', 'Thursday', 'Friday', 'Saturday'
-    ];
+    const days = this.formattedDaysOrMonths
     // prettier-ignore
     const data = this.peakhoursData
       .map(function (item) {
