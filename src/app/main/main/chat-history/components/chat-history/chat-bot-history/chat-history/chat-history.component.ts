@@ -23,9 +23,11 @@ export class ChatHistoryComponent implements OnInit {
   interval: any;
   bot_id= environment.bot_id;
   workspace_id= environment.workspace_id;
+  currentUserName: any = '';
 
   constructor(private chatVisibilityService: ChatHistoryVisibilityServiceService, private _botS: BotMonitoringService,private _spinner:NgxSpinnerService,private datePipe: DatePipe) { }
   ngOnInit(): void {
+    this.currentUserName = this.chat.username!=null ? this.chat.username : '';
     this.interval = setInterval(() => {
       this.refreshHistory();
     }, 5000)
@@ -56,6 +58,7 @@ export class ChatHistoryComponent implements OnInit {
         res.detail.map((item:any) => {
           item.timestamp = this.formatDate(item.timestamp);
         })
+        this.currentUserName = res.username;
         this.chat = res.detail;
         //this.chats.push(res[0].history);
       } else {

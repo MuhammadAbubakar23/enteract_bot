@@ -31,6 +31,14 @@ export class BotMonitoringService {
     formData.append('token',form.token)
     return this.http.post(this.chatBotBaseUrl + "chats/batch", formData).pipe(timeout(120 * 1000));
   }
+
+  ProfileCreate(form: any){
+    const formData = new FormData();
+    formData.append('token',form.token)
+    formData.append('username',form.username)
+    formData.append('email',form.email)
+    return this.http.post(this.chatBotBaseUrl + "profiles/create", formData);
+  }
   
   ChatHumanWdidget(form: any) {
     const formData = new FormData();

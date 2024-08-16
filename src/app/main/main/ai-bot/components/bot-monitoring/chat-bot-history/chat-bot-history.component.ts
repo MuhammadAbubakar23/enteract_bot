@@ -110,6 +110,7 @@ export class ChatBotHistoryComponent implements OnInit {
           this._chatVisibilityS.notifythirdActiveHistory({active:true, session_id: data.session_id });
           res.detail['session_id'] = data.session_id;
           res.detail['last_message'] = data.last_message;
+          res.detail['username'] = res.username;
           this.chats.push(res.detail);
           this._chatVisibilityS.refreshMethod(data.session_id);
         } else {

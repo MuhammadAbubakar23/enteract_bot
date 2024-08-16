@@ -39,9 +39,11 @@ export class ChatHistoryComponent implements OnInit {
   typing = false;
   currentTimestamp: Date = new Date();
   tempCount: any;
+  currentUserName: any = '';
   constructor(private chatVisibilityService: ChatVisibiltyHumanInteractionService, private _botS: BotMonitoringService, private _spinner: NgxSpinnerService,
     private datePipe: DatePipe, private _toastS: ToastrService, private _botService: BotMonitoringService, private uservc: UsersService) { }
   ngOnInit(): void {
+    this.currentUserName = this.chat.username!=null ? this.chat.username : '';
     this.interval = setInterval(() => {
       this.refreshHistory();
     }, 5000)
@@ -98,6 +100,7 @@ export class ChatHistoryComponent implements OnInit {
         res.detail.map((item: any) => {
           item.timestamp = this.formatDate(item.timestamp);
         })
+        this.currentUserName = res.username;
         this.chat = res.detail;
         //this.chats.push(res[0].history);
       } else {

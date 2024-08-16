@@ -78,7 +78,7 @@
               </div>
               <div class="ms-2 flex-grow-1">
                 <div class="d-flex align-items-center">
-                  <h6 class="dark text-truncate  m-0" style="width: 230px !important;">{{ item.session_id }}</h6>
+                  <h6 class="dark text-truncate  m-0" style="width: 230px !important;">{{ item.username != null?item.username: item.session_id }}</h6>
 
                   <small class="coal ms-auto top-0">{{item.last_timestamp | customDate}}</small>
                 </div>

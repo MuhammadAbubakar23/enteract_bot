@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { BotMonitoringService } from 'src/app/main/main/ai-bot/bot-monitoring.service';
@@ -32,9 +32,23 @@ export class ChatWidget2Component implements OnInit {
   tempCount: any = 0;
   buttonAlreadyClicked: any = false;
   conversation_end: any = 0;
-  constructor(private chatVisibilityService: ChatVisibilityService, private _spinner: NgxSpinnerService, private _botService: BotMonitoringService, private _toastS: ToastrService, private cdr: ChangeDetectorRef, private datePipe: DatePipe) { }
+  credentials = {
+    fullName: '',
+    email: ''
+  };
+  isCredentialsEntered = 0;
+  isFirstMessage = 0;
+  NameValidationError: any;
+  EmailValidationError: any;
+  registerForm!: FormGroup;
+  currentUserName: any;
+  constructor(private fb: FormBuilder, private chatVisibilityService: ChatVisibilityService, private _spinner: NgxSpinnerService, private _botService: BotMonitoringService, private _toastS: ToastrService, private cdr: ChangeDetectorRef, private datePipe: DatePipe) { }
 
   ngOnInit(): void {
+    this.registerForm = this.fb.group({
+      fullName: ['', [Validators.required, this.fullNameValidator()]],
+      email: ['', [Validators.required, Validators.email]],
+    });
     this.session_id = this.generateRandomString(6);
   }
   // ngAfterViewChecked() {
@@ -135,6 +149,9 @@ export class ChatWidget2Component implements OnInit {
           this.session_id = ""
           this.chatMessages=[];
           this.typing = false;
+          this.isCredentialsEntered = 0;
+          this.registerForm.reset();
+          this.currentUserName = '';
           clearInterval(this.interval);
           debugger
           if(refreshIndex!=-1){
@@ -198,7 +215,7 @@ export class ChatWidget2Component implements OnInit {
     const minutesStr = minutes < 10 ? '0' + minutes : minutes;
     const secondsStr = seconds < 10 ? '0' + seconds : seconds;
 
-    return `${hours}:${minutesStr}:${secondsStr} ${ampm}`;
+    return `${hours}:${minutesStr} ${ampm}`;
   }
 
   refreshHistory() {
@@ -233,6 +250,42 @@ export class ChatWidget2Component implements OnInit {
     const parsedDate = new Date(+year, +month - 1, +day, +hours, +minutes, +seconds);
     return this.datePipe.transform(parsedDate, 'h:mm a');
   }
+  submitCredentials() {
+    if (this.registerForm.valid) {
+      const data = {
+        email: this.registerForm.value.email,
+        username: this.registerForm.value.fullName,
+        token: localStorage.getItem('token')
+      }
+      this._botService.ProfileCreate(data).subscribe((res:any)=>{
+        this.isCredentialsEntered = 1;
+        this.currentUserName = this.registerForm.value.fullName;
+        // this.registerForm.reset;
+        console.log("response", res)
+        this.session_id = res.detail;
+        console.log("session id: ", res.detail);
+      },
+      error=>{
+        this.isCredentialsEntered = 0;
+        this._toastS.error(error.error);
+      }
+    )
+      // Handle the form submission
+    } else {
+      this.isCredentialsEntered = 0;
+      // Trigger validation messages
+      this.registerForm.markAllAsTouched();
+    }
+  }
+  
+  fullNameValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      const fullNameRegex = /^[a-zA-Z]+ [a-zA-Z]+$/;
+      const valid = fullNameRegex.test(control.value);
+      return valid ? null : { fullNameInvalid: true };
+    };
+  }
+  
   ngOnDestroy() {
     clearInterval(this.interval);
   }

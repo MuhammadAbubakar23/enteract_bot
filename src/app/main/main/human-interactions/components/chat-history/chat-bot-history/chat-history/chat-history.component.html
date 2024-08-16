@@ -9,7 +9,7 @@
                 <span class="iconButton medium bg-white fw-bold"></span>
                 <div class="ms-3">
                     <h6 class="user-status m-0">
-                        {{chat.session_id}}
+                        {{(currentUserName!=''? currentUserName: chat.session_id)}}
                         <!-- <i class="fa fa-circle user-status-icon sun" title="away"></i> -->
                     </h6>
                 </div>
@@ -53,7 +53,7 @@
                                                     ? "enteract.bot"
                                                     : msg.type === "human-agent"
                                                     ? msg.agent_name || "enteract.human"
-                                                    : chat.session_id
+                                                    : (currentUserName!=''? currentUserName: chat.session_id)
                                                     }}
                                                 </h6>
                                                 <small class="silver ms-auto">{{msg.timestamp}}</small>
